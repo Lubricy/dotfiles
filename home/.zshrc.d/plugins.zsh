@@ -1,0 +1,29 @@
+if [[ ! -d ~/.zplug ]]; then
+	git clone https://github.com/zplug/zplug ~/.zplug
+	source ~/.zplug/init.zsh && zplug update
+fi
+
+source ~/.zplug/init.zsh
+
+zplug "~/.zshrc.d/", as:theme, from:local, use:my.zshtheme
+zplug "zsh-users/zsh-syntax-highlighting", defer:2
+zplug "clvv/fasd", as:command, use:fasd
+zplug "plugins/git", from:oh-my-zsh, if:"(( $+commands[git] ))"
+zplug "plugins/fasd", from:oh-my-zsh, on:"clvv/fasd"
+
+zplug "andsens/homeshick", dir:$HOME/.homesick/repos/homeshick, use:homeshick.sh of:completions
+
+zplug "zsh-users/zsh-history-substring-search", on:"zsh-users/zsh-syntax-highlighting", defer:3
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+
+if ! zplug check --verbose; then
+	printf "Install [Y/n]: "
+	if read -q; then
+		echo; zplug install
+	else
+		echo
+	fi
+fi
+
+zplug load
