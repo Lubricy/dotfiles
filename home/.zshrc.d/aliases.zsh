@@ -12,4 +12,7 @@ if command -v nvim >/dev/null 2>&1; then
   alias vim=nvim
   alias vi=nvim
 fi
+if command -v htop >/dev/null 2>&1; then
+  alias top=htop
+fi
 
