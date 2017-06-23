@@ -10,7 +10,7 @@ if has("nvim")
 end
 
 source ~/.vim/plugins.vim
-source ~/.vim/local/colors.vim
+source ~/.vim/colors.vim
 
 let mapleader=" "
 
