@@ -19,12 +19,13 @@ bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
 
 if ! zplug check --verbose; then
-	printf "Install [Y/n]: "
-	if read -q; then
-		echo; zplug install
-	else
-		echo
-	fi
+	echo "Install? [Yes/No]"
+	select yn in "Yes" "No"; do
+	    case $yn in
+		Yes ) zplug install; break;;
+		No ) exit;;
+	    esac
+	done
 fi
 
 zplug load
