@@ -16,3 +16,9 @@ if command -v htop >/dev/null 2>&1; then
   alias top=htop
 fi
 
+foo_nix () {
+  docker run --rm -it -v nix-store:/nix -v nix-home:/root -v $(pwd):/src --workdir /src -e http_proxy -e HTTPS_PROXY "$@" nixos/nix zsh
+}
+if command -v docker >/dev/null 2>&1; then
+  alias nix=foo_nix
+fi

@@ -2,6 +2,9 @@
 HISTFILE=~/.zsh_history
 HISTSIZE=1000
 SAVEHIST=1000
+setopt inc_append_history
+setopt hist_ignore_dups 
+setopt hist_ignore_space
 # End of lines configured by zsh-newuser-install
 # The following lines were added by compinstall
 zstyle :compinstall filename '~/.zshrc'
@@ -27,3 +30,5 @@ if [ -d $HOME/.zshrc.d ]; then
 	done
 fi
 
+
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
