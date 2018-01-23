@@ -1,6 +1,6 @@
 if empty(glob('~/.vim/dein/repos/github.com/Shougo/dein.vim'))
   silent !git clone https://github.com/Shougo/dein.vim.git ~/.vim/dein/repos/github.com/Shougo/dein.vim
-    " autocmd VimEnter * call dein#install() | source $MYVIMRC
+  autocmd VimEnter * call dein#install() | source $MYVIMRC
 endif
 
 set runtimepath+=~/.vim/dein/repos/github.com/Shougo/dein.vim
@@ -23,8 +23,14 @@ call denite#custom#map(
 	      \)
 call denite#custom#map(
 	      \ 'insert',
-	      \ '<Down>',
+	      \ '<down>',
 	      \ '<denite:move_to_next_line>',
+	      \ 'noremap'
+	      \)
+call denite#custom#map(
+	      \ 'normal',
+	      \ 's',
+	      \ '<denite:do_action:vsplit>',
 	      \ 'noremap'
 	      \)
 nnoremap <Leader>f :Denite grep:::<C-r>=expand("<cword>")<CR><cr>
@@ -32,45 +38,43 @@ vnoremap <Leader>f ay:<C-u>Denite grep:::<C-r>a<CR>
 nnoremap <C-p> :Denite file_mru file_rec<cr>
 " }}}
 call dein#add('Shougo/neomru.vim')
-"" NERDTree {{{
-"call dein#add('scrooloose/nerdtree')
-"nnoremap <Leader>n :NERDTreeToggle<CR>
-""NERDTree goto file on open
-"function! s:IfNERDTreeOpenGotoFile()
-"  if exists("t:NERDTreeBufName")
-"    if bufwinnr(t:NERDTreeBufName) != -1
-"      if !empty(expand("%"))
-"        NERDTreeFind
-"      endif
-"    endif
-"  endif
-"endfunction
-"augroup NERDTree
-"  autocmd!
-"  autocmd BufWinEnter * call s:IfNERDTreeOpenGotoFile()
-"  autocmd WinEnter * call s:CloseIfOnlyNerdTreeLeft()
-"augroup end
-"
-"" Close all open buffers on entering a window if the only
-"" buffer that's left is the NERDTree buffer
-"function! s:CloseIfOnlyNerdTreeLeft()
-"  if exists("t:NERDTreeBufName")
-"    if bufwinnr(t:NERDTreeBufName) != -1
-"      if winnr("$") == 1
-"        q
-"      endif
-"    endif
-"  endif
-"endfunction
-"" }}}
+" NERDTree {{{
+call dein#add('scrooloose/nerdtree')
+nnoremap <Leader>n :NERDTreeToggle<CR>
+"NERDTree goto file on open
+function! s:IfNERDTreeOpenGotoFile()
+  if exists("t:NERDTreeBufName")
+    if bufwinnr(t:NERDTreeBufName) != -1
+      if !empty(expand("%"))
+        NERDTreeFind
+      endif
+    endif
+  endif
+endfunction
+augroup NERDTree
+  autocmd!
+  autocmd BufWinEnter * call s:IfNERDTreeOpenGotoFile()
+  autocmd WinEnter * call s:CloseIfOnlyNerdTreeLeft()
+augroup end
+
+" Close all open buffers on entering a window if the only
+" buffer that's left is the NERDTree buffer
+function! s:CloseIfOnlyNerdTreeLeft()
+  if exists("t:NERDTreeBufName")
+    if bufwinnr(t:NERDTreeBufName) != -1
+      if winnr("$") == 1
+        q
+      endif
+    endif
+  endif
+endfunction
+" }}}
 " ALE {{{
 call dein#add('w0rp/ale')
 let g:ale_change_sign_column_color = 1
 let g:ale_sign_column_always = 1
 let g:ale_set_signs = 0
 " }}}
-
-
 " vim-slime {{{
 call dein#add('jpalardy/vim-slime')
 let g:slime_target = "tmux"
@@ -110,6 +114,7 @@ call dein#add('michaeljsmith/vim-indent-object')
 call dein#add('kelwin/vim-smali' , { 'on_ft' : ['smali'] })
 call dein#add('Rip-Rip/clang_complete' , { 'on_ft' : ['cpp'] })
 call dein#add('dag/vim-fish' , { 'on_ft' : ['fish'] })
+call dein#add('posva/vim-vue' , { 'on_ft' : ['vue'] })
 call dein#add('digitaltoad/vim-pug' , {'on_ft' : ['pug' ] })
 call dein#add('neovimhaskell/haskell-vim' , { 'on_ft': ['haskell'] })
 call dein#add( 'itchyny/vim-haskell-indent' , { 'on_ft': ['haskell'] })

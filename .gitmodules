@@ -1,0 +1,6 @@
+[submodule "home/.emacs"]
+	path = home/.emacs
+	url = https://github.com/hlissner/doom-emacs
+[submodule "home/.zplug"]
+	path = home/.zplug
+	url = https://github.com/zplug/zplug
