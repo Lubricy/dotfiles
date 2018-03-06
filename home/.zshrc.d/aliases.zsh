@@ -17,8 +17,18 @@ if command -v htop >/dev/null 2>&1; then
 fi
 
 foo_nix () {
-  docker run --rm -it -v nix-store:/nix -v nix-home:/root -v $(pwd):/src --workdir /src -e http_proxy=$docker_proxy -e HTTPS_PROXY=$docker_proxy -e NO_PROXY -e no_proxy "$@" nixos/nix zsh
+  docker run --rm -it -v nix-store:/nix -v nix-home:/root -v $(pwd):/src --workdir /src -e http_proxy=$docker_proxy -e HTTPS_PROXY=$docker_proxy -e NO_PROXY -e no_proxy "$@" nixos/nix 
 }
 if command -v docker >/dev/null 2>&1; then
   alias nix=foo_nix
 fi
+
+foo_venv () {
+  dir=${1:-.venv}
+  if [ ! -d $dir ]; then
+    echo "creating venv in $dir"
+    python3 -m venv $dir
+  fi
+  source $dir/bin/activate
+}
+alias venv=foo_venv
