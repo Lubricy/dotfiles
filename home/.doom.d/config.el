@@ -1,9 +1,7 @@
 ;;; private/lubricy/config.el -*- lexical-binding: t; -*-
 
-(when (featurep! :feature evil)
-  (load! +environments)  ; my environments
-  (load! +bindings)  ; my key bindings
-  (load! +commands)) ; my custom ex commands
+(load! +environments)  ; my environments
+(load! +bindings)      ; my key bindings
 
 (def-package! docker-tramp
               :after tramp
