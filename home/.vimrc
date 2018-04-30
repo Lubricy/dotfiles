@@ -10,7 +10,7 @@ if has("nvim")
   set clipboard+=unnamed
 end
 
-source ~/.vim/plugins.vim
+"source ~/.vim/plugins.vim
 source ~/.vim/colors.vim
 
 let mapleader=" "
@@ -50,9 +50,9 @@ endif " has autocmd
 "Status Line
 set laststatus=2
 set statusline=%-28.28F%4(\ %m%)
-set statusline+=%#moremsg#%{fugitive#statusline()}%*
+"set statusline+=%#moremsg#%{fugitive#statusline()}%*
 set statusline+=%=
-set statusline+=%{ALEGetStatusLine()}\ \ \ \ 
+"set statusline+=%{ALEGetStatusLine()}\ \ \ \ 
 set statusline+=%-14.(%l,%c%V%)\ %P\ %h%w%q
 
 " "Netrw

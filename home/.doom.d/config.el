@@ -1,6 +1,6 @@
 ;;; private/lubricy/config.el -*- lexical-binding: t; -*-
 
-(load! +environments)  ; my environments
+;; (load! +environments)  ; my environments
 (load! +bindings)      ; my key bindings
 
 (def-package! docker-tramp

@@ -29,7 +29,7 @@
 ;;
 ;;; License: MIT
 
-(require 'core (concat user-emacs-directory "core/core"))
+;; (require 'core (concat user-emacs-directory "core/core"))
 
 (doom! :feature
        (popup            ; tame sudden yet inevitable temporary windows
@@ -159,9 +159,11 @@
       user-mail-address "lubricy@gmail.com"
       user-full-name    "Lubricy Fibber")
 
+(setenv "LANG" "en_US.UTF-8")
+
 ;; An extra measure to prevent the flash of unstyled mode-line while Emacs is
 ;; booting up (when Doom is byte-compiled).
-(setq-default mode-line-format nil)
+;; (setq-default mode-line-format nil)
 
 (def-package-hook! python
   :post-config

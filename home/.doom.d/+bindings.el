@@ -5,7 +5,7 @@
       ;; --- <leader> -------------------------------------
       (:leader
         :desc "new terminal at right"   :nv "\\" (λ! (evil-window-vsplit)(+term/open))
-        :desc "new terminal at bottom"  :nv "-" (λ! (evil-window-split)(+term/open))
+        :desc "new terminal at bottom"  :nv "-" 'eshell
 
         :desc "Left window"             :n "<left>"    #'evil-window-left
         :desc "Right window"            :n "<right>"   #'evil-window-right
@@ -36,7 +36,7 @@
           :desc "Switch to 7th workspace"  :n "7"   (λ! (+workspace/switch-to 6))
           :desc "Switch to 8th workspace"  :n "8"   (λ! (+workspace/switch-to 7))
           :desc "Switch to 9th workspace"  :n "9"   (λ! (+workspace/switch-to 8))
-          :desc "Switch to last workspace" :n "0"   #'+workspace/switch-to-last)        
+          :desc "Switch to last workspace" :n "0"   #'+workspace/switch-to-last)
         (:desc "search" :prefix "/"
           :desc "Swiper"                :nv "/" #'swiper
           :desc "Ag"                    :nv "f" #'+ivy:ag
@@ -74,7 +74,7 @@
         :n "L"         #'neotree-select-down-node
         :n "G"         #'evil-goto-line
         :n "gg"        #'evil-goto-first-line
-        :n "yy"        #'neotree-copy-filepath-to-yank-ring
+        :n "y"        #'neotree-copy-filepath-to-yank-ring
         :n "v"         #'neotree-enter-vertical-split
         :n "s"         #'neotree-enter-horizontal-split
         :n "q"         #'neotree-hide
@@ -87,4 +87,4 @@
 
 
 ;; --- <ex-commands> ------------------------------
-(ex! "q" #'+workspace/close-window-or-workspace)
+(ex! "q" #'kill-this-buffer)
