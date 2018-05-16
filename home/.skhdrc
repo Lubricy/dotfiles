@@ -1,3 +1,4 @@
+#!/bin/bash
 #  NOTE(koekeishiya): A list of all built-in modifier and literal keywords can
 #                     be found at https://github.com/koekeishiya/skhd/issues/1
 #
@@ -32,16 +33,21 @@
 
 # open terminal, blazingly fast compared to iTerm/Hyper
 alt - return : open -na /Applications/iTerm.app/
-shift + alt - return : emacsclient -c
+shift + alt - return : emacsclient -c -n 
 
 # close focused window
 alt - x : chunkc tiling::window --close
 
 ## focus window
 alt - h : chunkc tiling::window --focus west
-alt - j : chunkc tiling::window --focus south
-alt - k : chunkc tiling::window --focus north
+alt - j : chunkc tiling::window --focus north
+alt - k : chunkc tiling::window --focus south
 alt - l : chunkc tiling::window --focus east
+
+alt - left : chunkc tiling::window --focus west
+alt - up : chunkc tiling::window --focus north
+alt - down : chunkc tiling::window --focus south
+alt - right : chunkc tiling::window --focus east
 #
 #cmd - j : chunkc tiling::window --focus prev
 #cmd - k : chunkc tiling::window --focus next
@@ -54,16 +60,21 @@ shift + alt - h : chunkc tiling::window --swap west
 shift + alt - j : chunkc tiling::window --swap south
 shift + alt - k : chunkc tiling::window --swap north
 shift + alt - l : chunkc tiling::window --swap east
+
+shift + alt - left : chunkc tiling::window --swap west
+shift + alt - up : chunkc tiling::window --swap north
+shift + alt - down : chunkc tiling::window --swap south
+shift + alt - right : chunkc tiling::window --swap east
 #
 
 ## toggle monitor
-alt - d : chunkc tiling::monitor -f 2
+alt - a : chunkc tiling::monitor -f 2
 alt - s : chunkc tiling::monitor -f 1
-alt - a : chunkc tiling::monitor -f 3
+alt - d : chunkc tiling::monitor -f 3
 #
-shift + alt - d  : chunkc tiling::window --send-to-monitor 2; chunkc tiling::monitor -f 2
+shift + alt - a  : chunkc tiling::window --send-to-monitor 2; chunkc tiling::monitor -f 2
 shift + alt - s  : chunkc tiling::window --send-to-monitor 1; chunkc tiling::monitor -f 1
-shift + alt - a  : chunkc tiling::window --send-to-monitor 3; chunkc tiling::monitor -f 3
+shift + alt - d  : chunkc tiling::window --send-to-monitor 3; chunkc tiling::monitor -f 3
 
 #
 ## move window
@@ -151,6 +162,8 @@ alt - f : chunkc tiling::window --toggle native-fullscreen
 #
 ## toggle window fade
 alt - q : brew services restart chunkwm
+shift + alt - q : brew services restart skhd
+
 #
 ## float / unfloat window and center on screen
 alt - c : chunkc tiling::window --toggle float;\
