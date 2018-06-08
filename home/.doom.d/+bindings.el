@@ -1,6 +1,7 @@
 ;;; private/lubricy/+bindings.el -*- lexical-binding: t; -*-
 
 
+;;; Code:
 (map!
       ;; --- <leader> -------------------------------------
       (:leader
@@ -87,4 +88,6 @@
 
 
 ;; --- <ex-commands> ------------------------------
-(ex! "q" #'kill-this-buffer)
+
+(provide '+bindings)
+;;; +bindings.el ends here
