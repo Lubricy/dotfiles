@@ -48,11 +48,12 @@
        syntax-checker    ; tasing you for every semicolon you forget
        version-control   ; remember, remember that commit in November
        workspaces        ; tab emulation, persistence & separate workspaces
+       tramp
 
        :completion
        company           ; the ultimate code completion backend
-       ivy               ; a search engine for love and life
-      ;helm              ; the *other* search engine for love and life
+      ;ivy               ; a search engine for love and life
+       helm              ; the *other* search engine for love and life
       ;ido               ; the other *other* search engine...
 
        :ui
