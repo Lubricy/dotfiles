@@ -33,9 +33,5 @@
 (after! projectile
   (add-hook 'python-mode-hook 'project-set-venv))
 
-(after! python
-  (add-hook 'python-mode-hook (λ! (setq indent-tabs-mode nil)
-                                  (setq tab-width 4))))
-
 (provide 'config)
 ;;; config.el ends here
