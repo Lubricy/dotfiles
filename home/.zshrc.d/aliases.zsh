@@ -32,3 +32,5 @@ foo_venv () {
   source $dir/bin/activate
 }
 alias venv=foo_venv
+
+alias ec=emacsclient

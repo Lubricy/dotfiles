@@ -31,4 +31,5 @@ if [ -d $HOME/.zshrc.d ]; then
 fi
 
 
+export PATH=$HOME/.local/bin:$PATH
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
