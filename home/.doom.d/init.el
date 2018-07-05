@@ -15,6 +15,7 @@
         +childframe)     ; use childframes for error popups (Emacs 26+ only)
        version-control   ; remember, remember that commit in November
        workspaces        ; tab emulation, persistence & separate workspaces
+       tramp
 
        :completion
        (company          ; the ultimate code completion backend
