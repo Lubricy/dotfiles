@@ -12,17 +12,17 @@ bth() {
     echo "$b$d ${S[$s]}"
 }
 pp() {
-printf "%6s↑%6s↓" "$(bth $2)" "$(bth $1)"
+printf "$3%6s↑%6s↓" "$(bth $2)" "$(bth $1)"
 }
 getInterval() {
 IFACE=$1
-INTERVAL=$2
+INTERVAL=$3
 read -r BD BU <<<$(netstat -ib -I $IFACE | awk '/Link/{print $7,$10}')
 sleep $INTERVAL
 read -r AD AU <<<$(netstat -ib -I $IFACE | awk '/Link/{print $7,$10}')
 DN=$(($AD - $BD))
 UP=$(($AU - $BU))
-pp $DN $UP
+pp $DN $UP $2
 }
 #getInterval $1 1
 main() {
@@ -34,8 +34,7 @@ main() {
   for i in $BANDWIDTH_IFACE
   do
     a=(${i//:/ })
-    echo -n "${a[1]}"
-    getInterval "${a[0]}" 1
+    getInterval "${a[0]}" "${a[1]}" 1 &
   done
 }
 main
