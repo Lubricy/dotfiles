@@ -31,6 +31,16 @@ foo_venv () {
   fi
   source $dir/bin/activate
 }
-alias venv=foo_venv
-
+foo_pipvenv () {
+  if [ -z "$1" ]; then
+    pipenv shell
+  else
+    pipenv shell --python "$1"
+  fi
+}
+if command -v pipenv >/dev/null 2>&1; then
+  alias venv=pipenv
+else
+  alias venv=foo_venv
+fi
 alias ec=emacsclient
