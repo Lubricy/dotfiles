@@ -34,6 +34,7 @@
 # open terminal, blazingly fast compared to iTerm/Hyper
 alt - return : open -na /Applications/iTerm.app/
 shift + alt - return : emacsclient -c -n 
+alt - n : ~/.emacs.d/bin/org-capture
 
 # close focused window
 alt - x : chunkc tiling::window --close

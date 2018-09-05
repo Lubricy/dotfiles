@@ -31,7 +31,7 @@ foo_venv () {
   fi
   source $dir/bin/activate
 }
-foo_pipvenv () {
+foo_pipenv () {
   if [ -z "$1" ]; then
     pipenv shell
   else
@@ -39,8 +39,14 @@ foo_pipvenv () {
   fi
 }
 if command -v pipenv >/dev/null 2>&1; then
-  alias venv=pipenv
+  alias venv=foo_pipenv
 else
   alias venv=foo_venv
 fi
+
+if command -v rsync >/dev/null 2>&1; then
+  alias lcp='rsync -ah --info=progress2 --stats'
+  alias lmv='rsync -ah --remove-source-files --info=progress2 --stats'
+fi
+
 alias ec=emacsclient

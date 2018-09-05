@@ -10,6 +10,7 @@
 
 (def-package! docker-tramp
               :after tramp)
+
 (after! company
   (setq company-idle-delay 0.1
         company-minimum-prefix-length 2))
@@ -28,6 +29,7 @@
         (message "Changing to `%s'" venv-path)
         (setq-local python-shell-virtualenv-path venv-path)
         (setq-local flycheck-python-pycompile-executable (concat venv-path "bin/python"))
+        (setq-local flycheck-python-pylint-executable (concat venv-path "bin/python"))
         (setenv "PYTHONPATH" (projectile-project-root))))))
 
 (after! projectile

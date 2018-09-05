@@ -85,6 +85,11 @@
    :n "L"         #'neotree-select-down-node
    :n "G"         #'evil-goto-line
    :n "gg"        #'evil-goto-first-line
+   :n "z"         nil
+   (:prefix "z"
+     :desc "Top"        :n "t"       #'evil-scroll-line-to-top
+     :desc "Center"     :n "z"       #'evil-scroll-line-to-center
+     :desc "Bottom"     :n "b"       #'evil-scroll-line-to-bottom)
    :n "y"        #'neotree-copy-filepath-to-yank-ring
    :n "v"         #'neotree-enter-vertical-split
    :n "s"         #'neotree-enter-horizontal-split
