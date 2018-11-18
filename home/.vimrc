@@ -1,6 +1,6 @@
 set nocompatible
 filetype plugin on
-set shell=/bin/bash
+set shell=bash
 let mapleader = "\<Space>"
 
 if has("nvim")
