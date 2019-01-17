@@ -1,24 +1,26 @@
-;;; private/lubricy/config.el -*- lexical-binding: t; -*-
+;;; ~/.doom.d/config.el -*- lexical-binding: t; -*-
+
+;; Place your private configuration here
 
 (load! "+bindings")
-(when (featurep 'evil)
-  (load! "+evil-commands"))
 
-;; --- <ex-commands> ------------------------------
+;; I've swapped these keys on my keyboard
+(setq x-meta-keysym         'alt
+      x-alt-keysym          'meta
+      mac-option-modifier   'alt
+      mac-command-modifier  'meta
+      mac-function-modifier 'control
 
-;; --- packages -----------------------------------
+      user-mail-address "lubricy@gmail.com"
+      user-full-name    "Lubricy Fibber")
 
-(def-package! docker-tramp
-              :after tramp)
-
+;; company auto-complete
 (after! company
   (setq company-idle-delay 0.1
         company-minimum-prefix-length 2))
 
-;(def-package-hook! python
-;  :post-config
-;  (set-company-backend 'python-mode '(company-anaconda company-dabbrev-code company-yasnippet))
-;  t)
+(after! yasnippet
+  (push "~/.doom.d/snippets" yas-snippet-dirs))
 
 (defun project-set-venv ()
   "Set python venv to `.venv'."
@@ -33,7 +35,12 @@
         (setenv "PYTHONPATH" (projectile-project-root))))))
 
 (after! projectile
-  (add-hook 'python-mode-hook 'project-set-venv))
+  (add-hook 'python-mode-hook 'project-set-venv)
+  (setq projectile-project-search-path '("~/projects/")))
 
-(provide 'config)
-;;; config.el ends here
+(defun shk-fix-inline-images ()
+  (when org-inline-image-overlays
+    (org-redisplay-inline-images)))
+
+(after! org
+  (add-hook 'org-babel-after-execute-hook 'shk-fix-inline-images))

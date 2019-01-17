@@ -24,12 +24,11 @@ zle -N my-backward-delete-word
 bindkey '^W' my-backward-delete-word
 
 
+export PATH=$HOME/.local/bin:$PATH
 if [ -d $HOME/.zshrc.d ]; then
 	for file in $HOME/.zshrc.d/*.zsh; do
 		source $file
 	done
 fi
 
-
-export PATH=$HOME/.local/bin:$PATH
-test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+#test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"

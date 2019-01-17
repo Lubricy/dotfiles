@@ -1,3 +1,7 @@
-;;; private/lubricy/packages.el -*- lexical-binding: t; -*-
+;; -*- no-byte-compile: t; -*-
+;;; ~/.doom.d/packages.el
 
-(package! docker-tramp)
+;;; Examples:
+;; (package! some-package)
+;; (package! another-package :recipe (:fetcher github :repo "username/repo"))
+;; (package! builtin-package :disable t)
