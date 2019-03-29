@@ -11,8 +11,10 @@
    :desc "Down window"             :n "<down>"    #'evil-window-down
    (:prefix "t"
     :desc "Adjust text size"      "t"   #'text-scale-adjust)
+   (:prefix ("o" . "open")
+     :desc "Google Search"      "g"   #'google-this)
    (:when (featurep! :feature workspaces)
-     (:prefix ([tab] . "workspace")
+     (:prefix ("TAB" . "workspace")
        :desc "New workspace"             "c"   #'+workspace/new
        :desc "Delete session"            "d"   #'+workspace/kill-session
        :desc "Delete this workspace"     "x"   #'+workspace/delete
@@ -28,16 +30,18 @@
  ;; <drawer> -------------------------------------
  (:when (featurep! :ui treemacs)
    :after treemacs
-   (:when (featurep! :feature evil +anywhere)
+   (:when (featurep! :feature evil)
     :map evil-treemacs-state-map
     :g [escape]  #'treemacs-quit
     :g "h"       #'treemacs-visit-node-horizontal-split
+    :g "J"       #'treemacs-root-up
     :g "v"       #'treemacs-visit-node-vertical-split
     :g "c c"     #'treemacs-create-file))
 
  (:when (featurep! :lang org)
    :after org
-   (:when (featurep! :feature evil +anywhere)
+   (:when (featurep! :feature evil)
+    :after evil
     :map evil-org-mode-map
     :n "M-S-<left>"     #'org-do-promote
     :n "M-S-<right>"    #'org-do-demote
@@ -49,3 +53,8 @@
     :i [C-return]       #'org-return-indent)))
 
 (evil-ex-define-cmd "k[ill]" #'kill-this-buffer)
+
+
+;; <ugly hacks> ------------------------------------------
+(after! treemacs
+  (evil-define-key* 'treemacs treemacs-mode-map (kbd "h") nil))

@@ -95,8 +95,8 @@ shift + alt - d  : chunkc tiling::window --send-to-monitor 2; chunkc tiling::mon
 #
 ## send window to desktop
 #shift + alt - x : chunkc tiling::window --send-to-desktop $(chunkc get _last_active_desktop)
-shift + alt - z : chunkc tiling::window --send-to-desktop prev
-shift + alt - c : chunkc tiling::window --send-to-desktop next
+#shift + alt - z : chunkc tiling::window --send-to-desktop prev
+#shift + alt - c : chunkc tiling::window --send-to-desktop next
 shift + alt - 1 : chunkc tiling::window --send-to-desktop 1
 shift + alt - 2 : chunkc tiling::window --send-to-desktop 2
 shift + alt - 3 : chunkc tiling::window --send-to-desktop 3
@@ -153,7 +153,7 @@ alt - r : chunkc tiling::desktop --rotate 90
 alt - f : chunkc tiling::window --toggle fullscreen
 #
 ## toggle window native fullscreen
-shift + alt - f : chunkc tiling::window --toggle native-fullscreen
+#shift + alt - f : chunkc tiling::window --toggle native-fullscreen
 #
 ## toggle window parent zoom
 #alt - d : chunkc tiling::window --toggle parent
@@ -167,12 +167,12 @@ shift + alt - q : brew services restart skhd
 
 #
 ## float / unfloat window and center on screen
-alt - c : chunkc tiling::window --toggle float;\
+ctrl + alt - f : chunkc tiling::window --toggle float;\
           chunkc tiling::window --grid-layout 4:4:1:1:2:2
 #
 ## toggle sticky, float and resize to picture-in-picture size
-#alt - s : chunkc tiling::window --toggle sticky;\
-#          chunkc tiling::window --grid-layout 5:5:4:0:1:1
+shift + alt - f : chunkc tiling::window --toggle sticky;\
+          chunkc tiling::window --grid-layout 5:5:4:0:1:1
 #
 ## float next window to be tiled
 #shift + alt - t : chunkc set window_float_next 1
@@ -183,6 +183,13 @@ alt - e : chunkc tiling::desktop --layout monocle
 #alt - r : chunkc tiling::desktop --layout float
 #
 #ctrl + alt - w : chunkc tiling::desktop --deserialize ~/.chunkwm_layouts/dev_1
+
+# 0x1b -> = -
+alt - 0x1B : chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge east
+# 0x18 -> =
+alt - 0x18 : chunkc tiling::window --use-temporary-ratio +0.1 --adjust-window-edge east
+alt - g : chunkc tiling::desktop --deserialize ~/.chunkwmrc.d/goden_ratio
+shift + alt - g : chunkc tiling::desktop --deserialize ~/.chunkwmrc.d/none
 
 alt - m : osascript -e "tell app \"System Events\" to display dialog \"$(chunkc tiling::query --window $(chunkc tiling::query --window id))\""
 shift + alt - m : osascript -e "tell app \"System Events\" to display dialog \"$(chunkc tiling::query --desktop windows)\""

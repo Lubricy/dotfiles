@@ -121,4 +121,4 @@ chunkc tiling::rule --owner Outlook --name Reminder --state float
 #chunkc tiling::rule --owner \"Skype for Business\" --state float
 chunkc tiling::rule --owner \"App Store\" --state float
 chunkc tiling::rule --owner \"Citrix Viewer\" --subrole AXUnknown --state float
-chunkc tiling::rule --owner \"Emacs\" --name org-capture --state float
+chunkc tiling::rule --owner \"Emacs\" --name org-capture --state sticky --grid-layout 5:5:1:1:3:3
