@@ -42,6 +42,7 @@
   (when org-inline-image-overlays
     (org-redisplay-inline-images)))
 
+(after! org
   (add-hook 'org-babel-after-execute-hook 'shk-fix-inline-images))
 
 (provide 'config)
