@@ -36,7 +36,7 @@
 
 (after! projectile
   (add-hook 'python-mode-hook 'project-set-venv)
-  (setq projectile-project-search-path '("~/projects/")))
+  (setq projectile-project-search-path '("~/Projects/")))
 
 (defun shk-fix-inline-images ()
   (when org-inline-image-overlays

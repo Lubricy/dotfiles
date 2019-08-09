@@ -8,9 +8,9 @@ source ~/.zplug/init.zsh
 zplug "~/.zshrc.d/", as:theme, from:local, use:my.zshtheme
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
 zplug "clvv/fasd", as:command, use:fasd
-#zplug "plugins/docker", from:oh-my-zsh, if:"(( $+commands[docker] ))"
+zplug "plugins/docker", from:oh-my-zsh, if:"(( $+commands[docker] ))"
 zplug "plugins/git", from:oh-my-zsh, if:"(( $+commands[git] ))"
-#zplug "plugins/aws", from:oh-my-zsh, if:"(( $+commands[aws] ))"
+zplug "plugins/aws", from:oh-my-zsh, if:"(( $+commands[aws] ))"
 #zplug "plugins/pyenv", from:oh-my-zsh, if:"(( $+commands[pyenv] ))"
 zplug "plugins/fasd", from:oh-my-zsh, on:"clvv/fasd"
 

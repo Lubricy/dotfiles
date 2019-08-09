@@ -69,13 +69,13 @@ shift + alt - right : chunkc tiling::window --swap east
 #
 
 ## toggle monitor
-alt - a : chunkc tiling::monitor -f 3
+alt - d : chunkc tiling::monitor -f 3
 alt - s : chunkc tiling::monitor -f 1
-alt - d : chunkc tiling::monitor -f 2
+alt - a : chunkc tiling::monitor -f 2
 #
-shift + alt - a  : chunkc tiling::window --send-to-monitor 3; chunkc tiling::monitor -f 3
+shift + alt - d  : chunkc tiling::window --send-to-monitor 3; chunkc tiling::monitor -f 3
 shift + alt - s  : chunkc tiling::window --send-to-monitor 1; chunkc tiling::monitor -f 1
-shift + alt - d  : chunkc tiling::window --send-to-monitor 2; chunkc tiling::monitor -f 2
+shift + alt - a  : chunkc tiling::window --send-to-monitor 2; chunkc tiling::monitor -f 2
 
 #
 ## move window

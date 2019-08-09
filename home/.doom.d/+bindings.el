@@ -13,7 +13,7 @@
     :desc "Adjust text size"      "t"   #'text-scale-adjust)
    (:prefix ("o" . "open")
      :desc "Google Search"      "g"   #'google-this)
-   (:when (featurep! :feature workspaces)
+   (:when (featurep! :ui workspaces)
      (:prefix ("TAB" . "workspace")
        :desc "New workspace"             "c"   #'+workspace/new
        :desc "Delete session"            "d"   #'+workspace/kill-session
@@ -30,7 +30,7 @@
  ;; <drawer> -------------------------------------
  (:when (featurep! :ui treemacs)
    :after treemacs
-   (:when (featurep! :feature evil)
+   (:when (featurep! :editor evil)
     :map evil-treemacs-state-map
     :g [escape]  #'treemacs-quit
     :g "h"       #'treemacs-visit-node-horizontal-split
@@ -40,7 +40,7 @@
 
  (:when (featurep! :lang org)
    :after org
-   (:when (featurep! :feature evil)
+   (:when (featurep! :editor evil)
     :after evil
     :map evil-org-mode-map
     :n "M-S-<left>"     #'org-do-promote
