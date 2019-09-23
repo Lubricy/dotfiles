@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -e
+
+stack build :xmonad-config
+stack install :xmonad-config --local-bin-path bin/ --verbosity error
+ln -f -T $(stack exec -- which xmonad-config) $1

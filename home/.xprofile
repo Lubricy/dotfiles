@@ -4,7 +4,5 @@ export GTK_IM_MODULE=xim
 export XMODIFIERS=@im=ibus
 export QT_IM_MODULE=xim
 ibus-daemon -xdr
-chromium &
-polybar header &
 feh --bg-fill 'https://source.unsplash.com/1600x900/?dark,fantasy' &
 compton &
