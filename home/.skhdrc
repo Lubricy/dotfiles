@@ -163,7 +163,8 @@ alt - f : chunkc tiling::window --toggle fullscreen
 #
 ## toggle window fade
 alt - q : brew services restart chunkwm
-shift + alt - q : brew services restart skhd
+shift + alt - q : brew services stop chunkwm
+ctrl + alt - q : brew services restart skhd
 
 #
 ## float / unfloat window and center on screen

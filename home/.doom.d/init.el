@@ -1,15 +1,16 @@
 ;;; init.el -*- lexical-binding: t; -*-
 
-;; Copy this file to ~/.doom.d/init.el or ~/.config/doom/init.el ('doom
-;; quickstart' will do this for you). The `doom!' block below controls what
-;; modules are enabled and in what order they will be loaded. Remember to run
-;; 'doom refresh' after modifying it.
+;; Copy this file to ~/.doom.d/init.el or ~/.config/doom/init.el ('doom install'
+;; will do this for you). The `doom!' block below controls what modules are
+;; enabled and in what order they will be loaded. Remember to run 'doom refresh'
+;; after modifying it.
 ;;
 ;; More information about these modules (and what flags they support) can be
 ;; found in modules/README.org.
 
 (doom! :input
        ;;chinese
+       ;;japanese
 
        :completion
        company           ; the ultimate code completion backend
@@ -18,12 +19,13 @@
        ;;ivy               ; a search engine for love and life
 
        :ui
-       deft              ; notational velocity for Emacs
+       ;;deft              ; notational velocity for Emacs
        doom              ; what makes DOOM look the way it does
        doom-dashboard    ; a nifty splash screen for Emacs
        doom-quit         ; DOOM quit-message prompts when you quit Emacs
        ;;fill-column       ; a `fill-column' indicator
-       hl-todo           ; highlight TODO/FIXME/NOTE tags
+       hl-todo           ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
+       ;;hydra
        ;;indent-guides     ; highlighted indent columns
        modeline          ; snazzy, Atom-inspired modeline, plus API
        nav-flash         ; blink the current line after jumping
@@ -33,7 +35,7 @@
         +all             ; catch all popups that start with an asterix
         +defaults)       ; default popup rules
        pretty-code       ; replace bits of code with pretty symbols
-       ;;tabbar            ; FIXME an (incomplete) tab bar for Emacs
+       ;;tabs              ; an tab bar for Emacs
        treemacs          ; a project drawer, like neotree but cooler
        unicode           ; extended unicode support for various languages
        vc-gutter         ; vcs diff in the fringe
@@ -45,34 +47,36 @@
        (evil +everywhere); come to the dark side, we have cookies
        file-templates    ; auto-snippets for empty files
        fold              ; (nigh) universal code folding
-       (format +onsave)  ; automated prettiness
-       ;;lispy             ; vim for lisp, for people who dont like vim
+       ;;(format +onsave)  ; automated prettiness
+       ;;god               ; run Emacs commands without modifier keys
+       ;;lispy             ; vim for lisp, for people who don't like vim
        multiple-cursors  ; editing in many places at once
+       ;;objed             ; text object editing for the innocent
        parinfer          ; turn lisp into python, sort of
        rotate-text       ; cycle region at point between text candidates
        snippets          ; my elves. They type so I don't have to
+       word-wrap         ; soft wrapping with language-aware indent
 
        :emacs
-       (dired)            ; making dired pretty [functional]
-       ;;+ranger         ; bringing the goodness of ranger to dired
-       ;;+icons          ; colorful icons for dired-mode
-
+       dired             ; making dired pretty [functional]
        electric          ; smarter, keyword-based electric-indent
+       ibuffer           ; interactive buffer management
        vc                ; version-control and Emacs, sitting in a tree
 
        :term
        eshell            ; a consistent, cross-platform shell (WIP)
+       ;;shell             ; a terminal REPL for Emacs
        term              ; terminals in Emacs
        ;;vterm             ; another terminals in Emacs
 
        :tools
        ;;ansible
        debugger          ; FIXME stepping through code, to help you add bugs
-       ;;direnv
+       direnv
        docker
        editorconfig      ; let someone else argue about tabs vs spaces
        ;;ein               ; tame Jupyter notebooks with emacs
-       eval              ; run code, run (also, repls)
+       (eval +overlay)     ; run code, run (also, repls)
        flycheck          ; tasing you for every semicolon you forget
        flyspell          ; tasing you for misspelling mispelling
        ;;gist              ; interacting with github gists
@@ -101,11 +105,13 @@
        ;;crystal           ; ruby at the speed of c
        ;;csharp            ; unity, .NET, and mono shenanigans
        data              ; config/data formats
-       ;;erlang            ; an elegant language for a more civilized age
        ;;elixir            ; erlang done right
        ;;elm               ; care for a cup of TEA?
        emacs-lisp        ; drown in parentheses
+       ;;erlang            ; an elegant language for a more civilized age
        ;;ess               ; emacs speaks statistics
+       ;;faust             ; dsp, but you get to keep your soul
+       ;;fsharp           ; ML stands for Microsoft's Language
        ;;go                ; the hipster dialect
        (haskell +intero) ; a language that's lazier than I am
        ;;hy                ; readability of scheme w/ speed of python
@@ -113,22 +119,22 @@
        (java +meghanada) ; the poster child for carpal tunnel syndrome
        javascript        ; all(hope(abandon(ye(who(enter(here))))))
        ;;julia             ; a better, faster MATLAB
-       ;;kotlin            ; a better, slicker Java(Script)
+       kotlin            ; a better, slicker Java(Script)
        latex             ; writing papers in Emacs has never been so fun
+       ;;lean
        ;;ledger            ; an accounting system in Emacs
        ;;lua               ; one-based indices? one-based indices
        markdown          ; writing docs for people to ignore
        ;;nim               ; python + lisp at the speed of c
-       ;;nix               ; I hereby declare "nix geht mehr!"
+       nix               ; I hereby declare "nix geht mehr!"
        ;;ocaml             ; an objective camel
        (org              ; organize your plain life in plain text
-        +attach          ; custom attachment system
-        +babel           ; running code in org
-        +capture         ; org-capture in and outside of Emacs
-        +export          ; Exporting org to whatever you want
-        +habit           ; Keep track of your habits
-        +present         ; Emacs for presentations
-        +protocol)       ; Support for org-protocol:// links
+        +dragndrop       ; drag & drop files/images into org buffers
+        ;;+hugo            ; use Emacs for hugo blogging
+        +ipython         ; ipython/jupyter support for babel
+        +pandoc          ; export-with-pandoc support
+        ;;+pomodoro        ; be fruitful with the tomato technique
+        +present)        ; using org-mode for presentations
        ;;perl              ; write code no one else can comprehend
        ;;php               ; perl's insecure younger brother
        ;;plantuml          ; diagrams for confusing people more
@@ -140,12 +146,12 @@
        ;;ruby              ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
        ;;rust              ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
        scala             ; java, but good
-       sh                  ; she sells (ba|z|fi)sh shells on the C xor
+       ;;scheme            ; a fully conniving family of lisps
+       sh                ; she sells {ba,z,fi}sh shells on the C xor
        ;;solidity          ; do you need a blockchain? No.
        ;;swift             ; who asked for emoji variables?
        ;;terra             ; Earth and Moon in alignment for performance.
        web               ; the tubes
-       ;;vala              ; GObjective-C
 
        :email
        ;;(mu4e +gmail)       ; WIP
@@ -158,15 +164,11 @@
        :app
        ;;calendar
        ;;irc               ; how neckbeards socialize
-       ;;rss +org        ; emacs as an RSS reader
+       ;;(rss +org)        ; emacs as an RSS reader
        ;;twitter           ; twitter client https://twitter.com/vnought
-       ;;(write            ; emacs as a word processor (latex + org + markdown)
+       ;;(write            ; emacs for writers (fiction, notes, papers, etc.)
        ;; +wordnut         ; wordnet (wn) search
        ;; +langtool)       ; a proofreader (grammar/style check) for Emacs
-
-       :collab
-       ;;floobits          ; peer programming for a price
-       ;;impatient-mode    ; show off code over HTTP
 
        :config
        ;; For literate config users. This will tangle+compile a config.org

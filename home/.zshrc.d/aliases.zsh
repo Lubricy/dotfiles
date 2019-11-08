@@ -17,7 +17,7 @@ if command -v htop >/dev/null 2>&1; then
 fi
 
 foo_nix () {
-  docker run --rm -it -v nix-store:/nix -v nix-home:/root -v $(pwd):/src --workdir /src -e http_proxy=$docker_proxy -e HTTPS_PROXY=$docker_proxy -e NO_PROXY -e no_proxy "$@" nixos/nix 
+  docker run --rm -it -v nix-store:/nix -v nix-home:/root -v $(pwd):/src --workdir /src "$@" nixos/nix 
 }
 if command -v docker >/dev/null 2>&1; then
   alias nix=foo_nix
@@ -38,7 +38,56 @@ foo_pipenv () {
     pipenv shell --python "$1"
   fi
 }
-if command -v pipenv >/dev/null 2>&1; then
+foo_conda-env () {
+	source $(conda info --base)/etc/profile.d/conda.sh
+  if [ -z "$1" ]; then
+		if [ -e "environment.yml" ]; then
+			# echo "environment.yml file found"
+			ENV=$(head -n 1 environment.yml | cut -f2 -d ' ')
+			# Check if you are already in the environment
+			if [[ $PATH != *$ENV* ]]; then
+				# Check if the environment exists
+				conda activate $ENV
+				if [ $? -eq 0 ]; then
+					:
+				else
+					# Create the environment and activate
+					echo "Conda env '$ENV' doesn't exist."
+					conda env create -q
+					conda activate $ENV
+				fi
+			fi
+		fi
+  elif [ "$1" = "sync" ]; then
+		if [ -e "environment.yml" ]; then
+			# echo "environment.yml file found"
+			ENV=$(head -n 1 environment.yml | cut -f2 -d ' ')
+			# Check if you are already in the environment
+			if [[ $PATH != *$ENV* ]]; then
+				# Check if the environment exists
+				conda activate $ENV
+				if [ $? -eq 0 ]; then
+          :
+				else
+					# Create the environment and activate
+					echo "Conda env '$ENV' doesn't exist."
+					conda env create -q
+					conda activate $ENV
+				fi
+			fi
+      conda env export | sed '/prefix/d' > environment.yml
+		fi
+  else
+    ENV="$(basename $(pwd))"
+    conda create -n $ENV python="$1"
+    conda activate $ENV
+    conda env export | sed '/prefix/d' > environment.yml
+  fi
+}
+if command -v conda >/dev/null 2>&1; then
+  alias venv=foo_conda-env
+  alias pvenv=foo_pipenv
+elif command -v pipenv >/dev/null 2>&1; then
   alias venv=foo_pipenv
 else
   alias venv=foo_venv
