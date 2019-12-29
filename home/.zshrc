@@ -31,28 +31,28 @@ if [ -d $HOME/.zshrc.d ]; then
 	done
 fi
 
-. /Users/a578203/.nix-profile/etc/profile.d/nix.sh
+[[ -f $HOME/.nix-profile/etc/profile.d/nix.sh ]] && . $HOME/.nix-profile/etc/profile.d/nix.sh
 #test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
 # tabtab source for serverless package
 # uninstall by removing these lines or running `tabtab uninstall serverless`
-[[ -f /Users/a578203/.homebrew/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.zsh ]] && . /Users/a578203/.homebrew/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.zsh
+[[ -f $HOME/.homebrew/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.zsh ]] && . $HOME/.homebrew/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.zsh
 # tabtab source for sls package
 # uninstall by removing these lines or running `tabtab uninstall sls`
-[[ -f /Users/a578203/.homebrew/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.zsh ]] && . /Users/a578203/.homebrew/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.zsh
+[[ -f $HOME/.homebrew/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.zsh ]] && . $HOME/.homebrew/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.zsh
 # tabtab source for slss package
 # uninstall by removing these lines or running `tabtab uninstall slss`
-[[ -f /Users/a578203/.homebrew/lib/node_modules/serverless/node_modules/tabtab/.completions/slss.zsh ]] && . /Users/a578203/.homebrew/lib/node_modules/serverless/node_modules/tabtab/.completions/slss.zsh
+[[ -f $HOME/.homebrew/lib/node_modules/serverless/node_modules/tabtab/.completions/slss.zsh ]] && . $HOME/.homebrew/lib/node_modules/serverless/node_modules/tabtab/.completions/slss.zsh
 ## >>> conda initialize >>>
 ## !! Contents within this block are managed by 'conda init' !!
-#__conda_setup="$('/Users/a578203/.homebrew/Caskroom/miniconda/base/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+#__conda_setup="$('$HOME/.homebrew/Caskroom/miniconda/base/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
 #if [ $? -eq 0 ]; then
 #    eval "$__conda_setup"
 #else
-#    if [ -f "/Users/a578203/.homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh" ]; then
-#        . "/Users/a578203/.homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh"
+#    if [ -f "$HOME/.homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh" ]; then
+#        . "$HOME/.homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh"
 #    else
-#        export PATH="/Users/a578203/.homebrew/Caskroom/miniconda/base/bin:$PATH"
+#        export PATH="$HOME/.homebrew/Caskroom/miniconda/base/bin:$PATH"
 #    fi
 #fi
 #unset __conda_setup
