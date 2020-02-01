@@ -17,12 +17,16 @@ if command -v htop >/dev/null 2>&1; then
 fi
 
 foo_nix () {
-  docker run --rm -it -v nix-store:/nix -v nix-home:/root -v $(pwd):/src --workdir /src "$@" nixos/nix 
+  docker run --rm -i -t -v nix-store:/nix -v nix-home:/root -v $(pwd):/src --workdir /src -e http_proxy -e https_proxy -e HTTP_PROXY -e HTTPS_PROXY -e no_proxy -e NO_PROXY "$@" nixos/nix 
 }
 if command -v docker >/dev/null 2>&1; then
-  alias nix=foo_nix
+  alias nix-docker=foo_nix
 fi
 
+if command -v parallel >/dev/null 2>&1; then
+  alias par='parallel --progress'
+  alias parp='parallel --progress --pipe'
+fi
 foo_venv () {
   dir=${1:-.venv}
   if [ ! -d $dir ]; then
@@ -85,9 +89,9 @@ foo_conda-env () {
   fi
 }
 if command -v conda >/dev/null 2>&1; then
-  alias venv=foo_conda-env
-  alias pvenv=foo_pipenv
-elif command -v pipenv >/dev/null 2>&1; then
+  alias cvenv=foo_conda-env
+fi
+if command -v pipenv >/dev/null 2>&1; then
   alias venv=foo_pipenv
 else
   alias venv=foo_venv
