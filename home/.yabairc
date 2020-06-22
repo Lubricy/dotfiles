@@ -1,0 +1,69 @@
+# directory containing log files (HOMEBREW_PREFIX defaults to /usr/local unless you manually specified otherwise)
+HOMEBREW_PREFIX/var/log/yabai/
+
+# view the last lines of the error log 
+tail -f /usr/local/var/log/yabai/yabai.err.log
+
+# view the last lines of the debug log
+tail -f /usr/local/var/log/yabai/yabai.out.log
+
+# bsp or float (default: bsp)
+yabai -m config layout bsp
+
+# Override default layout for space 2 only
+yabai -m config --space 2 layout float
+
+# New window spawns to the left if vertical split, or top if horizontal split
+yabai -m config window_placement first_child
+
+# New window spawns to the right if vertical split, or bottom if horizontal split
+yabai -m config window_placement second_child
+
+# Set all padding and gaps to 20pt (default: 0)
+yabai -m config top_padding    4
+yabai -m config bottom_padding 4
+yabai -m config left_padding   4
+yabai -m config right_padding  4
+yabai -m config window_gap     4
+
+# Override gaps for space 2 only
+yabai -m config --space 2 window_gap 0
+
+# on or off (default: off)
+yabai -m config auto_balance on
+
+# Floating point value between 0 and 1 (default: 0.5)
+yabai -m config split_ratio 0.5
+
+# set mouse interaction modifier key (default: fn)
+yabai -m config mouse_modifier fn
+
+# set modifier + left-click drag to resize window (default: move)
+yabai -m config mouse_action1 move
+
+# set modifier + right-click drag to resize window (default: resize)
+yabai -m config mouse_action2 resize
+
+
+# floating windows are always on top (default: off)
+yabai -m config window_topmost on
+
+# modify window shadows (default: on, options: on, off, float)
+# example: show shadows only for floating windows
+yabai -m config window_shadow float
+
+# window opacity (default: off)
+# example: render all unfocused windows with 90% opacity
+yabai -m config window_opacity on
+yabai -m config active_window_opacity 1.0
+yabai -m config normal_window_opacity 0.5
+
+# border color
+yabai -m config window_border                on
+yabai -m config window_border_width          6
+yabai -m config active_window_border_color   0xff775759
+yabai -m config normal_window_border_color   0xff555555
+yabai -m config insert_feedback_color        0xffd75f5f
+
+yabai -m config mouse_follows_focus          on
+yabai -m config focus_follows_mouse          on
