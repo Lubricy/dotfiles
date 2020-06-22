@@ -1,5 +1,6 @@
 set nocompatible
 filetype plugin on
+set clipboard=unnamedplus
 set shell=bash
 let mapleader = "\<Space>"
 

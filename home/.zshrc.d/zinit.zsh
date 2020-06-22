@@ -18,6 +18,12 @@ zinit snippet OMZ::lib/git.zsh
 zinit ice wait atload"unalias grv" lucid
 zinit snippet OMZ::plugins/git/git.plugin.zsh
 
+zinit ice as"program" pick"fasd" wait lucid
+zinit load clvv/fasd
+
+zinit ice wait lucid
+zinit snippet OMZ::plugins/fasd/fasd.plugin.zsh
+
 zinit ice wait lucid
 zinit snippet OMZ::plugins/kubectl/kubectl.plugin.zsh
 
@@ -26,6 +32,9 @@ zinit snippet OMZ::plugins/aws/aws.plugin.zsh
 
 zinit ice wait lucid
 zinit snippet OMZ::plugins/helm/helm.plugin.zsh
+
+zinit ice wait lucid
+zinit snippet OMZ::plugins/direnv/direnv.plugin.zsh
 
 zinit ice wait"1" atload"zicompinit; zicdreplay -q" lucid
 zinit snippet OMZ::plugins/pyenv/pyenv.plugin.zsh
@@ -49,8 +58,8 @@ zinit load zsh-users/zsh-history-substring-search
 zinit ice lucid
 zinit load zsh-users/zsh-syntax-highlighting
 
-zinit ice lucid atload"_zsh_autosuggest_start"
-zinit load zsh-users/zsh-autosuggestions
+# zinit ice lucid atload"_zsh_autosuggest_start"
+# zinit load zsh-users/zsh-autosuggestions
 
 setopt promptsubst
 autoload -Uz colors; colors

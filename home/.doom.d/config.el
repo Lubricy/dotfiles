@@ -3,6 +3,7 @@
 ;; Place your private configuration here
 
 (load! "+bindings")
+(load! "+evil-commands")
 
 ;; I've swapped these keys on my keyboard
 (setq x-meta-keysym         'alt
@@ -29,13 +30,15 @@
       (when (and (not (equal python-shell-virtualenv-path venv-path))
                  (file-directory-p venv-path))
         (message "Changing to `%s'" venv-path)
-        (setq-local python-shell-virtualenv-path venv-path)
-        (setq-local flycheck-python-pycompile-executable (concat venv-path "bin/python"))
-        (setq-local flycheck-python-pylint-executable (concat venv-path "bin/python"))
-        (setenv "PYTHONPATH" (projectile-project-root))))))
+        (pyvenv-activate venv-path)))))
+        ;; (setq-local python-shell-virtualenv-path venv-path)
+        ;; (setq-local flycheck-python-pycompile-executable (concat venv-path "bin/python"))
+        ;; (setq-local flycheck-python-pylint-executable (concat venv-path "bin/python"))
+        ;; (setenv "PYTHONPATH" (projectile-project-root))))))
 
 (after! projectile
   (add-hook 'python-mode-hook 'project-set-venv)
+  ;; (add-hook 'hack-local-variables-hook 'project-set-venv)
   (setq projectile-project-search-path '("~/Projects/")))
 
 (defun shk-fix-inline-images ()
