@@ -31,22 +31,33 @@
                  (file-directory-p venv-path))
         (message "Changing to `%s'" venv-path)
         (pyvenv-activate venv-path)))))
-        ;; (setq-local python-shell-virtualenv-path venv-path)
-        ;; (setq-local flycheck-python-pycompile-executable (concat venv-path "bin/python"))
-        ;; (setq-local flycheck-python-pylint-executable (concat venv-path "bin/python"))
-        ;; (setenv "PYTHONPATH" (projectile-project-root))))))
 
 (after! projectile
   (add-hook 'python-mode-hook 'project-set-venv)
   ;; (add-hook 'hack-local-variables-hook 'project-set-venv)
   (setq projectile-project-search-path '("~/Projects/")))
 
+(after! treemacs
+  (setq treemacs-collapse-dirs 20))
+
 (defun shk-fix-inline-images ()
   (when org-inline-image-overlays
     (org-redisplay-inline-images)))
 
+(after! ob-async
+  (pushnew! ob-async-no-async-languages-alist "jupyter"))
+
 (after! org
-  (add-hook 'org-babel-after-execute-hook 'shk-fix-inline-images))
+  ;; Split up the search string on whitespace
+  ;; (after!
+  ;;   (dolist (lang '(python julia R))
+  ;;     (org-babel-jupyter-make-language-alias nil lang)))
+  (setq org-agenda-search-view-always-boolean t)
+  (add-hook 'org-babel-after-execute-hook 'shk-fix-inline-images)
+  (add-hook 'ob-async-pre-execute-src-block-hook
+          '(lambda ()
+            (require 'docker-tramp))))
+
 
 (provide 'config)
 ;;; config.el ends here
