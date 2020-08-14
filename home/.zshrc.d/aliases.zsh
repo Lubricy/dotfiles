@@ -45,48 +45,36 @@ foo_pipenv () {
 foo_conda-env () {
 	source $(conda info --base)/etc/profile.d/conda.sh
   if [ -z "$1" ]; then
-		if [ -e "environment.yml" ]; then
-			# echo "environment.yml file found"
-			ENV=$(head -n 1 environment.yml | cut -f2 -d ' ')
-			# Check if you are already in the environment
-			if [[ $PATH != *$ENV* ]]; then
-				# Check if the environment exists
-				conda activate $ENV
-				if [ $? -eq 0 ]; then
-					:
-				else
-					# Create the environment and activate
-					echo "Conda env '$ENV' doesn't exist."
-					conda env create -q
-					conda activate $ENV
-				fi
-			fi
-		fi
-  elif [ "$1" = "sync" ]; then
-		if [ -e "environment.yml" ]; then
-			# echo "environment.yml file found"
-			ENV=$(head -n 1 environment.yml | cut -f2 -d ' ')
-			# Check if you are already in the environment
-			if [[ $PATH != *$ENV* ]]; then
-				# Check if the environment exists
-				conda activate $ENV
-				if [ $? -eq 0 ]; then
-          :
-				else
-					# Create the environment and activate
-					echo "Conda env '$ENV' doesn't exist."
-					conda env create -q
-					conda activate $ENV
-				fi
-			fi
-      conda env export | sed '/prefix/d' > environment.yml
-		fi
+    PYVER="3"
   else
-    ENV="$(basename $(pwd))"
-    conda create -n $ENV python="$1"
-    conda activate $ENV
-    conda env export | sed '/prefix/d' > environment.yml
+    PYVER="$1"
   fi
+  if [ -e "environment.yml" ]; then
+    echo "environment.yml file found"
+    ENV=$(head -n 1 environment.yml | cut -f2 -d ' ')
+    CMD="conda env crerate"
+  else
+    ENV="./.venv"
+    CMD="conda create python=$PYVER"
+  fi
+  # Check if you are already in the environment
+  if [[ $PATH != *$ENV* ]]; then
+    # Check if the environment exists
+    conda activate $ENV
+    if [ $? -eq 0 ]; then
+      :
+    else
+      # Create the environment and activate
+      echo "Conda env '$ENV' doesn't exist."
+      if [[ $ENV != *.venv* ]]; then
+        $SHELL -c "$CMD -q"
+      else
+        $SHELL -c "$CMD -q --prefix $ENV"
+      fi
+      conda activate $ENV
+    fi
+  fi
+  conda env export | sed "s#^name:.*\$#name: $ENV#g;/prefix/d" > environment.yml
 }
 if command -v conda >/dev/null 2>&1; then
   alias cvenv=foo_conda-env
