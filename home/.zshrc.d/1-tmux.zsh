@@ -3,7 +3,7 @@ if which tmux >/dev/null 2>&1; then
     test -z "$SSH_CONNECTION" && test -z "$TMUX" && (tmux attach || tmux new-session)
 
     # when quitting tmux, try to attach
-    while (test -z "$SSH_CONNECTION" && test -z ${TMUX}); do
-        tmux attach || break
-    done
+ #   while (test -z "$SSH_CONNECTION" && test -z ${TMUX}); do
+ #       tmux attach || break
+ #   done
 fi

@@ -128,7 +128,10 @@ set smartindent
 set showcmd
 set pastetoggle=<F10>
 set foldmethod=marker
-set diffopt+=vertical
+if &diff
+  set diffopt-=internal
+  set diffopt+=vertical
+endif
 
 nnoremap g2 :diffget //2<CR>
 nnoremap g3 :diffget //3<CR>
