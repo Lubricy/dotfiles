@@ -36,6 +36,9 @@ zinit snippet OMZ::plugins/helm/helm.plugin.zsh
 zinit ice wait lucid
 zinit snippet OMZ::plugins/direnv/direnv.plugin.zsh
 
+zinit ice src"completions/asdf.bash" wait lucid
+zinit load asdf-vm/asdf
+
 zinit ice wait"1" atload"zicompinit; zicdreplay -q" lucid
 zinit snippet OMZ::plugins/pyenv/pyenv.plugin.zsh
 
@@ -53,7 +56,6 @@ function __bind_history_keys() {
 }
 zinit ice wait lucid atload'__bind_history_keys'
 zinit load zsh-users/zsh-history-substring-search
-
 
 zinit ice lucid
 zinit load zsh-users/zsh-syntax-highlighting

@@ -47,9 +47,8 @@
     :n "M-S-<right>"    #'org-do-demote
     :n "M-<left>"       #'org-promote-subtree
     :n "M-<right>"      #'org-demote-subtree
-    :n "o"              (λ! (+org/insert-item 'below))
-    :n "O"              (λ! (+org/insert-item 'above))
-    :i [return]         (λ! (+org/insert-item 'below))
+    :n "j"              #'org-next-block
+    :n "k"              #'org-previous-block
     :i [C-return]       #'org-return-indent)))
 
 (evil-ex-define-cmd "k[ill]" #'kill-this-buffer)
