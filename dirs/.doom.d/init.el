@@ -106,6 +106,7 @@
        terraform         ; infrastructure as code
        tmux              ; an API for interacting with tmux
        ;;upload            ; map local to remote projects via ssh/ftp
+       spark
 
        :os
        (:if IS-MAC macos)  ; improve compatibility with macOS
@@ -150,7 +151,6 @@
        ;;ocaml             ; an objective camel
        (org
         +jupyter
-        +spark
         +pomodoro)         ; organize your plain life in plain text
        ;;perl              ; write code no one else can comprehend
        ;;php               ; perl's insecure younger brother
