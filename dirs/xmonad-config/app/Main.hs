@@ -1,6 +1,10 @@
 module Main where
 
-import Lib
+import XMonad (xmonad)
+import XMonad.Hooks.EwmhDesktops (ewmh)
+
+import Lib (defaults)
 
 main :: IO ()
-main = someFunc
+main = do
+  xmonad $ ewmh defaults

@@ -1,6 +1,8 @@
 module Lib
-    ( someFunc
+    ( defaults
     ) where
 
-someFunc :: IO ()
-someFunc = putStrLn "someFunc"
+import XMonad
+
+defaults :: XConfig (Choose Tall (Choose (Mirror Tall) Full))
+defaults = def

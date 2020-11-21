@@ -1,2 +1,6 @@
 .stack-work/
 *~
+xmonad-x86_64-linux
+bin/
+*.errors
+
