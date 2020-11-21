@@ -1,1 +1,1 @@
-../../doom-emacs/
+../../doom-emacs

@@ -1,1 +1,1 @@
-../dirs/.doom.d
+../dirs/doom.d
