@@ -23,7 +23,7 @@ font-1 = MaterialIcons:size=18;5
 font-2 = NotoSans-Regular:size=12;2
 font-3 = FontAwesome:size=16;2
 
-modules-left = ewmh mpd
+modules-left = ewmh
 modules-center = title 
 modules-right = volume backlight wireless-network wired-network battery date powermenu
 
@@ -211,7 +211,7 @@ ramp-coreload-7-foreground = #ff5555
 
 [module/date]
 type = internal/date
-date =    %%{F#99}%Y-%m-%d%%{F-}  %%{F#fff}%H:%M%%{F-}
+date =    %%{F#999}%Y-%m-%d%%{F-}  %%{F#fff}%H:%M%%{F-}
 date-alt = %%{F#fff}%A, %d %B %Y  %%{F#fff}%H:%M%%{F#fba922}:%S%%{F-}
 
 [module/memory]
@@ -292,8 +292,10 @@ label-connected =    %{T3}%local_ip%%{T-}
 label-disconnected-foreground = #66
 
 [module/volume]
-type = internal/volume
-speaker-mixer = Speaker
+type = internal/pulseaudio
+
+use-ui-max = true
+speaker-mvolume = Speaker
 headphone-mixer = Headphone
 headphone-id = 9
 
