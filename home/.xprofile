@@ -1,8 +1,4 @@
-xinput set-prop "SynPS/2 Synaptics TouchPad" "libinput Tapping Enabled" 1
-xinput set-prop "SynPS/2 Synaptics TouchPad" "libinput Natural Scrolling Enabled" 1
-export GTK_IM_MODULE=xim
-export XMODIFIERS=@im=ibus
-export QT_IM_MODULE=xim
-ibus-daemon -xdr
-feh --bg-fill 'https://source.unsplash.com/1600x900/?dark,fantasy' &
-compton &
+#xinput set-prop "SynPS/2 Synaptics TouchPad" "libinput Tapping Enabled" 1
+#xinput set-prop "SynPS/2 Synaptics TouchPad" "libinput Natural Scrolling Enabled" 1
+
+[[ -f ~/.zshenv ]] && source ~/.zshenv

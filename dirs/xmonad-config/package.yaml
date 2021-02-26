@@ -23,6 +23,8 @@ dependencies:
 - base >= 4.7 && < 5
 - xmonad
 - xmonad-contrib
+- X11
+- containers
 
 library:
   source-dirs: src
@@ -30,12 +32,26 @@ library:
 executables:
   xmonad-config-exe:
     main:                Main.hs
-    source-dirs:         app
+    source-dirs:         app/Xmonad
     ghc-options:
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
+    - xmonad-config
+
+  xmonad-base16-generator-exe:
+    main:                Main.hs
+    source-dirs:         app/Base16
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - text
+    - stache
+    - megaparsec
+    - aeson
     - xmonad-config
 
 tests:
