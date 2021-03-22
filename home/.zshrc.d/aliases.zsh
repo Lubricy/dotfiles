@@ -52,7 +52,7 @@ foo_conda-env () {
   if [ -e "environment.yml" ]; then
     echo "environment.yml file found"
     ENV=$(head -n 1 environment.yml | cut -f2 -d ' ')
-    CMD="conda env crerate"
+    CMD="conda env create"
   else
     ENV="./.venv"
     CMD="conda create python=$PYVER"
@@ -80,10 +80,9 @@ if command -v conda >/dev/null 2>&1; then
   alias cvenv=foo_conda-env
 fi
 if command -v pipenv >/dev/null 2>&1; then
-  alias venv=foo_pipenv
-else
-  alias venv=foo_venv
+  alias pvenv=foo_pipenv
 fi
+alias venv=foo_venv
 
 if command -v rsync >/dev/null 2>&1; then
   alias lcp='rsync -ah --info=progress2 --stats'
