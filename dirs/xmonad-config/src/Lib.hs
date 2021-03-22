@@ -7,12 +7,14 @@ import XMonad.Hooks.ManageHelpers
 import Graphics.X11.ExtraTypes.XF86 ()
 import XMonad.Util.EZConfig
 import XMonad.Layout.Spacing
-import XMonad.Hooks.ManageDocks (avoidStruts, manageDocks, checkDock, ToggleStruts(..))
+import XMonad.Actions.UpdatePointer
+import XMonad.Hooks.ManageDocks (avoidStruts, avoidStrutsOn, manageDocks, checkDock, ToggleStruts(..), Direction2D(..))
 import XMonad.Layout.NoBorders (smartBorders)
 import XMonad.Hooks.EwmhDesktops
 import Data.List (find)
 import XMonad.Layout.MultiToggle ((??), mkToggle, Toggle(..), EOT(..))
 import XMonad.Layout.MultiToggle.Instances (StdTransformers(FULL, NOBORDERS))
+import XMonad.Layout.ResizableTile ( ResizableTall(..), MirrorResize(MirrorShrink,MirrorExpand) )
 import qualified XMonad.StackSet as W
 import qualified Data.Map as M
 
@@ -24,6 +26,7 @@ myLayoutHook = mkToggle (NOBORDERS ?? FULL ?? EOT) (
     tall
     ||| Mirror tall
     ||| Full)
+  -- where tall = ResizableTall 2 (3/100) (1/2)
   where tall = Tall 1 (3/100) (1/2)
 
 -- | Restack dock under lowest managed window.
@@ -61,7 +64,8 @@ myManageHook = composeAll . concat $
     , [ className =? "Thunderbird" --> doShift "5" ]
     , [(className =? "Firefox" <&&> resource =? "Dialog") --> doFloat ]
     , [ className =? "Pidgin" --> doShift "5" ]
-    , [ className =? "Gimp" --> doShift "6" ]
+    , [ className =? "Gimp" --> doShift "4" ]
+    , [ className =? "Virt-manager" --> doShift "4" ]
     , [ className =? f --> doFloat | f <- myFloatingWindows ] ]
     where
         myFloatingWindows   = [ "Pidgin", "Skype", "Galculator", "Lxappearance", "Transmission-gtk", "Vlc", "Gimp"]
@@ -79,8 +83,9 @@ defaults = def {
   , borderWidth = 2
   , focusedBorderColor = "#ffcc66"
   , normalBorderColor  = "#cccccc"
+  , logHook = updatePointer (0.5, 0.25) (0.8, 0.8)
   , handleEventHook = handleEventHook def <+> fullscreenEventHook
-  , layoutHook =  avoidStruts . myGaps . smartBorders $ myLayoutHook
+  , layoutHook =  myGaps . avoidStruts . smartBorders $ myLayoutHook
   , startupHook = spawn "~/.config/polybar/launch.sh"
   , manageHook = lowerDock <+> manageDocks <+> myManageHook
   } `additionalKeysP`
