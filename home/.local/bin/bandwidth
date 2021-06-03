@@ -1,5 +1,5 @@
-
 #!/usr/bin/env bash
+
 bth() {
     b=${1:-0}; d=''; s=0; S=(B K M G T E P Y Z)
     while ((b > 1000)); do
@@ -60,7 +60,7 @@ main() {
   do
     a=(${i//:/ })
     getInterval "${a[0]}" "${a[1]}" 1 &
-    sleep 0.1
   done
+  wait
 }
 main

@@ -45,6 +45,9 @@ zinit snippet OMZ::plugins/pyenv/pyenv.plugin.zsh
 zinit ice wait lucid as"completion"
 zinit snippet OMZ::plugins/docker/_docker
 
+zinit ice wait lucid as"completion"
+zinit snippet OMZ::plugins/pass/_pass
+
 zinit ice wait lucid blockf atpull'zinit creinstall -q .'
 zplugin light zsh-users/zsh-completions
 

@@ -17,23 +17,36 @@
 
 ;; company auto-complete
 (after! company
-  (setq company-idle-delay 0.1
-        company-minimum-prefix-length 2))
+  (add-to-list 'company-backends 'company-files)
+
+  (setq company-idle-delay 0.01
+        company-minimum-prefix-length 1))
+
+(after! anaconda-mode
+  (set-company-backend! 'anaconda-mode '(company-tabnine :with company-anaconda)))
+
+(after! tide
+  (set-company-backend! 'tide-mode '(company-tabnine :with company-tide)))
 
 (after! yasnippet
   (push "~/.doom.d/snippets" yas-snippet-dirs))
 
-(defun project-set-venv ()
+(defun project-set-venv (&optional window)
   "Set python venv to `.venv'."
   (when (projectile-project-p)
-    (let ((venv-path (file-name-as-directory (concat (projectile-project-root) ".venv"))))
-      (when (and (not (equal python-shell-virtualenv-path venv-path))
-                 (file-directory-p venv-path))
-        (message "Changing to `%s'" venv-path)
-        (pyvenv-activate venv-path)))))
+      (if (equal major-mode 'python-mode)
+          (let ((venv-path (file-name-as-directory
+                                  (concat (projectile-locate-dominating-file default-directory ".venv")
+                                          ".venv"))))
+            (if (file-directory-p venv-path)
+                (when (not (equal python-shell-virtualenv-root venv-path))
+                  (pyvenv-activate venv-path))
+                (pyvenv-deactivate)))
+          (pyvenv-deactivate))))
 
 (after! projectile
-  (add-hook 'python-mode-hook 'project-set-venv)
+   (add-hook! 'window-state-change-functions 'project-set-venv)
+  ;; (add-hook! 'change-major-mode-hook 'project-set-venv)
   ;; (add-hook 'hack-local-variables-hook 'project-set-venv)
   (setq projectile-project-search-path '("~/Projects/")))
 

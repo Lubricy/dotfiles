@@ -4,13 +4,13 @@
 ;;; Packages
 
 (use-package! org-gtd
-  :after org
+  :after-call org-capture
   :config
   ;; where org-gtd will put its files. This value is also the default one.
   (setq org-gtd-directory "~/gtd/")
   (add-to-list 'org-agenda-files  "~/gtd/")
   (setq org-todo-keywords '((sequence "TODO(t)" "NEXT(n)" "PROJ(p)" "STRT(s)" "WAIT(w)" "HOLD(h)" "|" "DONE(d)" "KILL(k)")
- (sequence "[ ](T)" "[-](S)" "[?](W)" "|" "[X](D)")))
+                            (sequence "[ ](T)" "[-](S)" "[?](W)" "|" "[X](D)")))
   ;; package: https://github.com/Malabarba/org-agenda-property
   ;; this is so you can see who an item was delegated to in the agenda
   (setq org-agenda-property-list '("DELEGATED_TO"))
@@ -32,7 +32,7 @@
    ;; processing phase
    ("C-c d f" . org-gtd-clarify-finalize)))
 
-(after! (org-gtd org-capture)
+(after! org-gtd
   (add-to-list 'org-capture-templates
                '("i" "GTD item"
                  entry
