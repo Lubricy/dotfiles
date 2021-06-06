@@ -66,6 +66,9 @@ zinit load zsh-users/zsh-syntax-highlighting
 # zinit ice lucid atload"_zsh_autosuggest_start"
 # zinit load zsh-users/zsh-autosuggestions
 
+zinit ice lucid wait'1' has'fzf'
+zinit light Aloxaf/fzf-tab
+
 setopt promptsubst
 autoload -Uz colors; colors
 zinit ice lucid
