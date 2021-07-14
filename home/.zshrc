@@ -28,6 +28,7 @@ if [ -d $HOME/.zshrc.d ]; then
 	done
 fi
 
+typeset -U PATH
 # Entirety of my startup file... then
 if [[ "$PROFILE_STARTUP" == true ]]; then
     zprof

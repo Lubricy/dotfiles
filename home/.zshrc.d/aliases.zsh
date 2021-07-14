@@ -8,12 +8,16 @@ foo_cd () {
   ls
 }
 alias cd=foo_cd
+alias vi=vim
 if command -v nvim >/dev/null 2>&1; then
   alias vim=nvim
   alias vi=nvim
 fi
 if command -v htop >/dev/null 2>&1; then
   alias top=htop
+fi
+if command -v bat >/dev/null 2>&1; then
+  alias cat=bat
 fi
 
 foo_nix () {
@@ -95,3 +99,12 @@ alias urldecode='python3 -c "import sys, urllib.parse as ul; \
 
 alias urlencode='python3 -c "import sys, urllib.parse as ul; \
     print (ul.quote_plus(sys.argv[1]))"'
+
+alias pwe="PASSWORD_STORE_ENABLE_EXTENSIONS=true pass fzf -e"
+pwn() {
+	PASSWORD_STORE_ENABLE_EXTENSIONS=true pass fzf -s
+}
+alias pwc="PASSWORD_STORE_ENABLE_EXTENSIONS=true pass fzf"
+function rot() { 
+	cat - <(echo -n $1) | openssl dgst -binary -sha256 | openssl base64 | head -c 8
+}

@@ -17,7 +17,8 @@
     :desc "show all stuck projects"         "s" #'org-gtd-show-stuck-projects
     :desc "finish editing"                  "f" #'org-gtd-clarify-finalize)
    (:prefix "t"
-    :desc "Adjust text size"      "t"   #'text-scale-adjust)
+    :desc "Adjust text size"      "t"   #'text-scale-adjust
+    :desc "Auto format on save"   "a"   #'format-all-mode)
    (:prefix ("l" . "link")
      :desc "Google Chrome"        "c"   #'org-mac-chrome-insert-frontmost-url
      :desc "Microsoft Outlook"    "o"   #'org-mac-outlook-message-insert-selected

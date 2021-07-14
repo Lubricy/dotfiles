@@ -4,6 +4,7 @@
 
 (load! "+bindings")
 (load! "+evil-commands")
+(load! "+local-config")
 
 ;; I've swapped these keys on my keyboard
 (setq x-meta-keysym         'alt
@@ -31,12 +32,22 @@
 (after! yasnippet
   (push "~/.doom.d/snippets" yas-snippet-dirs))
 
-(defun project-set-venv (&optional window)
+(defun lubricy/babel-ansi ()
+  (when-let ((beg (org-babel-where-is-src-block-result nil nil)))
+    (save-excursion
+      (goto-char beg)
+      (when (looking-at org-babel-result-regexp)
+        (let ((end (org-babel-result-end))
+              (ansi-color-context-region nil))
+          (ansi-color-apply-on-region beg end))))))
+
+(defun lubricy/project-set-venv (&optional window)
   "Set python venv to `.venv'."
   (when (projectile-project-p)
       (if (equal major-mode 'python-mode)
-          (let ((venv-path (file-name-as-directory
-                                  (concat (projectile-locate-dominating-file default-directory ".venv")
+          (let ((venv-path
+                 (file-name-as-directory (concat
+                                          (projectile-locate-dominating-file default-directory ".venv")
                                           ".venv"))))
             (if (file-directory-p venv-path)
                 (when (not (equal python-shell-virtualenv-root venv-path))
@@ -44,11 +55,22 @@
                 (pyvenv-deactivate)))
           (pyvenv-deactivate))))
 
+(defun lubricy/org-babel-node-setenv ()
+  (let ((root (projectile-locate-dominating-file default-directory "package.json")))
+    (when root
+      (let* ((node-modules (concat (file-name-as-directory root) "node_modules"))
+             (node-path (getenv "NODE_PATH"))
+             (node-paths (if node-path (split-string node-path ":") '())))
+          (setenv "NODE_PATH" (string-join (delete-dups (cons node-modules node-paths)) ":"))))))
+
+
+
+
+
+
 (after! projectile
-   (add-hook! 'window-state-change-functions 'project-set-venv)
-  ;; (add-hook! 'change-major-mode-hook 'project-set-venv)
-  ;; (add-hook 'hack-local-variables-hook 'project-set-venv)
-  (setq projectile-project-search-path '("~/Projects/")))
+  (setq projectile-project-search-path '("~/Projects/"))
+  (add-hook! 'window-state-change-functions 'lubricy/project-set-venv))
 
 (after! treemacs
   (setq treemacs-collapse-dirs 20))
@@ -61,11 +83,9 @@
   (pushnew! ob-async-no-async-languages-alist "jupyter"))
 
 (after! org
-  ;; Split up the search string on whitespace
-  ;; (after!
-  ;;   (dolist (lang '(python julia R))
-  ;;     (org-babel-jupyter-make-language-alias nil lang)))
   (setq org-agenda-search-view-always-boolean t)
+  (add-hook 'org-mode-hook 'lubricy/org-babel-node-setenv)
+  (add-hook 'org-babel-after-execute-hook 'lubricy/babel-ansi)
   (add-hook 'org-babel-after-execute-hook 'shk-fix-inline-images)
   (add-hook 'ob-async-pre-execute-src-block-hook
           '(lambda ()

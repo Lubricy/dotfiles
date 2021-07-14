@@ -107,9 +107,11 @@
        terraform         ; infrastructure as code
        tmux              ; an API for interacting with tmux
        ;;upload            ; map local to remote projects via ssh/ftp
+       ;; private modules
        spark
        gtd
        gnuplot
+       jira
 
        :os
        (:if IS-MAC macos)  ; improve compatibility with macOS

@@ -50,14 +50,14 @@ yabai -m config active_window_opacity 1.0
 yabai -m config normal_window_opacity 0.5
 
 # border color
-yabai -m config window_border                on
-yabai -m config window_border_width          4
+yabai -m config window_border                off
+yabai -m config window_border_width          8
 yabai -m config active_window_border_color   0xff775759
 yabai -m config normal_window_border_color   0x00555555
 yabai -m config insert_feedback_color        0x00d75f5f
 
 yabai -m config mouse_follows_focus          on
-yabai -m config focus_follows_mouse          on
+yabai -m config focus_follows_mouse          autoraise
 
 
 yabai -m rule --add title='Preferences$' manage=off border=off
