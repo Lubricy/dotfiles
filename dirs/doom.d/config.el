@@ -16,6 +16,9 @@
       user-mail-address "lubricy@gmail.com"
       user-full-name    "Lubricy Fibber")
 
+;; treemacs to show git directory highlights
+(setq +treemacs-git-mode 'deferred)
+
 ;; company auto-complete
 (after! company
   (add-to-list 'company-backends 'company-files)

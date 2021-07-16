@@ -5,6 +5,8 @@
  :g "M-v" #'clipboard-yank
  ;; <leader> -------------------------------------
  (:leader
+   :desc "Org capture"             "x"    #'org-capture
+   :desc "Pop up scratch buffer"   "X"    #'doom/open-scratch-buffer
    :desc "Left window"             :n "<left>"    #'evil-window-left
    :desc "Right window"            :n "<right>"   #'evil-window-right
    :desc "Up window"               :n "<up>"      #'evil-window-up
@@ -22,7 +24,10 @@
    (:prefix ("l" . "link")
      :desc "Google Chrome"        "c"   #'org-mac-chrome-insert-frontmost-url
      :desc "Microsoft Outlook"    "o"   #'org-mac-outlook-message-insert-selected
-     :desc "Finder"               "f"   #'org-mac-finder-insert-selected)
+     :desc "Finder"               "f"   #'org-mac-finder-insert-selected
+     :desc "Jira"                 "j"   #'+ejira-insert-link)
+   (:prefix ("n" . "notes")
+     :desc "Org insert last link"      "p"   #'org-insert-last-stored-link)
    (:prefix ("o" . "open")
      :desc "Google Search"      "g"   #'google-this)
    (:when (featurep! :ui workspaces)

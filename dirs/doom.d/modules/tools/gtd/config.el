@@ -3,57 +3,86 @@
 ;;
 ;;; Packages
 
-(use-package! org-gtd
-  :after-call org-capture
-  :config
-  ;; where org-gtd will put its files. This value is also the default one.
-  (setq org-gtd-directory "~/gtd/")
-  (add-to-list 'org-agenda-files  "~/gtd/")
-  (setq org-todo-keywords '((sequence "TODO(t)" "NEXT(n)" "PROJ(p)" "STRT(s)" "WAIT(w)" "HOLD(h)" "|" "DONE(d)" "KILL(k)")
-                            (sequence "[ ](T)" "[-](S)" "[?](W)" "|" "[X](D)")))
-  ;; package: https://github.com/Malabarba/org-agenda-property
-  ;; this is so you can see who an item was delegated to in the agenda
-  (setq org-agenda-property-list '("DELEGATED_TO"))
-  ;; I think this makes the agenda easier to read
-  (setq org-agenda-property-position 'next-line)
-  ;; package: https://www.nongnu.org/org-edna-el/
-  ;; org-edna is used to make sure that when a project task gets DONE,
-  ;; the next TODO is automatically changed to NEXT.
-  (setq org-edna-use-inheritance t)
-  (org-edna-load)
-  :bind
-  (("C-c d c" . org-gtd-capture) ;; add item to inbox
-   ("C-c d a" . org-agenda-list) ;; see what's on your plate today
-   ("C-c d p" . org-gtd-process-inbox) ;; process entire inbox
-   ("C-c d n" . org-gtd-show-all-next) ;; see all NEXT items
-   ;; see projects that don't have a NEXT item
-   ("C-c d s" . org-gtd-show-stuck-projects)
-   ;; the keybinding to hit when you're done editing an item in the
-   ;; processing phase
-   ("C-c d f" . org-gtd-clarify-finalize)))
+(after! org
+  (add-to-list 'org-modules 'org-id)
+  (unless (string-match-p "\\.gpg" org-agenda-file-regexp)
+    (setq org-agenda-file-regexp
+          (replace-regexp-in-string "\\\\\\.org" "\\\\.org\\\\(\\\\.gpg\\\\)?"
+                                    org-agenda-file-regexp)))
+  (setq +org-capture-todo-file "gtd.org")
+  ;; The following setting creates a unique task ID for the heading in the
+  ;; PROPERTY drawer when I use C-c l. This allows me to move the task around
+  ;; arbitrarily in my org files and the link to it still works.
+  (setq org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id)
 
-(after! org-gtd
-  (add-to-list 'org-capture-templates
-               '("i" "GTD item"
-                 entry
-                 (file (lambda () (org-gtd--path org-gtd-inbox-file-basename)))
-                 "* %?\n%U\n\n  %i"
-                 :kill-buffer t))
-  (add-to-list 'org-capture-templates
-               '("e" "GTD item with link to where you are in emacs now"
-                 entry
-                 (file (lambda () (org-gtd--path org-gtd-inbox-file-basename)))
-                 "* %?\n%U\n\n  %i\n  %a"
-                 :kill-buffer t))
-  (add-to-list 'org-capture-templates
-               '("l" "GTD item with link to current Chrome web page"
-                 entry
-                 (file (lambda () (org-gtd--path org-gtd-inbox-file-basename)))
-                 "* %?\n%U\n\n  %i\n  %(org-mac-chrome-get-frontmost-url)"
-                 :kill-buffer t))
-  (add-to-list 'org-capture-templates
-               '("m" "GTD item with link to current Outlook mail message"
-                 entry
-                 (file (lambda () (org-gtd--path org-gtd-inbox-file-basename)))
-                 "* %?\n%U\n\n  %i\n  %(org-mac-outlook-message-get-links)"
-                 :kill-buffer t)))
+  (setq org-todo-keywords
+        '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
+          (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE(p)" "MEETING(m)")))
+
+  (setq org-capture-templates
+          '(("i" " item"
+             entry (file+headline +org-capture-todo-file "Inbox")
+             "* TODO %?\n%U\n%a\n"
+             :clock-in t
+             :clock-resume t)
+            ("f" " file"
+             entry (file+headline +org-capture-todo-file "Inbox")
+             "* %? :NOTE:\n%U\n\n  %i\n  %a"
+             :clock-in t
+             :clock-resume t)
+            ("l" " link"
+             entry (file+headline +org-capture-todo-file "Inbox")
+             "* %? :res:\n%U\n\n  %i\n- [ ] %(org-mac-chrome-get-frontmost-url)"
+             :clock-in t
+             :clock-resume t)
+            ("e" " email"
+             entry (file+headline +org-capture-todo-file "Inbox")
+             "* NEXT Respond to :@laptop:\nSCHEDULED: %t\n%U\n%a\n- [] %(org-mac-outlook-message-get-links)"
+             :clock-in t
+             :clock-resume t)
+            ("p" " phone"
+             entry (file+headline +org-capture-todo-file "Inbox")
+             "* PHONE %? :misc:phone:\n%U"
+             :clock-in t
+             :clock-resume t)
+            ("m" " meeting"
+             entry (file+headline +org-capture-todo-file "Inbox")
+             "* MEETING with %? :misc:meet:\n%U"
+             :clock-in t
+             :clock-resume t)
+            ("n" " notes"
+             entry (file+headline +org-capture-todo-file "Inbox")
+             "* %? :note:\n%U\n\n  %i\n  %a"
+             :clock-in t
+             :clock-resume t)
+            ("r" " resources"
+             entry (file+headline +org-capture-todo-file "Inbox")
+             "* %? :res:\n%U\n\n  %i\n  %a"
+             :clock-in t
+             :clock-resume t))))
+
+(define-button-type 'lubricy/crypt-decrypt-button
+  'action (lambda (_) (org-decrypt-entry))
+  'help-echo "Decrypt entry"
+  'help-args "test")
+
+;; (defun lubricy/org-make-crypt-buttons ()
+;;   (interactive)
+;;   (let ((org--matcher-tags-todo-only nil))
+;;     (org-scan-tags
+;;      'lubricy/org-make-crypt-button
+;;      (cdr (org-make-tags-matcher org-crypt-tag-matcher))
+;;      org--matcher-tags-todo-only)))
+
+(defun lubricy/org-make-crypt-button ()
+  (pcase (org-at-encrypted-entry-p)
+    (`(,beg . ,end)
+     (make-text-button beg end :type 'lubricy/crypt-decrypt-button))
+   (_ nil)))
+
+(after! org-crypt
+  (org-crypt-use-before-save-magic)
+  (setq org-crypt-disable-auto-save 'encrypt)
+  (setq org-tags-exclude-from-inheritance (quote ("crypt")))
+  (advice-add #'org-encrypt-entry
+              :after #'lubricy/org-make-crypt-button))

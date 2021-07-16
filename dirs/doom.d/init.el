@@ -20,10 +20,13 @@
        ;;layout            ; auie,ctsrnm is the superior home row
 
        :completion
-       (company +tng)           ; the ultimate code completion backend
+       (company
+        +childframe)       ; the ultimate code completion backend
        ;;helm              ; the *other* search engine for love and life
        ;;ido               ; the other *other* search engine...
-       ivy               ; a search engine for love and life
+       (ivy
+        +fuzzy
+        +prescient)               ; a search engine for love and life
 
        :ui
        ;;deft              ; notational velocity for Emacs
@@ -58,10 +61,10 @@
        fold              ; (nigh) universal code folding
        (format +onsave)  ; automated prettiness
        ;;god               ; run Emacs commands without modifier keys
-       ;;lispy             ; vim for lisp, for people who don't like vim
+       lispy             ; vim for lisp, for people who don't like vim
        multiple-cursors  ; editing in many places at once
        ;; objed             ; text object editing for the innocent
-       (parinfer +rust)          ; turn lisp into python, sort of
+       ;;(parinfer +rust)          ; turn lisp into python, sort of
        rotate-text       ; cycle region at point between text candidates
        snippets          ; my elves. They type so I don't have to
        word-wrap         ; soft wrapping with language-aware indent
@@ -80,8 +83,12 @@
        vterm             ; the best terminal emulation in Emacs
 
        :checkers
-       syntax            ; tasing you for every semicolon you forget
-       (spell +flyspell) ; tasing you for misspelling mispelling
+       (syntax
+        +childframe)     ; tasing you for every semicolon you forget
+       (spell
+        +flyspell
+        +enchant
+        +everywhere)     ; tasing you for misspelling mispelling
        grammar           ; tasing grammar mistake every you make
 
        :tools
@@ -99,7 +106,7 @@
        ;;eglot
        magit             ; a git porcelain for Emacs
        make              ; run make tasks from Emacs
-       ;;pass              ; password manager for nerds
+       (pass +auth)      ; password manager for nerds
        pdf               ; pdf enhancements
        ;;prodigy           ; FIXME managing external services & code builders
        rgb               ; creating color strings
@@ -108,9 +115,7 @@
        tmux              ; an API for interacting with tmux
        ;;upload            ; map local to remote projects via ssh/ftp
        ;; private modules
-       spark
        gtd
-       gnuplot
        jira
 
        :os
@@ -157,7 +162,11 @@
        ;;ocaml             ; an objective camel
        (org
         +jupyter
-        +pomodoro)         ; organize your plain life in plain text
+        +pomodoro
+        +gnuplot
+        +pandoc
+        +pretty
+        +dragndrop)        ; organize your plain life in plain text
        ;;perl              ; write code no one else can comprehend
        ;;php               ; perl's insecure younger brother
        ;;plantuml          ; diagrams for confusing people more
@@ -187,7 +196,7 @@
        ;;(wanderlust +gmail)
 
        :app
-       ;;calendar
+       calendar
        ;;emms
        everywhere          ; *leave* Emacs!? You must be joking
        ;;irc               ; how neckbeards socialize
