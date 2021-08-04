@@ -5,6 +5,7 @@
 (load! "+bindings")
 (load! "+evil-commands")
 (load! "+local-config")
+(load! "+org")
 
 ;; I've swapped these keys on my keyboard
 (setq x-meta-keysym         'alt
@@ -27,7 +28,7 @@
         company-minimum-prefix-length 1))
 
 (after! anaconda-mode
-  (set-company-backend! 'anaconda-mode '(company-tabnine :with company-anaconda)))
+  (set-company-backend! 'anaconda-mode '(company-anaconda :with company-tabnine)))
 
 (after! tide
   (set-company-backend! 'tide-mode '(company-tabnine :with company-tide)))
@@ -65,11 +66,6 @@
              (node-path (getenv "NODE_PATH"))
              (node-paths (if node-path (split-string node-path ":") '())))
           (setenv "NODE_PATH" (string-join (delete-dups (cons node-modules node-paths)) ":"))))))
-
-
-
-
-
 
 (after! projectile
   (setq projectile-project-search-path '("~/Projects/"))

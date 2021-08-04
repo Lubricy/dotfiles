@@ -8,4 +8,3 @@
 
 (package! google-this)
 (package! graphql-mode)
-(package! ob-http)
