@@ -164,7 +164,8 @@
         +gnuplot
         +pandoc
         +pretty
-        +dragndrop)  ; organize your plain life in plain text
+        +dragndrop
+        +roam2)  ; organize your plain life in plain text
        ;;perl              ; write code no one else can comprehend
        ;;php               ; perl's insecure younger brother
        ;;plantuml          ; diagrams for confusing people more

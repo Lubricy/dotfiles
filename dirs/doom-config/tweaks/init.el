@@ -1,0 +1,5 @@
+(load! "+company")
+(load! "+org")
+(load! "+pomodoro")
+(load! "+projectile")
+(load! "+treemacs")

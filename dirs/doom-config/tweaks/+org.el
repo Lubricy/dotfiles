@@ -1,4 +1,32 @@
+(defun lubricy/babel-ansi ()
+  (when-let ((beg (org-babel-where-is-src-block-result nil nil)))
+    (save-excursion
+      (goto-char beg)
+      (when (looking-at org-babel-result-regexp)
+        (let ((end (org-babel-result-end))
+              (ansi-color-context-region nil))
+          (ansi-color-apply-on-region beg end))))))
+
+(defun shk-fix-inline-images ()
+  (when org-inline-image-overlays
+    (org-redisplay-inline-images)))
+
+(defun lubricy/org-babel-node-setenv ()
+  (let ((root (projectile-locate-dominating-file default-directory "package.json")))
+    (when root
+      (let* ((node-modules (concat (file-name-as-directory root) "node_modules"))
+             (node-path (getenv "NODE_PATH"))
+             (node-paths (if node-path (split-string node-path ":") '())))
+          (setenv "NODE_PATH" (string-join (delete-dups (cons node-modules node-paths)) ":"))))))
+
 (after! org
+  (setq org-agenda-search-view-always-boolean t)
+  (add-hook 'org-mode-hook 'lubricy/org-babel-node-setenv)
+  (add-hook 'org-babel-after-execute-hook 'lubricy/babel-ansi)
+  (add-hook 'org-babel-after-execute-hook 'shk-fix-inline-images)
+  (add-hook 'ob-async-pre-execute-src-block-hook
+          '(lambda ()
+            (require 'docker-tramp)))
   (defadvice! org-babel-record-timestamp (orig-fn &rest args)
       :around 'org-babel-execute-src-block
     (let* ((info (or (nth 1 args) (org-babel-get-src-block-info)))
@@ -45,3 +73,7 @@
                 (insert (concat begin-prompt begin-time))
                 )))
         (apply orig-fn args)))))
+
+(after! ob-async
+  (pushnew! ob-async-no-async-languages-alist "jupyter"))
+
