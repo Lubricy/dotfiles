@@ -194,5 +194,6 @@ alt - 0x18: ~/.local/bin/yabai_resize v +60
 alt + shift - 0x1B : ~/.local/bin/yabai_resize h -60
 alt + shift - 0x18 : ~/.local/bin/yabai_resize h +60
 
-alt - space : ~/.emacs.d/bin/org-capture
+alt - space : ~/.homesick/repos/doom-emacs/bin/org-capture
+alt - p : PASSWORD_STORE_ENABLE_EXTENSIONS=true pass choose
 alt - m : yabai -m query --windows --window | ~/.local/bin/alerter
