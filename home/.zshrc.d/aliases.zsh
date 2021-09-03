@@ -94,11 +94,12 @@ if command -v rsync >/dev/null 2>&1; then
 fi
 
 alias ec=emacsclient
-alias urldecode='python3 -c "import sys, urllib.parse as ul; \
-    print(ul.unquote_plus(sys.argv[1]))"'
+alias urldecode="python3 -c 'import sys, urllib.parse as ul; \
+	print(ul.unquote_plus(next(iter(sys.argv[1:2]), None) or sys.stdin.read()), end=\"\")'"
 
-alias urlencode='python3 -c "import sys, urllib.parse as ul; \
-    print (ul.quote_plus(sys.argv[1]))"'
+alias urlencode="python3 -c 'import sys, urllib.parse as ul; \
+	print(ul.quote_plus(next(iter(sys.argv[1:2]), None) or sys.stdin.read()), end=\"\")'"
+
 
 alias pwe="PASSWORD_STORE_ENABLE_EXTENSIONS=true pass fzf -e"
 pwn() {

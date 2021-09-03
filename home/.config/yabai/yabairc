@@ -62,5 +62,5 @@ yabai -m config focus_follows_mouse          autoraise
 
 yabai -m rule --add title='Preferences$' manage=off border=off
 yabai -m rule --add title='Notification$' manage=off border=off
-yabai -m rule --add title='doom-capture' manage=off grid=5:5:1:1:3:3 opacity=0.5
+yabai -m rule --add title='doom-capture' manage=off grid=5:5:1:1:3:3 border=off layer=above
 yabai -m rule --add app='choose' manage=off

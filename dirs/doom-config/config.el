@@ -2,8 +2,6 @@
 
 ;; Place your private configuration here
 
-(load! "+bindings")
-(load! "+evil-commands")
 
 ;; I've swapped these keys on my keyboard
 (setq x-meta-keysym         'alt

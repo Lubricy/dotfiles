@@ -1,5 +1,8 @@
+(load! "+haskell")
 (load! "+company")
 (load! "+org")
 (load! "+pomodoro")
 (load! "+projectile")
 (load! "+treemacs")
+(load! "+fcitx")
+(load! "bindings/init")

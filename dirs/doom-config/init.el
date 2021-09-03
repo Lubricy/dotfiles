@@ -15,7 +15,7 @@
 ;;      directory (for easy access to its source code).
 
 (doom! :input
-       ;;chinese
+       chinese
        ;;japanese
        ;;layout            ; auie,ctsrnm is the superior home row
 
@@ -59,7 +59,7 @@
        (evil +everywhere)               ; come to the dark side, we have cookies
        file-templates                   ; auto-snippets for empty files
        fold                             ; (nigh) universal code folding
-       (format +onsave)                 ; automated prettiness
+       format                 ; automated prettiness
        ;;god               ; run Emacs commands without modifier keys
        lispy                       ; vim for lisp, for people who don't like vim
        multiple-cursors            ; editing in many places at once
@@ -111,10 +111,7 @@
        terraform  ; infrastructure as code
        tmux       ; an API for interacting with tmux
        ;;upload            ; map local to remote projects via ssh/ftp
-       ;; private modules
-       gtd
-       jira
-       http
+
 
        :os
        (:if IS-MAC macos)               ; improve compatibility with macOS
@@ -164,6 +161,7 @@
         +gnuplot
         +pandoc
         +pretty
+        +present
         +dragndrop
         +roam2)  ; organize your plain life in plain text
        ;;perl              ; write code no one else can comprehend
@@ -203,6 +201,12 @@
        ;;irc               ; how neckbeards socialize
        ;;(rss +org)        ; emacs as an RSS reader
        ;;twitter           ; twitter client https://twitter.com/vnought
+
+       :private-tools
+       gtd
+       jira
+       http
+       roam-ui
 
        :config
        ;;literate

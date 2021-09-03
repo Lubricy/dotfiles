@@ -167,7 +167,8 @@ alt - v : yabai -m window --insert west
 
 # float / unfloat window and center on screen
 alt - f : yabai -m window --toggle float;\
-          yabai -m window --grid 4:4:1:1:2:2
+          yabai -m window --grid 4:4:1:1:2:2;\
+          yabai -m window --toggle topmost
 
 # toggle sticky(+float), topmost, picture-in-picture
 alt + shift - f : yabai -m window --toggle sticky;\

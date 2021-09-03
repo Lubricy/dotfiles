@@ -1,4 +1,4 @@
 ;; -*- no-byte-compile: t; -*-
-;;; tools/eglot/packages.el
+;;; tools/http/packages.el
 
 (package! ob-http)
