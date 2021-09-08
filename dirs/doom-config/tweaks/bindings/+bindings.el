@@ -53,10 +53,14 @@
  ;; <completion> ---------------------------------
  (:when (featurep! :completion ivy)
    (:after ivy
-     :map ivy-minibuffer-map
-     :g "M-v"    #'yank
-     :g "C-u"    #'ivy-scroll-down-command
-     :g "C-d"    #'ivy-scroll-up-command))
+    :map ivy-minibuffer-map
+    :g "M-v"    #'yank
+    :g "C-u"    #'ivy-scroll-down-command
+    :g "C-d"    #'ivy-scroll-up-command
+    :g "S-<return>"    #'ivy-immediate-done
+    :g "C-<return>"    #'ivy-dispatching-done
+    :g "C-M-<return>"    #'ivy-dispatching-call
+    :g "C-d"    #'ivy-scroll-up-command))
 
  ;; <drawer> -------------------------------------
  (:when (featurep! :ui treemacs)
