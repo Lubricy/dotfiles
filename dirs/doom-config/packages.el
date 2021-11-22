@@ -7,3 +7,9 @@
 ;; (package! builtin-package :disable t)
 
 (package! graphql-mode)
+
+;;; FIXME https://github.com/org-roam/org-roam/issues/1934
+(package! org :pin "73875939a8b5545ac53a86ec467239f510d14de8")
+
+(when IS-MAC
+  (package! org-mac-link))

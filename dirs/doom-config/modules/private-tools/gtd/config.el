@@ -5,6 +5,9 @@
 
 (after! org
   (add-to-list 'org-modules 'org-id)
+
+  (setq org-archive-location "archive/all.org::* %s")
+
   (unless (string-match-p "\\.gpg" org-agenda-file-regexp)
     (setq org-agenda-file-regexp
           (replace-regexp-in-string "\\\\\\.org" "\\\\.org\\\\(\\\\.gpg\\\\)?"
@@ -19,6 +22,10 @@
         '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
           (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELED(c@/!)" "PHONE(p)" "MEETING(m)")))
 
+  (defun transform-square-brackets-to-round-ones(string-to-transform)
+    "Transforms [ into ( and ] into ), other chars left unchanged."
+    (concat
+     (mapcar #'(lambda (c) (if (equal c ?[) ?\( (if (equal c ?]) ?\) c))) string-to-transform)))
   (setq org-capture-templates
         '(("i" " item"
            entry (file +org-capture-todo-file)
@@ -49,7 +56,18 @@
            entry (file+headline +org-capture-notes-file "Misc")
            "* MEETING with %? :misc:meet:\n%U"
            :clock-in t
-           :clock-resume t))))
+           :clock-resume t)
+          ;;; org-capture
+          ("P" " Protocol"
+           entry (file +org-capture-todo-file)
+           "* %:description :res:link:\n\n#+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n%a\n"
+           :empy-lines 1
+           :immediate-finish t)
+          ("L" " auto link"
+           entry (file+headline "bookmarks.org" "Scratch")
+           "* %a\n"
+           :empy-lines 1
+           :immediate-finish t))))
 
 (define-button-type 'lubricy/crypt-decrypt-button
   'action `(lambda (x) (save-excursion

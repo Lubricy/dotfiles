@@ -29,11 +29,12 @@
    :desc "Adjust text size"      "t"   #'text-scale-adjust
    :desc "Auto format on save"   "a"   #'format-all-mode
    :desc "line number"           "n"   #'display-line-numbers-mode)
-  (:prefix-map ("l" . "link")
-   :desc "Google Chrome"        "c"   #'org-mac-chrome-insert-frontmost-url
-   :desc "Microsoft Outlook"    "o"   #'org-mac-outlook-message-insert-selected
-   :desc "Finder"               "f"   #'org-mac-finder-insert-selected
-   :desc "Jira"                 "j"   #'+ejira-insert-link)
+  (:when IS-MAC
+   (:prefix-map ("l" . "link")
+    :desc "Google Chrome"        "c"   #'org-mac-chrome-insert-frontmost-url
+    :desc "Microsoft Outlook"    "o"   #'org-mac-outlook-message-insert-selected
+    :desc "Finder"               "f"   #'org-mac-finder-insert-selected
+    :desc "Jira"                 "j"   #'+ejira-insert-link))
   (:prefix ("n" . "notes")
    :desc "Org insert last link"      "p"   #'org-insert-last-stored-link)
   (:prefix-map ("o" . "open")
@@ -78,7 +79,7 @@
    :g "A"       #'treemacs-add-project-to-workspace
    :g "D"       #'treemacs-remove-project-from-workspace))
  ;; <vterm> -------------------------------------
- (:when (featurep! :tools vterm)
+ (:when (featurep! :term vterm)
   (:after vterm
    :map vterm-mode-map
    :g "M-v" #'vterm-yank))

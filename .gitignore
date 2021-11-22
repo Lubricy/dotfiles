@@ -1,4 +1,4 @@
-/dirs/doom-config/+local-config.el
+/dirs/doom-config/tweaks/+local-config.el
 *flycheck*
 .DS_Store
 

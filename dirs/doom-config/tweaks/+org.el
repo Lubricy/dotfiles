@@ -77,3 +77,10 @@
 (after! ob-async
   (pushnew! ob-async-no-async-languages-alist "jupyter"))
 
+(when IS-MAC
+  (use-package! org-mac-link
+    :after org
+    :config
+    (setq org-mac-grab-Acrobat-app-p nil) ; Disable grabbing from Adobe Acrobat
+    (setq org-mac-grab-devonthink-app-p nil) ; Disable grabbinb from DevonThink
+    ))

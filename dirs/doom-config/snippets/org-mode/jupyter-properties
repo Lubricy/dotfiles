@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: jupyter property
+# uuid: ph
+# key: ph
+# condition: t
+# --
+
+:PROPERTIES:
+:header-args:${1:jupyter-python+}:  :session ${2:default} :async yes
+:END:
+$0

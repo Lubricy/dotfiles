@@ -13,8 +13,9 @@
       user-mail-address "lubricy@gmail.com"
       user-full-name    "Lubricy Fibber")
 
-(load! "+local-config")
-(load! "tweaks/init")
+(defun load-directory (dir)
+  (mapc (lambda (file) (load! file)) (directory-files-recursively dir "\\.el$")))
+(load-directory (concat doom-private-dir "tweaks"))
 
 (provide 'config)
 ;;; config.el ends here
