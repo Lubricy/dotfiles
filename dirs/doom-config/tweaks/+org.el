@@ -19,16 +19,20 @@
              (node-paths (if node-path (split-string node-path ":") '())))
           (setenv "NODE_PATH" (string-join (delete-dups (cons node-modules node-paths)) ":"))))))
 
+(defun lubricy/test-echo ()
+  (message "hook!"))
+
 (after! org
   (setq org-agenda-search-view-always-boolean t)
   (add-hook 'org-mode-hook 'lubricy/org-babel-node-setenv)
+  (add-hook 'org-mode-hook '+org-pretty-mode)
   (add-hook 'org-babel-after-execute-hook 'lubricy/babel-ansi)
   (add-hook 'org-babel-after-execute-hook 'shk-fix-inline-images)
   (add-hook 'ob-async-pre-execute-src-block-hook
-          '(lambda ()
-            (require 'docker-tramp)))
+            '(lambda ()
+               (require 'docker-tramp)))
   (defadvice! org-babel-record-timestamp (orig-fn &rest args)
-      :around 'org-babel-execute-src-block
+    :around 'org-babel-execute-src-block
     (let* ((info (or (nth 1 args) (org-babel-get-src-block-info)))
            (begin-prompt "#+S_TIME: ")
            (end-prompt   "#+E_TIME: ")

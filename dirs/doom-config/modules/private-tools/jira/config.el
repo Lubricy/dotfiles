@@ -25,14 +25,21 @@
     (org-insert-link nil (format "jira:%s" id) "@")
     (org-insert-link nil (format "id:%s" id) id))
 
-    ;; Make the issues visisble in your agenda by adding `ejira-org-directory'
-    ;; into your `org-agenda-files'.
+  ;; Make the issues visisble in your agenda by adding `ejira-org-directory'
+  ;; into your `org-agenda-files'.
   ;;(add-to-list 'org-agenda-files ejira-org-directory)
 
-          ;; Add an agenda view to browse the issues that
-  (map! :map (ejira-mode-map)
-        "C-c C-t" #'ejira-progress-issue)
+  ;; Add an agenda view to browse the issues that
+
+  (defun lubricy/advice-org-todo-in-ejira (fn &rest ARGS)
+    (if (bound-and-true-p ejira-mode)
+        (progn
+          (ejira-progress-issue))
+      (apply fn ARGS)))
+  (advice-add 'org-todo :around 'lubricy/advice-org-todo-in-ejira)
+
+
   (org-add-agenda-custom-command
-     '("j" "My JIRA issues"
-       ((ejira-jql "resolution = unresolved and assignee = currentUser()"
-                       ((org-agenda-overriding-header "Assigned to me")))))))
+   '("j" "My JIRA issues"
+     ((ejira-jql "resolution = unresolved and assignee = currentUser()"
+                 ((org-agenda-overriding-header "Assigned to me")))))))

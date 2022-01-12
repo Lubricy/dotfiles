@@ -22,6 +22,12 @@
         '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
           (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELED(c@/!)" "PHONE(p)" "MEETING(m)")))
 
+  (defun lubricy/org-capture-maybe-create-id ()
+    (when (org-capture-get :create-id)
+      (org-id-get-create)))
+  (add-hook 'org-capture-mode-hook #'lubricy/org-capture-maybe-create-id)
+
+
   (defun transform-square-brackets-to-round-ones(string-to-transform)
     "Transforms [ into ( and ] into ), other chars left unchanged."
     (concat
@@ -57,17 +63,18 @@
            "* MEETING with %? :misc:meet:\n%U"
            :clock-in t
            :clock-resume t)
-          ;;; org-capture
+;;; org-capture
           ("P" " Protocol"
            entry (file +org-capture-todo-file)
            "* %:description :res:link:\n\n#+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n%a\n"
            :empy-lines 1
            :immediate-finish t)
           ("L" " auto link"
-           entry (file+headline "bookmarks.org" "Scratch")
+           entry (file+headline "roam/links.org" "Scratch")
            "* %a\n"
            :empy-lines 1
-           :immediate-finish t))))
+           :immediate-finish t
+           :create-id t))))
 
 (define-button-type 'lubricy/crypt-decrypt-button
   'action `(lambda (x) (save-excursion
@@ -124,24 +131,22 @@
             "What to do with this item?"
             '(
               (?a "action" "do this when possible")
-              (?s "sequence" "a sequence of actions")
-              (?i "item" "add an item to existing sequence")
+              (?p "project" "a sequence of actions")
               (?r "resource(roam)" "Store this to roam knowledge base")
               (?d "done" "quick item: < 2 minutes, done!")
               (?t "trash" "this has no value to me")
               (?c "calendar" "do this at a certain time")
-              (?e "delegate" "give it to someone else")
-              (?m "maybe" "Sit and hatch on it")
+              (?o "other" "delegate to someone else")
+              (?s "someday" "Sit and hatch on it")
               (?q "quit" "I'll come back to this later")
               ))))
       (cl-case (car action)
         (?a (org-gtd--single-action))
-        (?s (org-gtd--project))
-        (?i (org-gtd--existing-project))
+        (?p (org-gtd--project))
         (?r (org-gtd--roam-archive))
         (?d (org-gtd--quick-action))
         (?t (org-gtd--trash))
         (?c (org-gtd--calendar))
-        (?e (org-gtd--delegate))
-        (?m (org-gtd--incubate))
+        (?o (org-gtd--delegate))
+        (?s (org-gtd--incubate))
         (?q (doom/escape))))))
