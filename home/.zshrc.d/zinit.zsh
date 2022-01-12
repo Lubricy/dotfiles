@@ -1,6 +1,6 @@
 if [[ ! -d $HOME/.zinit/bin ]]; then
   mkdir $HOME/.zinit
-  git clone https://github.com/zdharma/zinit.git $HOME/.zinit/bin
+  git clone https://github.com/z-shell/zinit.git $HOME/.zinit/bin
   source $HOME/.zinit/bin/zinit.zsh
   zinit self-update
 fi
