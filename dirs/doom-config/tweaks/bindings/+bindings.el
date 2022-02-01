@@ -11,13 +11,16 @@
   :desc "Right window"            :n "<right>"   #'evil-window-right
   :desc "Up window"               :n "<up>"      #'evil-window-up
   :desc "Down window"             :n "<down>"    #'evil-window-down
+  (:prefix-map ("c" . "code")
+   :desc "toggle between implementation and test"   "t" #'projectile-toggle-between-implementation-and-test)
   (:prefix-map ("b" . "buffer")
+   :desc "show buffer"                     "b" #'display-buffer
    :desc "Auto format current buffer"      "f" #'format-all-buffer)
   (:when (featurep! :completion ivy)
    (:prefix-map ("b" . "buffer")
-    :desc "Split buffer"                    "b" #'+ivy/switch-buffer-other-window
-    :desc "Split workspace buffer"          "w" #'+ivy/switch-workspace-buffer-other-window
-    :desc "Switch workspace buffer"         "W" #'+ivy/switch-workspace-buffer))
+    :desc "Force show buffer"              "F" #'+ivy/switch-buffer-other-window
+    :desc "Force show workspace buffer"    "w" #'+ivy/switch-workspace-buffer-other-window
+    :desc "Switch to workspace buffer"     "W" #'+ivy/switch-workspace-buffer))
   (:prefix-map ("d" . "Get Things Done")
    :desc "add item to inbox"               "c" #'org-gtd-capture
    :desc "see what's on your plate today"  "a" #'org-agenda-list
@@ -28,7 +31,9 @@
   (:prefix-map ("t" . "toggle")
    :desc "Adjust text size"      "t"   #'text-scale-adjust
    :desc "Auto format on save"   "a"   #'format-all-mode
-   :desc "line number"           "n"   #'display-line-numbers-mode)
+   :desc "line number"           "n"   #'display-line-numbers-mode
+   (:when (featurep! :private-tools blamer)
+    :desc "git blame" "B" #'global-blamer-mode))
   (:when IS-MAC
    (:prefix-map ("l" . "link")
     :desc "Google Chrome"        "c"   #'org-mac-chrome-insert-frontmost-url

@@ -17,7 +17,7 @@
       (let* ((node-modules (concat (file-name-as-directory root) "node_modules"))
              (node-path (getenv "NODE_PATH"))
              (node-paths (if node-path (split-string node-path ":") '())))
-          (setenv "NODE_PATH" (string-join (delete-dups (cons node-modules node-paths)) ":"))))))
+        (setenv "NODE_PATH" (string-join (delete-dups (cons node-modules node-paths)) ":"))))))
 
 (defun lubricy/test-echo ()
   (message "hook!"))
@@ -28,9 +28,8 @@
   (add-hook 'org-mode-hook '+org-pretty-mode)
   (add-hook 'org-babel-after-execute-hook 'lubricy/babel-ansi)
   (add-hook 'org-babel-after-execute-hook 'shk-fix-inline-images)
-  (add-hook 'ob-async-pre-execute-src-block-hook
-            '(lambda ()
-               (require 'docker-tramp)))
+  (add-hook! 'ob-async-pre-execute-src-block-hook
+    (load (expand-file-name "init.el" user-emacs-directory)))
   (defadvice! org-babel-record-timestamp (orig-fn &rest args)
     :around 'org-babel-execute-src-block
     (let* ((info (or (nth 1 args) (org-babel-get-src-block-info)))
@@ -81,10 +80,3 @@
 (after! ob-async
   (pushnew! ob-async-no-async-languages-alist "jupyter"))
 
-(when IS-MAC
-  (use-package! org-mac-link
-    :after org
-    :config
-    (setq org-mac-grab-Acrobat-app-p nil) ; Disable grabbing from Adobe Acrobat
-    (setq org-mac-grab-devonthink-app-p nil) ; Disable grabbinb from DevonThink
-    ))

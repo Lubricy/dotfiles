@@ -33,4 +33,3 @@ typeset -U PATH
 if [[ "$PROFILE_STARTUP" == true ]]; then
     zprof
 fi
-[ -f "/Users/a578203/.ghcup/env" ] && source "/Users/a578203/.ghcup/env" # ghcup-env

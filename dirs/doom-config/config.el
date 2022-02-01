@@ -17,5 +17,8 @@
   (mapc (lambda (file) (load! file)) (directory-files-recursively dir "\\.el$")))
 (load-directory (concat doom-private-dir "tweaks"))
 
+;; spell-fu tweak
+(setq ispell-dictionary "en")
+
 (provide 'config)
 ;;; config.el ends here
