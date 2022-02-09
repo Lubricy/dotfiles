@@ -6,8 +6,6 @@
 (after! org
   (add-to-list 'org-modules 'org-id)
 
-  (setq org-archive-location "archive/all.org::* %s")
-
   (unless (string-match-p "\\.gpg" org-agenda-file-regexp)
     (setq org-agenda-file-regexp
           (replace-regexp-in-string "\\\\\\.org" "\\\\.org\\\\(\\\\.gpg\\\\)?"
@@ -19,8 +17,24 @@
   (setq org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id)
 
   (setq org-todo-keywords
-        '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
-          (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELED(c@/!)" "PHONE(p)" "MEETING(m)")))
+        '((sequence "TODO(t)" "NEXT(n)" "PROG(p)" "|" "DONE(d)")
+          (sequence "WAIT(w@/!)" "HOLD(h@/!)" "|" "CNCL(x@/!)" "TRASH(s)" "CALL(c)" "MEET(m)" "REST(r)")))
+
+
+
+  (defun lubricy/switch-task-on-clock-out (task-state)
+    "Change a task to 'PROG' when TASK-STATE is 'TODO'."
+    (if (string= task-state "PROG")
+        "NEXT"
+      task-state))
+  (defun lubricy/switch-task-on-clock-in (task-state)
+    "Change a task to 'PROG' when TASK-STATE is 'TODO'."
+    (if (or (string= task-state "TODO") (string= task-state "NEXT"))
+        "PROG"
+      task-state))
+
+  (setq org-clock-in-switch-to-state #'lubricy/switch-task-on-clock-in)
+  (setq org-clock-out-switch-to-state #'lubricy/switch-task-on-clock-out)
 
   (defun lubricy/org-capture-maybe-create-id ()
     (when (org-capture-get :create-id)
@@ -78,11 +92,11 @@
 
 (define-button-type 'lubricy/crypt-decrypt-button
   'action `(lambda (x) (save-excursion
-                         (org-back-to-heading)
-                         (org-decrypt-entry)))
+                    (org-back-to-heading)
+                    (org-decrypt-entry)))
   'mouse-action `(lambda (x) (save-excursion
-                               (org-back-to-heading)
-                               (org-decrypt-entry)))
+                          (org-back-to-heading)
+                          (org-decrypt-entry)))
   'display "Decrypt"
   'help-echo "Decrypt entry")
 
@@ -110,43 +124,60 @@
 
     ))
 
-(defun org-gtd--roam-archive ()
-  (org-gtd--clarify-item)
-  (org-gtd--decorate-item)
-  (org-roam-refile))
 
 (use-package! org-gtd
   :after org
   :init
   (setq org-gtd-directory "~/org/")
+  (setq org-gtd-archive-location
+        (lambda ()
+          (concat "archive/"
+                  (format-time-string "%Y" (current-time))
+                  "/%s"
+                  "::datetree/")))
+  (setq org-archive-location (funcall org-gtd-archive-location))
   :config
-  (map! :map org-gtd-command-map
-        :g "C-c C-c" 'org-gtd-clarify-finalize
-        :g "C-c C-k" 'org-gtd-process-inbox)
+  (map! :map org-gtd-process-map
+        :g "C-c C-c"  'org-gtd-choose
+        :g "C-c C-k"  'org-gtd--stop-processing
+        :n [S-return] 'org-gtd-choose
+        :n "m"        'org-gtd-choose
+        :n "q"        'org-gtd--stop-processing)
+  (defun org-gtd--roam-archive ()
+    "Process GTD inbox item as a reference item in roam."
+    (interactive)
+    (with-org-gtd-context (org-roam-create-note-from-headline))
+    (org-gtd-process-inbox))
+  (transient-define-prefix org-gtd-choose ()
+    "Choose how to categorize the current item.
+     Note that this function is intended to be used only during inbox processing.
+     Each action continues inbox processing, so you may put your emacs in an
+     undefined state."
+    ["Actionable"
+     [("d" "Already Done" org-gtd--quick-action)
+      ("a" "Next Action" org-gtd--single-action)]
+     [("e" "Someone Else" org-gtd--delegate)
+      ("s" "Scheduled Someday" org-gtd--calendar)]
+     [("p" "Project (multi-step)" org-gtd--project)]
+     ]
+    ["Non-actionable"
+     [("i" "Incubate" org-gtd--incubate)
+      ("r" "Save in Roam" org-gtd--roam-archive)]
+     [("t" "Trash" org-gtd--trash)]]
+    ["Org GTD"
+     ("q"
+      "Exit. Stop processing the inbox for now."
+      org-gtd--stop-processing)
+     ("x"
+      "Exit. Continue processing the inbox."
+      transient-quit-one)])
+  (setq org-gtd-agenda-custom-commands
+    '(("g" "Scheduled today and all NEXT items"
+       (
+        (agenda "" ((org-agenda-span 1)
+                    (org-agenda-start-day nil)))
+        (todo '("TODO" "NEXT" "PROG") ((org-agenda-overriding-header "All NEXT items")))
+        (todo "WAIT" ((org-agenda-todo-ignore-with-date t)
+                      (org-agenda-overriding-header "Blocked items")))))))
 
-  (defun org-gtd--process-inbox-element ()
-    "With point on an item, choose which GTD action to take."
-    (let ((action
-           (read-multiple-choice
-            "What to do with this item?"
-            '(
-              (?a "action" "do this when possible")
-              (?p "project" "a sequence of actions")
-              (?r "resource(roam)" "Store this to roam knowledge base")
-              (?d "done" "quick item: < 2 minutes, done!")
-              (?t "trash" "this has no value to me")
-              (?c "calendar" "do this at a certain time")
-              (?o "other" "delegate to someone else")
-              (?s "someday" "Sit and hatch on it")
-              (?q "quit" "I'll come back to this later")
-              ))))
-      (cl-case (car action)
-        (?a (org-gtd--single-action))
-        (?p (org-gtd--project))
-        (?r (org-gtd--roam-archive))
-        (?d (org-gtd--quick-action))
-        (?t (org-gtd--trash))
-        (?c (org-gtd--calendar))
-        (?o (org-gtd--delegate))
-        (?s (org-gtd--incubate))
-        (?q (doom/escape))))))
+  (org-gtd-mode))

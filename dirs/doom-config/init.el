@@ -214,6 +214,8 @@
        blamer
        hydra-posframe
        tree-sitter
+       pdf
+       corporate
        :config
        ;;literate
 

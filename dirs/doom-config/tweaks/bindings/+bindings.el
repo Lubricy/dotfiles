@@ -21,19 +21,21 @@
     :desc "Force show buffer"              "F" #'+ivy/switch-buffer-other-window
     :desc "Force show workspace buffer"    "w" #'+ivy/switch-workspace-buffer-other-window
     :desc "Switch to workspace buffer"     "W" #'+ivy/switch-workspace-buffer))
-  (:prefix-map ("d" . "Get Things Done")
-   :desc "add item to inbox"               "c" #'org-gtd-capture
-   :desc "see what's on your plate today"  "a" #'org-agenda-list
-   :desc "process entire inbox"            "p" #'org-gtd-process-inbox
-   :desc "see all NEXT items"              "n" #'org-gtd-show-all-next
-   :desc "show all stuck projects"         "s" #'org-gtd-show-stuck-projects
-   :desc "finish editing"                  "f" #'org-gtd-clarify-finalize)
+  (:when (featurep! :private-tools gtd)
+   (:prefix-map ("d" . "Get Things Done")
+    :desc "add item to inbox"               "c" #'org-gtd-capture
+    :desc "see what's on your plate today"  "a" #'org-agenda-list
+    :desc "process entire inbox"            "p" #'org-gtd-process-inbox
+    :desc "see all NEXT items"              "n" #'org-gtd-show-all-next
+    :desc "show all stuck projects"         "s" #'org-gtd-show-stuck-projects
+    :desc "gtd engage"                      "e" #'org-gtd-engage
+    :desc "finish editing"                  "d" #'org-gtd-choose))
   (:prefix-map ("t" . "toggle")
    :desc "Adjust text size"      "t"   #'text-scale-adjust
    :desc "Auto format on save"   "a"   #'format-all-mode
    :desc "line number"           "n"   #'display-line-numbers-mode
    (:when (featurep! :private-tools blamer)
-    :desc "git blame" "B" #'global-blamer-mode))
+    :desc "git blame" "B" #'blamer-mode))
   (:when IS-MAC
    (:prefix-map ("l" . "link")
     :desc "Google Chrome"        "c"   #'org-mac-chrome-insert-frontmost-url

@@ -9,4 +9,5 @@
                     :height 100
                     :italic t)))
   :config
-  (global-blamer-mode 1))
+  (setq blamer-self-author-name "You")
+  (add-hook! prog-mode #'blamer-mode))

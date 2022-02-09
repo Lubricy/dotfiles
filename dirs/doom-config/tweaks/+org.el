@@ -80,3 +80,9 @@
 (after! ob-async
   (pushnew! ob-async-no-async-languages-alist "jupyter"))
 
+(after! org-roam
+  (setq org-roam-capture-templates
+    '(("d" "default" plain "%?"
+       :target (file+head "default/%<%Y%m%d%H%M%S>-${slug}.org"
+                          "#+title: ${title}\n")
+       :unnarrowed t))))

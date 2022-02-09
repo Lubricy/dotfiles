@@ -1,3 +1,4 @@
+/tweaks/+local-config.el
 /+environments.el
 *.elc
 /custom.el

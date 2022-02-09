@@ -38,7 +38,8 @@ Org-mode properties drawer already, keep the headline and don’t insert
     (goto-char (point-min))
     (when has-properties
       (kill-line)
-      (kill-line))))
+      (kill-line))
+    (org-capture-finalize)))
 
 (defun workspace-root (&optional index)
   (let* ((index (or index 0))
