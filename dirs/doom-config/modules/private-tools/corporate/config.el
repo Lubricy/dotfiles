@@ -1,9 +1,9 @@
 (use-package! excorporate
   :defer t
-  :commands excorporate
+  :commands (excorporate org-gtd-engage appt-activate org-agenda)
   :config
 ;;; hack
-  (defun exco-diary-insert-meeting (finalize
+  (defun lubricy/exco-diary-insert-meeting (finalize
                                     subject start _end _location
                                     _main-invitees _optional-invitees
                                     icalendar-text)
@@ -65,6 +65,7 @@
             (replace-match "<EXCO_IPV4_ADDR \\1 \\2 \\3 \\4>"))
           (icalendar-import-buffer file t))))
     (funcall finalize))
+  (fset #'exco-diary-insert-meeting #'lubricy/exco-diary-insert-meeting)
   (defun lubricy/agenda-update-diary ()
     "call excorporate to update the diary for today"
     (exco-diary-diary-advice (calendar-current-date) (calendar-current-date) #'message "diary updated")))

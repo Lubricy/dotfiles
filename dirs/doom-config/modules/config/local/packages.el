@@ -5,8 +5,6 @@
 (package! vlf)
 (package! company-tabnine)
 
-;;; FIXME https://github.com/org-roam/org-roam/issues/1934
-(package! org :pin "73875939a8b5545ac53a86ec467239f510d14de8")
 (package! jq-mode)
 (package! es-mode)
 

@@ -11,8 +11,9 @@
   (when org-inline-image-overlays
     (org-redisplay-inline-images)))
 
-(defun lubricy/org-babel-node-setenv ()
-  (let ((root (projectile-locate-dominating-file default-directory "package.json")))
+(defun lubricy/org-babel-node-setenv (&optional root)
+  (interactive "DProject root:")
+  (let ((root (or root (projectile-locate-dominating-file default-directory "package.json"))))
     (when root
       (let* ((node-modules (concat (file-name-as-directory root) "node_modules"))
              (node-path (getenv "NODE_PATH"))
@@ -23,12 +24,28 @@
   (message "hook!"))
 
 (after! org
-  (setq org-agenda-search-view-always-boolean t)
-  (add-hook 'org-mode-hook 'lubricy/org-babel-node-setenv)
-  (add-hook 'org-mode-hook '+org-pretty-mode)
-  (add-hook 'org-babel-after-execute-hook 'lubricy/babel-ansi)
-  (add-hook 'org-babel-after-execute-hook 'shk-fix-inline-images)
-  (add-hook! 'ob-async-pre-execute-src-block-hook
+  (setq org-agenda-search-view-always-boolean t
+        org-fancy-priorities-list '("" "" ""))
+  (setq org-todo-keywords
+        '((sequence "TODO(t)" "NEXT(n)" "PROG(p)" "|" "DONE(d)")
+          (sequence "WAIT(w@/!)" "HOLD(h@/!)" "|" "CNCL(x@/!)" "TRASH(s)" "CALL(c)" "MEET(m)" "REST(r)"))
+        org-todo-keyword-faces
+        '(("TODO" . +org-todo-onhold)
+          ("NEXT" . org-todo)
+          ("PROG" . +org-todo-active)
+          ("DONE" . org-done)
+          ("WAIT" . +org-todo-onhold)
+          ("HOLD" . +org-todo-onhold)
+          ("CNCL" . +org-todo-cancel)
+          ("TRASH" . org-done)
+          ("MEET" . +org-todo-active)
+          ("CALL" . +org-todo-active)
+          ("REST" . +org-todo-active)))
+  (add-hook! org-mode #'lubricy/org-babel-node-setenv)
+  (add-hook! org-mode #'+org-pretty-mode)
+  (add-hook! org-babel-after-execute #'lubricy/babel-ansi)
+  (add-hook! org-babel-after-execute #'shk-fix-inline-images)
+  (add-hook! ob-async-pre-execute-src-block
     (load (expand-file-name "init.el" user-emacs-directory)))
   (defadvice! org-babel-record-timestamp (orig-fn &rest args)
     :around 'org-babel-execute-src-block

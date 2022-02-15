@@ -11,18 +11,18 @@
   :desc "Right window"            :n "<right>"   #'evil-window-right
   :desc "Up window"               :n "<up>"      #'evil-window-up
   :desc "Down window"             :n "<down>"    #'evil-window-down
-  (:prefix-map ("c" . "code")
+  (:prefix ("c" . "code")
    :desc "toggle between implementation and test"   "t" #'projectile-toggle-between-implementation-and-test)
-  (:prefix-map ("b" . "buffer")
+  (:prefix ("b" . "buffer")
    :desc "show buffer"                     "b" #'display-buffer
    :desc "Auto format current buffer"      "f" #'format-all-buffer)
   (:when (featurep! :completion ivy)
-   (:prefix-map ("b" . "buffer")
+   (:prefix ("b" . "buffer")
     :desc "Force show buffer"              "F" #'+ivy/switch-buffer-other-window
     :desc "Force show workspace buffer"    "w" #'+ivy/switch-workspace-buffer-other-window
     :desc "Switch to workspace buffer"     "W" #'+ivy/switch-workspace-buffer))
   (:when (featurep! :private-tools gtd)
-   (:prefix-map ("d" . "Get Things Done")
+   (:prefix ("d" . "Get Things Done")
     :desc "add item to inbox"               "c" #'org-gtd-capture
     :desc "see what's on your plate today"  "a" #'org-agenda-list
     :desc "process entire inbox"            "p" #'org-gtd-process-inbox
@@ -30,21 +30,21 @@
     :desc "show all stuck projects"         "s" #'org-gtd-show-stuck-projects
     :desc "gtd engage"                      "e" #'org-gtd-engage
     :desc "finish editing"                  "d" #'org-gtd-choose))
-  (:prefix-map ("t" . "toggle")
+  (:prefix ("t" . "toggle")
    :desc "Adjust text size"      "t"   #'text-scale-adjust
    :desc "Auto format on save"   "a"   #'format-all-mode
    :desc "line number"           "n"   #'display-line-numbers-mode
    (:when (featurep! :private-tools blamer)
     :desc "git blame" "B" #'blamer-mode))
   (:when IS-MAC
-   (:prefix-map ("l" . "link")
+   (:prefix ("l" . "link")
     :desc "Google Chrome"        "c"   #'org-mac-chrome-insert-frontmost-url
     :desc "Microsoft Outlook"    "o"   #'org-mac-outlook-message-insert-selected
     :desc "Finder"               "f"   #'org-mac-finder-insert-selected
     :desc "Jira"                 "j"   #'+ejira-insert-link))
   (:prefix ("n" . "notes")
    :desc "Org insert last link"      "p"   #'org-insert-last-stored-link)
-  (:prefix-map ("o" . "open")
+  (:prefix ("o" . "open")
    :desc "Google Search"      "g"   #'google-this)
   (:when (featurep! :ui workspaces)
    (:prefix ("TAB" . "workspace")
@@ -85,14 +85,18 @@
    :g "c c"     #'treemacs-create-file
    :g "A"       #'treemacs-add-project-to-workspace
    :g "D"       #'treemacs-remove-project-from-workspace))
- ;; <vterm> -------------------------------------
- (:when (featurep! :term vterm)
-  (:after vterm
-   :map vterm-mode-map
-   :g "M-v" #'vterm-yank))
 
  (:when (featurep! :lang org)
   :after org
+  (:localleader
+   :map org-mode-map
+   :g "Q" (lambda!
+           (let
+               ((org-complete-tags-always-offer-all-agenda-tags t)
+                (org-agenda-files (directory-files-recursively
+                                                     org-directory
+                                                     "org$")))
+             (counsel-org-tag))))
   (:when (featurep! :editor evil)
    :after evil
    :map evil-org-mode-map

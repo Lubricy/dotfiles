@@ -206,6 +206,7 @@
        ;;twitter           ; twitter client https://twitter.com/vnought
 
        :private-tools
+       eaf
        gtd
        jira
        http
@@ -216,6 +217,7 @@
        tree-sitter
        pdf
        corporate
+
        :config
        ;;literate
 

@@ -16,10 +16,6 @@
   ;; arbitrarily in my org files and the link to it still works.
   (setq org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id)
 
-  (setq org-todo-keywords
-        '((sequence "TODO(t)" "NEXT(n)" "PROG(p)" "|" "DONE(d)")
-          (sequence "WAIT(w@/!)" "HOLD(h@/!)" "|" "CNCL(x@/!)" "TRASH(s)" "CALL(c)" "MEET(m)" "REST(r)")))
-
 
 
   (defun lubricy/switch-task-on-clock-out (task-state)
@@ -29,7 +25,9 @@
       task-state))
   (defun lubricy/switch-task-on-clock-in (task-state)
     "Change a task to 'PROG' when TASK-STATE is 'TODO'."
-    (if (or (string= task-state "TODO") (string= task-state "NEXT"))
+    (if (and
+         (not (s-contains? "inbox" (buffer-file-name)))
+         (or (string= task-state "TODO") (string= task-state "NEXT")))
         "PROG"
       task-state))
 
@@ -84,8 +82,8 @@
            :empy-lines 1
            :immediate-finish t)
           ("L" " auto link"
-           entry (file+headline "roam/links.org" "Scratch")
-           "* %a\n"
+           entry (file +org-capture-todo-file)
+           "* %:description :res:\n\n%a\n"
            :empy-lines 1
            :immediate-finish t
            :create-id t))))
@@ -172,12 +170,52 @@
       "Exit. Continue processing the inbox."
       transient-quit-one)])
   (setq org-gtd-agenda-custom-commands
-    '(("g" "Scheduled today and all NEXT items"
-       (
-        (agenda "" ((org-agenda-span 1)
-                    (org-agenda-start-day nil)))
-        (todo '("TODO" "NEXT" "PROG") ((org-agenda-overriding-header "All NEXT items")))
-        (todo "WAIT" ((org-agenda-todo-ignore-with-date t)
-                      (org-agenda-overriding-header "Blocked items")))))))
+        `(("g" "Scheduled today and all NEXT items"
+           ,(append '((agenda "" ((org-agenda-dim-blocked-tasks nil)
+                                  (org-agenda-span 1)
+                                  (org-agenda-start-day nil)))
+                      (todo "NEXT" ((org-agenda-overriding-header "All NEXT items"))))
+                    (when (featurep! :private-tools jira)
+                      '((todo "" ((org-agenda-files '("~/org/jira"))
+                                  (org-agenda-overriding-header "All Jira items")))))
+                    '((todo "PROG" ((org-agenda-overriding-header "In Progress")))
+                      (tags "REFILE" ((org-agenda-overriding-header "Inbox items")))
+                      (todo "WAIT" ((org-agenda-todo-ignore-with-date t)
+                                    (org-agenda-overriding-header "Blocked items"))))))))
 
-  (org-gtd-mode))
+  (defun org-agenda-delete-empty-blocks ()
+    "Remove empty agenda blocks.
+  A block is identified as empty if there are fewer than 2
+  non-empty lines in the block (excluding the line with
+  `org-agenda-block-separator' characters)."
+    (when org-agenda-compact-blocks
+      (user-error "Cannot delete empty compact blocks"))
+    (setq buffer-read-only nil)
+    (save-excursion
+      (goto-char (point-min))
+      (let* ((blank-line-re "^\\s-*$")
+             (content-line-count (if (looking-at-p blank-line-re) 0 1))
+             (start-pos (point))
+             (block-re (format "%c\\{10,\\}" org-agenda-block-separator)))
+        (while (and (not (eobp)) (forward-line))
+          (cond
+           ((looking-at-p block-re)
+            (when (< content-line-count 2)
+              (delete-region start-pos (1+ (point-at-bol))))
+            (setq start-pos (point))
+            (forward-line)
+            (setq content-line-count (if (looking-at-p blank-line-re) 0 1)))
+           ((not (looking-at-p blank-line-re))
+            (setq content-line-count (1+ content-line-count)))))
+        (when (< content-line-count 2)
+          (delete-region start-pos (point-max)))
+        (goto-char (point-min))
+        ;; The above strategy can leave a separator line at the beginning
+        ;; of the buffer.
+        (when (looking-at-p block-re)
+          (delete-region (point) (1+ (point-at-eol))))))
+    (setq buffer-read-only t))
+
+  (add-hook! org-agenda-finalize #'org-agenda-delete-empty-blocks)
+  (setq org-edna-use-inheritance 1)
+  (org-edna-mode 1))
