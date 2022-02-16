@@ -1,3 +1,23 @@
+(after! pdf-view
+  (map! :map pdf-view-mode-map
+        :n  "u"         #'pdf-view-scroll-down-or-previous-page
+        :n  "d"         #'pdf-view-scroll-up-or-next-page)
+
+  (add-hook! pdf-view-mode
+    (pdf-view-fit-width-to-window)
+    (pdf-view-themed-minor-mode 1)))
+
+(after! org-noter
+  (setq org-noter-always-create-frame t
+        org-noter-notes-window-location 'horizontal-split
+        org-noter-doc-split-fraction '(0.8 . 0.8))
+  (map! :map org-noter-doc-mode-map
+        :after pdf-view
+        :n "q"   #'org-noter-kill-session
+        :n "i"   #'org-noter-insert-note
+        :n "I"   #'org-noter-insert-precise-note))
+
+
 (use-package! pdf-continuous-scroll-mode
   :after pdf-view
   :when (featurep! +scroll)
@@ -23,24 +43,3 @@
         :n  "<mouse-4>" #'pdf-cs-mouse-scroll-backward
         :n  "u"         #'pdf-continuous-previous-half-page
         :n  "d"         #'pdf-continuous-next-half-page))
-
-
-(after! pdf-view
-  (map! :map pdf-view-mode-map
-        :n  "u"         #'pdf-view-scroll-down-or-previous-page
-        :n  "d"         #'pdf-view-scroll-up-or-next-page)
-
-  (add-hook! pdf-view-mode
-    (pdf-view-fit-width-to-window)
-    (pdf-view-themed-minor-mode 1)))
-
-(after! org-noter
-  (setq org-noter-always-create-frame t
-        org-noter-notes-window-location 'horizontal-split
-        org-noter-doc-split-fraction '(0.8 . 0.8))
-  (map! :map org-noter-doc-mode-map
-        :after pdf-view
-        :n "q"   #'org-noter-kill-session
-        :n "i"   #'org-noter-insert-note
-        :n "I"   #'org-noter-insert-precise-note))
-

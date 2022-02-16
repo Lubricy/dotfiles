@@ -1,4 +1,11 @@
+(use-package! org-jira
+  :when (featurep! +jira)
+  :after org
+  :init
+  (setq-default org-jira-working-dir (concat (file-name-as-directory org-directory) "jira"))
+  (add-to-list 'org-agenda-files org-jira-working-dir))
 (use-package! excorporate
+  :when (featurep! +calendar)
   :defer t
   :commands (excorporate org-gtd-engage appt-activate org-agenda)
   :config
@@ -69,3 +76,8 @@
   (defun lubricy/agenda-update-diary ()
     "call excorporate to update the diary for today"
     (exco-diary-diary-advice (calendar-current-date) (calendar-current-date) #'message "diary updated")))
+
+(use-package! confluence
+  :when (featurep! +confluence)
+  :defer t
+  :commands (confluence-search confluence-get-page))

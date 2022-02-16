@@ -1,3 +1,4 @@
+;;;###autoload
 (defun org-asset (filename)
   (let ((filedir (format "%s.assets" (file-relative-name buffer-file-name))))
     (make-directory filedir 't)
@@ -7,16 +8,7 @@
   (let* ((filename (file-name-nondirectory (buffer-file-name)))
          (prefix (or prefix (format "session-%s" filename))))
     (format "%s-%s" prefix (secure-hash 'sha1 (buffer-file-name)))))
-
-(defun org-archive-done-tasks ()
-  (interactive)
-  (org-map-entries
-   (lambda ()
-     (org-archive-subtree)
-     (setq org-map-continue-from (org-element-property :begin (org-element-at-point))))
-   "/DONE" 'tree))
-
-
+;;;###autoload
 (defun org-roam-create-note-from-headline ()
   "Create an Org-roam note from the current headline and jump to it.
 
@@ -40,11 +32,11 @@ Org-mode properties drawer already, keep the headline and don’t insert
       (kill-line)
       (kill-line))
     (org-capture-finalize)))
-
+;;;###autoload
 (defun workspace-root (&optional index)
   (let* ((index (or index 0))
          (projects (treemacs-workspace->projects (treemacs-current-workspace))))
     (treemacs-project->path (nth index projects))))
-
+;;;###autoload
 (defun workspace-path (relpath &optional index)
   (concat (file-name-as-directory (workspace-root index)) relpath))

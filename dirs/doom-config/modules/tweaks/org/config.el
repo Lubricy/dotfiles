@@ -103,3 +103,4 @@
        :target (file+head "default/%<%Y%m%d%H%M%S>-${slug}.org"
                           "#+title: ${title}\n")
        :unnarrowed t))))
+

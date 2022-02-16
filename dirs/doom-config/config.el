@@ -13,12 +13,8 @@
       user-mail-address "lubricy@gmail.com"
       user-full-name    "Lubricy Fibber")
 
-(defun load-directory (dir)
-  (mapc (lambda (file) (load! file)) (directory-files-recursively dir "\\.el$")))
-(load-directory (concat doom-private-dir "tweaks"))
-
-;; spell-fu tweak
-(setq ispell-dictionary "en")
+(load-directory! "bindings")
+(load-directory! "private")
 
 (provide 'config)
 ;;; config.el ends here

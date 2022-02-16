@@ -90,7 +90,7 @@
   :after org
   (:localleader
    :map org-mode-map
-   :g "Q" (lambda!
+   :g "Q" (cmd!
            (let
                ((org-complete-tags-always-offer-all-agenda-tags t)
                 (org-agenda-files (directory-files-recursively

@@ -1,1 +1,6 @@
-(package! excorporate)
+(when (featurep! +calendar)
+  (package! excorporate))
+(when (featurep! +jira)
+  (package! org-jira))
+(when (featurep! +confluence)
+  (package! confluence))
