@@ -5,7 +5,7 @@
 
   (after! unicode-fonts
     (dolist (unicode-block '("Mathematical Alphanumeric Symbols"))
-      (push "STIXGeneral" (cadr (assoc unicode-block unicode-fonts-block-font-mapping)))))
+      (pushnew "STIXGeneral" (cadr (assoc unicode-block unicode-fonts-block-font-mapping)))))
 
   (use-package! org-mac-link
     :after org

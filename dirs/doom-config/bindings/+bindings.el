@@ -34,6 +34,8 @@
    :desc "Adjust text size"      "t"   #'text-scale-adjust
    :desc "Auto format on save"   "a"   #'format-all-mode
    :desc "line number"           "n"   #'display-line-numbers-mode
+   :desc "tree silde"            "P"   #'org-tree-slide-mode
+   :desc "prettify symbols"      "p"   #'prettify-symbols-mode
    (:when (featurep! :private-tools blamer)
     :desc "git blame" "B" #'blamer-mode))
   (:when IS-MAC
@@ -107,9 +109,3 @@
    :n "j"              #'org-next-block
    :n "k"              #'org-previous-block)))
 
-(evil-ex-define-cmd "k[ill]" #'kill-this-buffer)
-
-
-;; <ugly hacks> ------------------------------------------
-(after! treemacs
-  (evil-define-key* 'treemacs treemacs-mode-map (kbd "h") nil))

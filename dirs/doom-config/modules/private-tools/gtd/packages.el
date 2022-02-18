@@ -3,3 +3,4 @@
 
 (package! org-gtd)
 (package! org-ql)
+(package! org-projectile)

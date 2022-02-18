@@ -122,11 +122,11 @@
 
     ))
 
-
 (use-package! org-gtd
   :after org
   :init
   (setq org-gtd-directory "~/org/")
+  (setq org-gtd-refile-to-any-target 'nil)
   (setq org-gtd-archive-location
         (lambda ()
           (concat "archive/"
@@ -175,7 +175,7 @@
                                   (org-agenda-span 1)
                                   (org-agenda-start-day nil)))
                       (todo "NEXT" ((org-agenda-overriding-header "All NEXT items"))))
-                    (when (featurep! :private-tools jira)
+                    (when (featurep! :private-tools corporate +jira)
                       '((todo "" ((org-agenda-files '("~/org/jira"))
                                   (org-agenda-overriding-header "All Jira items")))))
                     '((todo "PROG" ((org-agenda-overriding-header "In Progress")))
@@ -219,3 +219,12 @@
   (add-hook! org-agenda-finalize #'org-agenda-delete-empty-blocks)
   (setq org-edna-use-inheritance 1)
   (org-edna-mode 1))
+
+(use-package! org-projectile
+  :config
+  (org-projectile-per-project)
+  (setq org-projectile-projects-file
+        (concat (file-name-as-directory org-directory) "projects.org"))
+  (setq org-projectile-per-project-filepath "todo.org")
+  (setq org-agenda-files (append org-agenda-files (org-projectile-todo-files)))
+  (push (org-projectile-project-todo-entry) org-capture-templates))

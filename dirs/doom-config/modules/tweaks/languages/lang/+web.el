@@ -1,4 +1,4 @@
-(after! web
+(after! npm-mode
   ;; node style compilation error
   (add-to-list
    'compilation-error-regexp-alist-alist

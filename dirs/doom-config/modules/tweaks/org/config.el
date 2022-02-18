@@ -1,3 +1,4 @@
+;;;###autoload
 (defun lubricy/babel-ansi ()
   (when-let ((beg (org-babel-where-is-src-block-result nil nil)))
     (save-excursion
@@ -6,11 +7,11 @@
         (let ((end (org-babel-result-end))
               (ansi-color-context-region nil))
           (ansi-color-apply-on-region beg end))))))
-
+;;;###autoload
 (defun shk-fix-inline-images ()
   (when org-inline-image-overlays
     (org-redisplay-inline-images)))
-
+;;;###autoload
 (defun lubricy/org-babel-node-setenv (&optional root)
   (interactive "DProject root:")
   (let ((root (or root (projectile-locate-dominating-file default-directory "package.json"))))
@@ -23,12 +24,14 @@
 (defun lubricy/test-echo ()
   (message "hook!"))
 
+
 (after! org
   (setq org-agenda-search-view-always-boolean t
-        org-fancy-priorities-list '("" "" ""))
-  (setq org-todo-keywords
+        org-fancy-priorities-list '("" "" "")
+        org-todo-keywords
         '((sequence "TODO(t)" "NEXT(n)" "PROG(p)" "|" "DONE(d)")
-          (sequence "WAIT(w@/!)" "HOLD(h@/!)" "|" "CNCL(x@/!)" "TRASH(s)" "CALL(c)" "MEET(m)" "REST(r)"))
+          (sequence "WAIT(w@/!)" "HOLD(h@/!)" "|" "CNCL(x@/!)"
+                    "TRASH(s)" "CALL(c)" "MEET(m)" "REST(r)"))
         org-todo-keyword-faces
         '(("TODO" . +org-todo-onhold)
           ("NEXT" . org-todo)
@@ -41,12 +44,14 @@
           ("MEET" . +org-todo-active)
           ("CALL" . +org-todo-active)
           ("REST" . +org-todo-active)))
-  (add-hook! org-mode #'lubricy/org-babel-node-setenv)
-  (add-hook! org-mode #'+org-pretty-mode)
-  (add-hook! org-babel-after-execute #'lubricy/babel-ansi)
-  (add-hook! org-babel-after-execute #'shk-fix-inline-images)
-  (add-hook! ob-async-pre-execute-src-block
-    (load (expand-file-name "init.el" user-emacs-directory)))
+  (add-hook! org-mode
+             #'lubricy/org-babel-node-setenv
+             #'+org-pretty-mode)
+  (add-hook! org-babel-after-execute
+             #'lubricy/babel-ansi
+             #'shk-fix-inline-images)
+  ;; (remove-hook! ob-async-pre-execute-src-block
+  ;;   (load (expand-file-name "init.el" user-emacs-directory)))
   (defadvice! org-babel-record-timestamp (orig-fn &rest args)
     :around 'org-babel-execute-src-block
     (let* ((info (or (nth 1 args) (org-babel-get-src-block-info)))
@@ -57,7 +62,7 @@
            (code-block-name (nth 4 info))
            (block-start (nth 5 info))
            (timestamp (cdr (assoc :timestamp code-block-params)))
-           (cache (let ((c (cdr (assq :cache code-block-params))) )
+           (cache (let ((c (cdr (assq :cache code-block-params))))
                     (and (not (car args)) c (string= "yes" c))))
            (new-hash (and cache (org-babel-sha1-hash info)))
            (old-hash (and cache (org-babel-current-result-hash)))
@@ -92,15 +97,36 @@
                     (insert "\n")))
                 (insert (concat begin-prompt begin-time))
                 )))
-        (apply orig-fn args)))))
-
+        (apply orig-fn args))))
+  (plist-put! +ligatures-extra-symbols
+              :name    "❯"
+              :header  "»"
+              :begin  ""
+              :end  ""
+              :result "")
+  (let* ((blocks
+          '("comment"
+            "example"))
+         (ligatures
+          '(:name   "#+name:"
+            :header "#+header:"
+            :header "#+headers:"
+            :result "#+results:"))
+         (+ligatures (append ligatures
+          (cl-loop for b in blocks
+                   append `(:begin ,(concat "#+begin_" b)
+                            :end ,(concat "#+end_" b))
+                   ))))
+    (apply #'set-ligatures! 'org-mode
+      (cl-loop for (k v) on +ligatures by #'cddr
+               append `(,k ,v ,k ,(upcase v))))))
 (after! ob-async
   (pushnew! ob-async-no-async-languages-alist "jupyter"))
 
 (after! org-roam
   (setq org-roam-capture-templates
-    '(("d" "default" plain "%?"
-       :target (file+head "default/%<%Y%m%d%H%M%S>-${slug}.org"
-                          "#+title: ${title}\n")
-       :unnarrowed t))))
+        '(("d" "default" plain "%?"
+           :target (file+head "default/%<%Y%m%d%H%M%S>-${slug}.org"
+                              "#+title: ${title}\n")
+           :unnarrowed t))))
 
