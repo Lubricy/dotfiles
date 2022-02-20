@@ -54,14 +54,17 @@
     :desc "Delete session"            "D"   #'+workspace/kill-session
     :desc "Delete this workspace"     "x"   #'+workspace/delete
     :desc "Rename workspace"          ","   #'+workspace/rename
+    :desc "swap left"                 "{"   #'+workspace/swap-left
+    :desc "swap right"                "}"   #'+workspace/swap-right
     :desc "Restore last session"      "R"   #'+workspace/restore-last-session))
-  (:when (featurep! :lang org +roam2)
-   (:prefix-map ("n" . "notes")
+   (:prefix ("n" . "notes")
+    (:when (featurep! :lang org +noter)
+     :desc "org noter" "n" #'org-noter)
     (:when (featurep! :private-tools roam-ui)
      (:prefix ("r" . "roam")
       :desc "Open Roam UI" "v" (cmd! (org-roam-ui-mode t))
       :desc "Stop Roam UI" "V" (cmd! (org-roam-ui-mode 'toggle))
-      )))))
+      ))))
 
  ;; <completion> ---------------------------------
  (:when (featurep! :completion ivy)

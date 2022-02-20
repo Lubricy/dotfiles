@@ -7,10 +7,12 @@
         (let ((end (org-babel-result-end))
               (ansi-color-context-region nil))
           (ansi-color-apply-on-region beg end))))))
+
 ;;;###autoload
 (defun shk-fix-inline-images ()
   (when org-inline-image-overlays
     (org-redisplay-inline-images)))
+
 ;;;###autoload
 (defun lubricy/org-babel-node-setenv (&optional root)
   (interactive "DProject root:")
@@ -20,10 +22,6 @@
              (node-path (getenv "NODE_PATH"))
              (node-paths (if node-path (split-string node-path ":") '())))
         (setenv "NODE_PATH" (string-join (delete-dups (cons node-modules node-paths)) ":"))))))
-
-(defun lubricy/test-echo ()
-  (message "hook!"))
-
 
 (after! org
   (setq org-agenda-search-view-always-boolean t
@@ -130,3 +128,5 @@
                               "#+title: ${title}\n")
            :unnarrowed t))))
 
+(dolist (flag doom--current-flags)
+  (load! (symbol-name flag)))

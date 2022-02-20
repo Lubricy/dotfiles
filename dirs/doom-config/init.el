@@ -157,12 +157,12 @@
        ;;ocaml             ; an objective camel
        (org
         +jupyter
-        +pomodoro
         +gnuplot
         +pandoc
         +pretty
         +present
         +dragndrop
+        +noter
         +roam2)      ; organize your plain life in plain text
        ;;perl              ; write code no one else can comprehend
        ;;php               ; perl's insecure younger brother
@@ -232,12 +232,12 @@
        chinese
        (company +tabnine)
        hydra
+       ivy
        mac
        languages
-       org
+       (org +crypt)
        pdf
-       ;; pomodoro
-       projectile
+       (projectile +ivy)
        roam
        tramp
        treemacs

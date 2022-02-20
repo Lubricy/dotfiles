@@ -88,40 +88,6 @@
            :immediate-finish t
            :create-id t))))
 
-(define-button-type 'lubricy/crypt-decrypt-button
-  'action `(lambda (x) (save-excursion
-                    (org-back-to-heading)
-                    (org-decrypt-entry)))
-  'mouse-action `(lambda (x) (save-excursion
-                          (org-back-to-heading)
-                          (org-decrypt-entry)))
-  'display "Decrypt"
-  'help-echo "Decrypt entry")
-
-;; (defun lubricy/org-make-crypt-buttons ()
-;;   (interactive)
-;;   (let ((org--matcher-tags-todo-only nil))
-;;     (org-scan-tags
-;;      'lubricy/org-make-crypt-button
-;;      (cdr (org-make-tags-matcher org-crypt-tag-matcher))
-;;      org--matcher-tags-todo-only)))
-
-
-(after! org-crypt
-  (org-crypt-use-before-save-magic)
-  (setq org-crypt-disable-auto-save 'encrypt)
-  (setq org-tags-exclude-from-inheritance (quote ("crypt")))
-  (defadvice! lubricy/org-make-decrypt-button ()
-    :after 'org-encrypt-entry
-    (pcase (org-at-encrypted-entry-p)
-      (`(,beg . ,end)
-       (save-excursion
-         (make-button beg end :type 'lubricy/crypt-decrypt-button)
-         ))
-      (_ (lambda (&rest args) nil)))
-
-    ))
-
 (use-package! org-gtd
   :after org
   :init
@@ -146,6 +112,32 @@
     (interactive)
     (with-org-gtd-context (org-roam-create-note-from-headline))
     (org-gtd-process-inbox))
+  (defun +occ-insert-gtd-project ()
+    (goto-char (org-find-property "ORG_GTD" "Projects"))
+    (org-insert-subheading 0))
+
+  (defun +org-projectile-refile ()
+    (interactive)
+    (let* ((category (projectile-completing-read
+                      "refile to project: "
+                      (occ-get-categories org-projectile-strategy)))
+           (filepath (occ-get-capture-file org-projectile-strategy category))
+           (marker (with-current-buffer (find-file-noselect filepath)
+              (save-excursion
+                (occ-goto-or-insert-category-heading
+                 category
+                 :build-heading #'org-projectile-build-heading
+                 :insert-heading-fn #'+occ-insert-gtd-project
+                 :get-category-from-element #'org-projectile-get-category-from-heading)
+                (point-marker)))))
+      (org-refile nil nil (list category filepath nil marker))))
+  (defun org-gtd--projectile ()
+    "Process GTD inbox item as a reference item in roam."
+    (interactive)
+    (org-gtd--decorate-item)
+    (org-todo "NEXT")
+    (+org-projectile-refile)
+    (org-gtd-process-inbox))
   (transient-define-prefix org-gtd-choose ()
     "Choose how to categorize the current item.
      Note that this function is intended to be used only during inbox processing.
@@ -156,7 +148,8 @@
       ("a" "Next Action" org-gtd--single-action)]
      [("e" "Someone Else" org-gtd--delegate)
       ("s" "Scheduled Someday" org-gtd--calendar)]
-     [("p" "Project (multi-step)" org-gtd--project)]
+     [("m" "Multi Step" org-gtd--project)]
+     [("p" "Project" org-gtd--projectile)]
      ]
     ["Non-actionable"
      [("i" "Incubate" org-gtd--incubate)
@@ -222,9 +215,8 @@
 
 (use-package! org-projectile
   :config
-  (org-projectile-per-project)
+  (org-projectile-single-file)
   (setq org-projectile-projects-file
         (concat (file-name-as-directory org-directory) "projects.org"))
-  (setq org-projectile-per-project-filepath "todo.org")
   (setq org-agenda-files (append org-agenda-files (org-projectile-todo-files)))
   (push (org-projectile-project-todo-entry) org-capture-templates))

@@ -1,3 +1,5 @@
+;;;###if (featurep! +pomodoro)
+
 (after! org-pomodoro
   (setq org-pomodoro-short-break-sound "~/Music/material_product_sounds/wav/01 Hero Sounds/hero_simple-celebration-01.wav")
   (setq org-pomodoro-long-break-sound "~/Music/material_product_sounds/wav/01 Hero Sounds/hero_simple-celebration-03.wav")
