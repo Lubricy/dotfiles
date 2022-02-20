@@ -13,6 +13,8 @@
       user-mail-address "lubricy@gmail.com"
       user-full-name    "Lubricy Fibber")
 
+(setq doom-theme 'doom-dracula)
+
 (load-directory! "bindings")
 (load-directory! "private")
 
