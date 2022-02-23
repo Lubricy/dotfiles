@@ -74,8 +74,8 @@ autoload -Uz colors; colors
 zinit ice lucid
 zinit snippet $HOME/.zshrc.d/my.zshtheme
 
-zinit ice lucid
-zinit light dracula/zsh
+# zinit ice lucid
+# zinit light dracula/zsh
 
 zinit ice lucid
 zinit light dracula/zsh-syntax-highlighting

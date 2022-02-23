@@ -17,4 +17,6 @@
          ))
       (_ nil)))
   (add-hook! org-mode
-             (org-map-entries #'lubricy/org-make-decrypt-button)))
+    (when (and (buffer-file-name (current-buffer))
+               (file-exists-p (buffer-file-name (current-buffer))))
+      (org-map-entries #'lubricy/org-make-decrypt-button))))
