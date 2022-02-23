@@ -35,7 +35,7 @@
    :desc "Auto format on save"   "a"   #'format-all-mode
    :desc "line number"           "n"   #'display-line-numbers-mode
    :desc "tree silde"            "P"   #'org-tree-slide-mode
-   :desc "prettify symbols"      "p"   #'prettify-symbols-mode
+   :desc "prettify symbols"      "p"   #'global-prettify-symbols-mode
    (:when (featurep! :private-tools blamer)
     :desc "git blame" "B" #'blamer-mode))
   (:when IS-MAC
@@ -44,8 +44,6 @@
     :desc "Microsoft Outlook"    "o"   #'org-mac-outlook-message-insert-selected
     :desc "Finder"               "f"   #'org-mac-finder-insert-selected
     :desc "Jira"                 "j"   #'+ejira-insert-link))
-  (:prefix ("n" . "notes")
-   :desc "Org insert last link"      "p"   #'org-insert-last-stored-link)
   (:prefix ("o" . "open")
    :desc "Google Search"      "g"   #'google-this)
   (:when (featurep! :ui workspaces)
@@ -58,12 +56,14 @@
     :desc "swap right"                "}"   #'+workspace/swap-right
     :desc "Restore last session"      "R"   #'+workspace/restore-last-session))
    (:prefix ("n" . "notes")
+    :desc "Org insert last link"      "p"   #'org-insert-last-stored-link
     (:when (featurep! :lang org +noter)
      :desc "org noter" "n" #'org-noter)
     (:when (featurep! :tweaks roam)
      (:prefix ("r" . "roam")
-      :desc "Open Roam UI" "v" (cmd! (org-roam-ui-mode t))
-      :desc "Stop Roam UI" "V" (cmd! (org-roam-ui-mode 'toggle))
+      :desc "Create headline" "h" #'org-roam-create-note-from-headline
+      :desc "Open Roam UI"    "v" (cmd! (org-roam-ui-mode t))
+      :desc "Stop Roam UI"    "V" (cmd! (org-roam-ui-mode 'toggle))
       ))))
 
  ;; <completion> ---------------------------------
