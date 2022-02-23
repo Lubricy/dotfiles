@@ -18,7 +18,7 @@ import XMonad.Layout.ResizableTile ( ResizableTall(..), MirrorResize(MirrorShrin
 import qualified XMonad.StackSet as W
 import qualified Data.Map as M
 
-myModMask = mod4Mask
+myModMask = mod1Mask -- mod1Mask = alt mod4Mask = win
 myTerminal = "kitty"
 
 -- EOT :: End of Transformer

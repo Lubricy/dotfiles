@@ -3,4 +3,5 @@ set -e
 
 stack build :xmonad-config-exe
 stack install :xmonad-config-exe --local-bin-path bin/ --verbosity error
+mkdir -p  ${XDG_DATA_DIR:-$HOME/.local/share/}/xmonad
 ln -f -T $(stack exec -- which xmonad-config-exe) $1
