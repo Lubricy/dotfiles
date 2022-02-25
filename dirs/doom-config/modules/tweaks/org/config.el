@@ -24,8 +24,9 @@
         (setenv "NODE_PATH" (string-join (delete-dups (cons node-modules node-paths)) ":"))))))
 
 (after! org
+  (setq org-priority-faces '((65 . error) (66 . success) (67 . warning))
+  (setq org-fancy-priorities-list '("" "" ""))
   (setq org-agenda-search-view-always-boolean t
-        org-fancy-priorities-list '("" "" "")
         org-todo-keywords
         '((sequence "TODO(t)" "NEXT(n)" "PROG(p)" "|" "DONE(d)")
           (sequence "WAIT(w@/!)" "HOLD(h@/!)" "|" "CNCL(x@/!)"
@@ -111,13 +112,13 @@
             :header "#+headers:"
             :result "#+results:"))
          (+ligatures (append ligatures
-          (cl-loop for b in blocks
-                   append `(:begin ,(concat "#+begin_" b)
-                            :end ,(concat "#+end_" b))
-                   ))))
+                             (cl-loop for b in blocks
+                                      append `(:begin ,(concat "#+begin_" b)
+                                               :end ,(concat "#+end_" b))
+                                      ))))
     (apply #'set-ligatures! 'org-mode
-      (cl-loop for (k v) on +ligatures by #'cddr
-               append `(,k ,v ,k ,(upcase v))))))
+           (cl-loop for (k v) on +ligatures by #'cddr
+                    append `(,k ,v ,k ,(upcase v))))))
 (after! ob-async
   (pushnew! ob-async-no-async-languages-alist "jupyter"))
 

@@ -26,6 +26,7 @@
   (defun lubricy/switch-task-on-clock-in (task-state)
     "Change a task to 'PROG' when TASK-STATE is 'TODO'."
     (if (and
+         (buffer-file-name)
          (not (s-contains? "inbox" (buffer-file-name)))
          (or (string= task-state "TODO") (string= task-state "NEXT")))
         "PROG"
@@ -66,27 +67,26 @@
            :clock-in t
            :clock-resume t)
           ("p" " phone"
-           entry (file+headline +org-capture-notes-file "Misc")
+           entry (file+olp+datetree +org-capture-notes-file)
            "* PHONE %? :misc:phone:\n%U"
            :clock-in t
            :clock-resume t)
           ("m" " meeting"
-           entry (file+headline +org-capture-notes-file "Misc")
+           entry (file+olp+datetree +org-capture-notes-file)
            "* MEETING with %? :misc:meet:\n%U"
            :clock-in t
            :clock-resume t)
 ;;; org-capture
           ("P" " Protocol"
            entry (file +org-capture-todo-file)
-           "* %:description :res:link:\n\n#+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n%a\n"
+           "* %a :link:\n\n %:description \n\n#+BEGIN_QUOTE\n%i\n#+END_QUOTE\n"
            :empy-lines 1
            :immediate-finish t)
           ("L" " auto link"
            entry (file +org-capture-todo-file)
-           "* %:description :res:\n\n%a\n"
+           "* %a :link:\n\n %:description\n"
            :empy-lines 1
-           :immediate-finish t
-           :create-id t))))
+           :immediate-finish t))))
 
 (use-package! org-gtd
   :after org
@@ -110,7 +110,7 @@
   (defun org-gtd--roam-archive ()
     "Process GTD inbox item as a reference item in roam."
     (interactive)
-    (with-org-gtd-context (org-roam-create-note-from-headline))
+    (+org-roam-refile-or-create)
     (org-gtd-process-inbox))
   (defun +occ-insert-gtd-project ()
     (goto-char (org-find-property "ORG_GTD" "Projects"))
@@ -123,13 +123,13 @@
                       (occ-get-categories org-projectile-strategy)))
            (filepath (occ-get-capture-file org-projectile-strategy category))
            (marker (with-current-buffer (find-file-noselect filepath)
-              (save-excursion
-                (occ-goto-or-insert-category-heading
-                 category
-                 :build-heading #'org-projectile-build-heading
-                 :insert-heading-fn #'+occ-insert-gtd-project
-                 :get-category-from-element #'org-projectile-get-category-from-heading)
-                (point-marker)))))
+                     (save-excursion
+                       (occ-goto-or-insert-category-heading
+                        category
+                        :build-heading #'org-projectile-build-heading
+                        :insert-heading-fn #'+occ-insert-gtd-project
+                        :get-category-from-element #'org-projectile-get-category-from-heading)
+                       (point-marker)))))
       (org-refile nil nil (list category filepath nil marker))))
   (defun org-gtd--projectile ()
     "Process GTD inbox item as a reference item in roam."
@@ -175,7 +175,6 @@
                       (tags "REFILE" ((org-agenda-overriding-header "Inbox items")))
                       (todo "WAIT" ((org-agenda-todo-ignore-with-date t)
                                     (org-agenda-overriding-header "Blocked items"))))))))
-
   (defun org-agenda-delete-empty-blocks ()
     "Remove empty agenda blocks.
   A block is identified as empty if there are fewer than 2
@@ -210,8 +209,14 @@
     (setq buffer-read-only t))
 
   (add-hook! org-agenda-finalize #'org-agenda-delete-empty-blocks)
+  (setq org-clock-persist t)
   (setq org-edna-use-inheritance 1)
-  (org-edna-mode 1))
+  (org-edna-mode 1)
+  (add-hook! org-after-todo-state-change
+    (when (and org-state
+               (member org-state org-done-keywords))
+      ;; TODO fix this
+      (lubricy/clock-in-default))))
 
 (use-package! org-projectile
   :config

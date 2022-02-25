@@ -1,5 +1,8 @@
 ;;; ~/.doom.d/+bindings.el -*- lexical-binding: t; -*-
 
+(when (featurep! :editor format +onsave)
+  (setq +enable-global-format-all t))
+
 (map!
  :g "M-c" #'clipboard-kill-ring-save
  :g "M-v" #'clipboard-yank
@@ -29,21 +32,32 @@
     :desc "see all NEXT items"              "n" #'org-gtd-show-all-next
     :desc "show all stuck projects"         "s" #'org-gtd-show-stuck-projects
     :desc "gtd engage"                      "e" #'org-gtd-engage
+    :desc "punch in"                        "i" #'lubricy/punch-in
+    :desc "punch out"                       "o" #'lubricy/punch-out
     :desc "finish editing"                  "d" #'org-gtd-choose))
   (:prefix ("t" . "toggle")
    :desc "Adjust text size"      "t"   #'text-scale-adjust
    :desc "Auto format on save"   "a"   #'format-all-mode
+   :desc "Auto format on save"   "A"   (cmd!
+                                        (if (bound-and-true-p +enable-global-format-all)
+                                            (progn
+                                              (remove-hook! after-change-major-mode #'+format-enable-on-save-maybe-h)
+                                              (setq +enable-global-format-all 'nil)
+                                              (message "Format-All mode disabled globally"))
+                                          (add-hook! after-change-major-mode #'+format-enable-on-save-maybe-h)
+                                          (setq +enable-global-format-all t)
+                                          (message "Format-All mode enabled globally")))
+
    :desc "line number"           "n"   #'display-line-numbers-mode
    :desc "tree silde"            "P"   #'org-tree-slide-mode
    :desc "prettify symbols"      "p"   #'global-prettify-symbols-mode
    (:when (featurep! :private-tools blamer)
-    :desc "git blame" "B" #'blamer-mode))
+    :desc "git blame" "B" #'global-blamer-mode))
   (:when IS-MAC
    (:prefix ("l" . "link")
     :desc "Google Chrome"        "c"   #'org-mac-chrome-insert-frontmost-url
     :desc "Microsoft Outlook"    "o"   #'org-mac-outlook-message-insert-selected
-    :desc "Finder"               "f"   #'org-mac-finder-insert-selected
-    :desc "Jira"                 "j"   #'+ejira-insert-link))
+    :desc "Finder"               "f"   #'org-mac-finder-insert-selected))
   (:prefix ("o" . "open")
    :desc "Google Search"      "g"   #'google-this)
   (:when (featurep! :ui workspaces)
@@ -55,16 +69,16 @@
     :desc "swap left"                 "{"   #'+workspace/swap-left
     :desc "swap right"                "}"   #'+workspace/swap-right
     :desc "Restore last session"      "R"   #'+workspace/restore-last-session))
-   (:prefix ("n" . "notes")
-    :desc "Org insert last link"      "p"   #'org-insert-last-stored-link
-    (:when (featurep! :lang org +noter)
-     :desc "org noter" "n" #'org-noter)
-    (:when (featurep! :tweaks roam)
-     (:prefix ("r" . "roam")
-      :desc "Create headline" "h" #'org-roam-create-note-from-headline
-      :desc "Open Roam UI"    "v" (cmd! (org-roam-ui-mode t))
-      :desc "Stop Roam UI"    "V" (cmd! (org-roam-ui-mode 'toggle))
-      ))))
+  (:prefix ("n" . "notes")
+   :desc "Org insert last link"      "p"   #'org-insert-last-stored-link
+   (:when (featurep! :lang org +noter)
+    :desc "org noter" "n" #'org-noter)
+   (:when (featurep! :tweaks roam)
+    (:prefix ("r" . "roam")
+     :desc "Create headline" "h" #'+org-roam-refile-or-create
+     :desc "Open Roam UI"    "v" (cmd! (org-roam-ui-mode t))
+     :desc "Stop Roam UI"    "V" (cmd! (org-roam-ui-mode 'toggle))
+     ))))
 
  ;; <completion> ---------------------------------
  (:when (featurep! :completion ivy)
@@ -99,8 +113,8 @@
            (let
                ((org-complete-tags-always-offer-all-agenda-tags t)
                 (org-agenda-files (directory-files-recursively
-                                                     org-directory
-                                                     "org$")))
+                                   org-directory
+                                   "org$")))
              (counsel-org-tag))))
   (:when (featurep! :editor evil)
    :after evil
