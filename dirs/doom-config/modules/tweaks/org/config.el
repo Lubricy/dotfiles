@@ -24,7 +24,7 @@
         (setenv "NODE_PATH" (string-join (delete-dups (cons node-modules node-paths)) ":"))))))
 
 (after! org
-  (setq org-priority-faces '((65 . error) (66 . success) (67 . warning))
+  (setq org-priority-faces '((65 . error) (66 . success) (67 . warning)))
   (setq org-fancy-priorities-list '("" "" ""))
   (setq org-agenda-search-view-always-boolean t
         org-todo-keywords

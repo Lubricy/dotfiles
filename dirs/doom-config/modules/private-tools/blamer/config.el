@@ -3,6 +3,7 @@
   :custom
   (blamer-idle-time 0.3)
   (blamer-min-offset 70)
+  :after git
   :custom-face
   (blamer-face ((t :foreground "#6977be"
                     :background nil

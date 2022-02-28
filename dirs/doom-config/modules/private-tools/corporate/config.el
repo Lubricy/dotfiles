@@ -4,79 +4,48 @@
   :init
   (setq-default org-jira-working-dir (concat (file-name-as-directory org-directory) "jira"))
   (add-to-list 'org-agenda-files org-jira-working-dir))
+
 (use-package! excorporate
   :when (featurep! +calendar)
-  :defer t
-  :commands (excorporate org-gtd-engage appt-activate org-agenda)
+  :commands (excorporate exco-connection-iterate)
+  :init
   :config
-;;; hack
-  (defun lubricy/exco-diary-insert-meeting (finalize
-                                    subject start _end _location
-                                    _main-invitees _optional-invitees
-                                    icalendar-text)
-    "Insert a retrieved meeting into the diary.
-     see also the documentation for `exco-calendar-item-iterate'.  the
-     arguments are subject, a string, the subject of the meeting,
-     start, the start date and time in emacs internal representation,
-     and icalendar-text, icalendar text representing the meeting.
-     _end, _location, _main-invitees, and _optional-invitees are
-     unused.
-     call finalize after the meeting has been inserted."
-    (when (not (string-match "^Cancel[l]?ed: " subject))
-      ;; FIXME: Sometimes meetings are duplicated if they have
-      ;; overlapping (and (diary-cyclic ...) (diary-block ...)) ranges,
-      ;; e.g., one in the today file and one in the transient file.
-      ;; Maybe we should de-duplicate them in the final display.  If the
-      ;; meeting start time is sometime today then put it in today's
-      ;; diary file, otherwise put it in the transient one.
-      (let* ((time (decode-time (current-time)))
-             (now (list (elt time 3) (elt time 4) (elt time 5)))
-             (dawn (apply #'encode-time 0 0 0 now))
-             (dusk (time-add dawn (seconds-to-time 86400)))
-             (file (if (and (time-less-p dawn start) (time-less-p start dusk))
-                       excorporate-diary-today-file
-                     excorporate-diary-transient-file)))
-        (with-temp-buffer
-          (insert icalendar-text)
+  (setq excorporate-update-diary 'nil)
+  (setq-default +excorporate-org-file-name
+                (concat (file-name-as-directory org-directory) "calendar.org")))
 
-          ;; FIXME: Maybe some users of multiple calendars will want to
-          ;; know the source calendar's name for each diary entry.
-          ;; There is no great way to achieve that right now, but one
-          ;; idea is to add X-WR-CALNAME support to
-          ;; icalendar-import-buffer, replace the
-          ;; exco-diary-insert-meeting argument to
-          ;; exco-calendar-item-with-details-iterate with:
-          ;;
-          ;; (lambda (&rest arguments)
-          ;;  (apply #'exco-diary-insert-meeting identifier arguments))
-          ;;
-          ;; and uncomment the following code.
-          ;;
-          ;; (goto-char (point-min))
-          ;; (while (re-search-forward
-          ;;	"^SUMMARY\\([^:]*\\):\\(.*\\(\n[ 	].*\\)*\\)" nil t)
-          ;;   (insert (format "\nX-WR-CALNAME: (%s)" identifier)))
-
-          ;; Escape literal percent signs (%).  Use less-than sign (<)
-          ;; and greater-than sign (>) which are forbidden URL
-          ;; characters, so that in the plain text diary file,
-          ;; percent-encoded URLs become completely invalid rather than
-          ;; slightly wrong.
-          (goto-char (point-min))
-          (while (re-search-forward "%" nil t)
-            (replace-match "<EXCO_PERCENT_SIGN>"))
-          (while
-              (re-search-forward
-               "\\(25[-5]\\|2[0-4][0-9]\\|1[0-9][0-9]\\|[1-9]?[0-9]\\)\\.\\(25[0-5]\\|2[0-4][0-9]\\|1[0-9][0-9]\\|[1-9]?[0-9]\\)\\.\\(25[0-5]\\|2[0-4][0-9]\\|1[0-9][0-9]\\|[1-9]?[0-9]\\)\\.\\(25[0-5]\\|2[0-4][0-9]\\|1[0-9][0-9]\\|[1-9]?[0-9]\\)"
-               nil t)                   ;
-            (replace-match "<EXCO_IPV4_ADDR \\1 \\2 \\3 \\4>"))
-          (icalendar-import-buffer file t))))
-    (funcall finalize))
-  (fset #'exco-diary-insert-meeting #'lubricy/exco-diary-insert-meeting)
-  (defun lubricy/agenda-update-diary ()
-    "call excorporate to update the diary for today"
-    (exco-diary-diary-advice (calendar-current-date) (calendar-current-date) #'message "diary updated")))
-
+(use-package! excorporate-org
+  :when (featurep! +calendar)
+  :after (excorporate org)
+  :config
+  ;; HACK
+  (defun exco-org-insert-meeting (subject start end location
+                                          main-invitees optional-invitees
+                                          &optional item-identifier organizer)
+    "Insert a scheduled meeting.
+     SUBJECT is a string, the subject of the meeting.  START is the
+     meeting start time in Emacs internal date time format, and END is
+     the end of the meeting in the same format.  LOCATION is a string
+     representing the location.  MAIN-INVITEES and OPTIONAL-INVITEES
+     are the requested participants.  ITEM-IDENTIFIER is the opaque
+     item identifier.  ORGANIZER is a string, the email address of the
+     meeting organizer."
+    (let* ((now (current-time)))
+      (insert (format "** MEET %s\n" subject))
+      (org-set-property "Identifier" (format "%S" item-identifier))
+      (org-set-property "Duration" (format "%d minutes" (round (/ (float-time (time-subtract end start)) 60.0))))
+      (when location
+        (org-set-property "Location" location))
+      (org-set-property "Organizer" organizer)
+      (org-set-property "Retrieved" (format-time-string "[%Y-%m-%d %a %H:%M]" (current-time)))
+      (insert (format-time-string "<%Y-%m-%d %a %H:%M>" start) "--"
+              (format-time-string "<%Y-%m-%d %a %H:%M>" end) "\n")
+      (when main-invitees
+        (insert "*** Invitees:\n")
+        (exco-org-insert-invitees main-invitees))
+      (when optional-invitees
+        (insert "*** Optional invitees:\n")
+        (exco-org-insert-invitees optional-invitees)))))
 (use-package! confluence
   :when (featurep! +confluence)
   :defer t

@@ -73,7 +73,7 @@
            :clock-resume t)
           ("m" " meeting"
            entry (file+olp+datetree +org-capture-notes-file)
-           "* MEETING with %? :misc:meet:\n%U"
+           "* MEET with %? :misc:meet:\n%U"
            :clock-in t
            :clock-resume t)
 ;;; org-capture

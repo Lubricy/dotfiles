@@ -2,7 +2,8 @@
 (defun lubricy/punch-in ()
   (interactive)
   (when (featurep! :private-tools corporate)
-    (excorporate))
+    (+exco-org-today)
+    (appt-activate 1))
   (when (featurep! :private-tools corporate +jira)
     (with-temp-buffer
       (call-interactively #'org-jira-get-issues)))
@@ -12,7 +13,8 @@
 ;;;###autoload
 (defun lubricy/punch-out ()
   (interactive)
-  (org-clock-out))
+  (org-clock-out)
+  (appt-activate 0))
 ;;;###autoload
 (defun lubricy/clock-in-default ()
   (interactive)
