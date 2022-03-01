@@ -11,9 +11,15 @@
        (save-excursion
          (let ((+beg (save-excursion (goto-char beg) (forward-line  1) (beginning-of-line) (point)))
                (+end (save-excursion (goto-char end) (forward-line -2) (end-of-line) (point))))
-           (make-button beg (1- +beg) 'action (cmd! (org-decrypt-entry)))
-           (make-button +beg +end 'display "-----ENCRYPTED BODY-----" 'action (cmd! (org-decrypt-entry)))
-           (make-button (1+ +end) end 'action (cmd! (org-decrypt-entry))))
+           (make-button beg (1- +beg)
+                        'action (cmd! (org-decrypt-entry))
+                        'mouse-action (cmd! (org-decrypt-entry)))
+           (make-button +beg +end 'display "-----ENCRYPTED BODY-----"
+                        'action (cmd! (org-decrypt-entry))
+                        'mosue-action (cmd! (org-decrypt-entry)))
+           (make-button (1+ +end) end
+                        'action (cmd! (org-decrypt-entry))
+                        'mosue-action (cmd! (org-decrypt-entry))))
          ))
       (_ nil)))
   (add-hook! org-mode

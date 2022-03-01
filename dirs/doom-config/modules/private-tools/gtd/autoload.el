@@ -41,7 +41,7 @@ Org-mode properties drawer already, keep the headline and don’t insert
                       (let* ((link (org-element-link-parser))
                              (beg (org-element-property :contents-begin link))
                              (end (org-element-property :contents-end link)))
-                        (buffer-substring beg end)))
+                        (and beg end (buffer-substring beg end))))
                     _title))
          (node (org-roam-node-read title))
          (file (org-roam-node-file node))
