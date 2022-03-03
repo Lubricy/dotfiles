@@ -50,3 +50,8 @@
   :when (featurep! +confluence)
   :defer t
   :commands (confluence-search confluence-get-page))
+
+(map! (:leader
+       (:prefix "d"
+        :desc "fetch mail" "m" #'+exco-org-today
+        :desc "fetch jira" "j" #'org-jira-get-issues)))

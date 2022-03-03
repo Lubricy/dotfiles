@@ -67,12 +67,12 @@
            :clock-in t
            :clock-resume t)
           ("p" " phone"
-           entry (file+olp+datetree +org-capture-notes-file)
+           entry (file +org-capture-notes-file)
            "* PHONE %? :misc:phone:\n%U"
            :clock-in t
            :clock-resume t)
           ("m" " meeting"
-           entry (file+olp+datetree +org-capture-notes-file)
+           entry (file +org-capture-notes-file)
            "* MEET with %? :misc:meet:\n%U"
            :clock-in t
            :clock-resume t)
@@ -110,8 +110,11 @@
   (defun org-gtd--roam-archive ()
     "Process GTD inbox item as a reference item in roam."
     (interactive)
+    (org-gtd--decorate-item)
+    (org-todo 'none)
     (+org-roam-refile-or-create)
     (org-gtd-process-inbox))
+
   (defun +occ-insert-gtd-project ()
     (goto-char (org-find-property "ORG_GTD" "Projects"))
     (org-insert-subheading 0))
@@ -131,6 +134,7 @@
                         :get-category-from-element #'org-projectile-get-category-from-heading)
                        (point-marker)))))
       (org-refile nil nil (list category filepath nil marker))))
+
   (defun org-gtd--projectile ()
     "Process GTD inbox item as a reference item in roam."
     (interactive)
@@ -219,9 +223,16 @@
       (lubricy/clock-in-default))))
 
 (use-package! org-projectile
+  :after org
   :config
   (org-projectile-single-file)
   (setq org-projectile-projects-file
         (concat (file-name-as-directory org-directory) "projects.org"))
   (setq org-agenda-files (append org-agenda-files (org-projectile-todo-files)))
-  (push (org-projectile-project-todo-entry) org-capture-templates))
+  (pushnew (org-projectile-project-todo-entry) org-capture-templates)
+  (org-link-set-parameters "project"
+                           :complete (lambda (&rest args)
+                                       (concat "project:" (projectile-completing-read
+                                                "Insert project: "
+                                                (occ-get-categories org-projectile-strategy))))
+                           :follow #'org-projectile-open-project))

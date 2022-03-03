@@ -2,11 +2,7 @@
 (defun lubricy/punch-in ()
   (interactive)
   (when (featurep! :private-tools corporate)
-    (+exco-org-today)
     (appt-activate 1))
-  (when (featurep! :private-tools corporate +jira)
-    (with-temp-buffer
-      (call-interactively #'org-jira-get-issues)))
   (lubricy/clock-in-default))
 
 
@@ -80,7 +76,8 @@ Org-mode properties drawer already, keep the headline and don’t insert
             (let ((org-loop-over-headlines-in-active-region nil))
               (org-align-tags)))
        (when (fboundp 'deactivate-mark) (deactivate-mark)))
-      (unless file
+      (if file
+          (save-buffer)
         (org-capture-finalize)))
     (if regionp
         (delete-region (point) (+ (point) (- region-end region-start)))

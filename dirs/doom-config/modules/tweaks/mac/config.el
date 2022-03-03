@@ -1,5 +1,5 @@
 (when IS-MAC
-  (after! epg
+  (after! epa
     ;; uses pinentry-osx
     (setq epg-pinentry-mode 'ask))
 

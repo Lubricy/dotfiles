@@ -4,8 +4,8 @@
         org-attach-dir-relative t)
   (setq org-todo-keywords
         '((sequence "TODO(t)" "NEXT(n)" "PROG(p)" "|" "DONE(d)")
-          (sequence "WAIT(w@/!)" "HOLD(h@/!)" "|" "CNCL(x@/!)"
-                    "TRASH(s)" "CALL(c)" "MEET(m)" "REST(r)"))
+          (sequence "WAIT(w@/!)" "HOLD(h@/!)" "|" "CNCL(x@/!)" "TRASH(s)")
+          (sequence "CALL(c)" "MEET(m)" "|" "REST(r)"))
         org-todo-keyword-faces
         '(("TODO" . +org-todo-onhold)
           ("NEXT" . org-todo)
