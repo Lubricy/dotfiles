@@ -1,3 +1,5 @@
 .projectile
 *.swp
 .venv
+*flycheck*
+.DS_Store

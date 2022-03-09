@@ -17,5 +17,5 @@
                                    (get-buffer-create excorporate-org-buffer-name)
                                  (write-region
                                   (point-min) (point-max)
-                                  +excorporate-org-file-name)))))
-  (org-agenda-to-appt))
+                                  +excorporate-org-file-name))
+                               (org-agenda-to-appt)))))

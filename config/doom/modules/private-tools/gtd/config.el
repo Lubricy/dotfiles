@@ -216,11 +216,12 @@
   (setq org-clock-persist t)
   (setq org-edna-use-inheritance 1)
   (org-edna-mode 1)
-  (add-hook! org-after-todo-state-change
-    (when (and org-state
-               (member org-state org-done-keywords))
-      ;; TODO fix this
-      (lubricy/clock-in-default))))
+  (add-hook! org-clock-out
+    (when (and (bound-and-true-p lubricy/keep-clock-running)
+               (not org-clock-clocking-in)
+               (marker-buffer org-clock-default-task)
+               (not org-clock-resolving-clocks-due-to-idleness))
+      (lubricy/clock-in-last-task))))
 
 (use-package! org-projectile
   :after org
@@ -228,8 +229,7 @@
   (org-projectile-single-file)
   (setq org-projectile-projects-file
         (concat (file-name-as-directory org-directory) "projects.org"))
-  (setq org-agenda-files (append org-agenda-files (org-projectile-todo-files)))
-  (pushnew (org-projectile-project-todo-entry) org-capture-templates)
+  ;; (pushnew (org-projectile-project-todo-entry) org-capture-templates)
   (org-link-set-parameters "project"
                            :complete (lambda (&rest args)
                                        (concat "project:" (projectile-completing-read

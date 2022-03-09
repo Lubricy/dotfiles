@@ -1,6 +1,10 @@
 set nocompatible
 filetype plugin on
-set clipboard=unnamedplus
+if system('uname -s') == "Darwin\n"
+  set clipboard=unnamed "OSX
+else
+  set clipboard=unnamedplus "Linux
+endif
 set shell=bash
 let mapleader = "\<Space>"
 
