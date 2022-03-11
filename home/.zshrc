@@ -28,6 +28,13 @@ if [ -d $HOME/.zshrc.d ]; then
 	done
 fi
 
+bindkey -r '^[[A'
+bindkey -r '^[[B'
+function __bind_history_keys() {
+  bindkey '^[[A' history-substring-search-up
+  bindkey '^[[B' history-substring-search-down
+}
+
 typeset -U PATH
 # Entirety of my startup file... then
 if [[ "$PROFILE_STARTUP" == true ]]; then

@@ -1,81 +1,86 @@
-if [[ ! -d $HOME/.zinit/bin ]]; then
-  mkdir $HOME/.zinit
-  git clone https://github.com/z-shell/zinit.git $HOME/.zinit/bin
-  source $HOME/.zinit/bin/zinit.zsh
-  zinit self-update
+### Added by Zinit's installer
+if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
+    print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
+    command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
+    command git clone https://github.com/zdharma-continuum/zinit "$HOME/.local/share/zinit/zinit.git" && \
+        print -P "%F{33} %F{34}Installation successful.%f%b" || \
+        print -P "%F{160} The clone has failed.%f%b"
 fi
-source $HOME/.zinit/bin/zinit.zsh
 
-zinit ice lucid blockf
-zinit light $HOME/.homesick/repos/homeshick
-
-zinit ice wait lucid as"completion"
-zinit snippet $HOME/.homesick/repos/homeshick/completions/_homeshick
-
-zinit ice lucid
-zinit snippet OMZ::lib/git.zsh
-
-zinit ice wait atload"unalias grv" lucid
-zinit snippet OMZ::plugins/git/git.plugin.zsh
-
-zinit ice as"program" pick"fasd" wait lucid
-zinit load clvv/fasd
-
-zinit ice wait lucid
-zinit snippet OMZ::plugins/fasd/fasd.plugin.zsh
-
-zinit ice wait lucid
-zinit snippet OMZ::plugins/kubectl/kubectl.plugin.zsh
-
-zinit ice wait lucid
-zinit snippet OMZ::plugins/aws/aws.plugin.zsh
-
-zinit ice wait lucid
-zinit snippet OMZ::plugins/helm/helm.plugin.zsh
-
-zinit ice wait lucid
-zinit snippet OMZ::plugins/direnv/direnv.plugin.zsh
-
-zinit ice wait lucid
-zinit load asdf-vm/asdf
-
-zinit ice wait"1" atload"zicompinit; zicdreplay -q" lucid
-zinit snippet OMZ::plugins/pyenv/pyenv.plugin.zsh
-
-zinit ice wait lucid as"completion"
-zinit snippet OMZ::plugins/docker/_docker
-
-zinit ice wait lucid as"completion"
-zinit snippet OMZ::plugins/pass/_pass
-
-zinit ice wait lucid blockf atpull'zinit creinstall -q .'
-zplugin light zsh-users/zsh-completions
-
-bindkey -r '^[[A'
-bindkey -r '^[[B'
-function __bind_history_keys() {
-  bindkey '^[[A' history-substring-search-up
-  bindkey '^[[B' history-substring-search-down
-}
-zinit ice wait lucid atload'__bind_history_keys'
-zinit load zsh-users/zsh-history-substring-search
-
-zinit ice lucid
-zinit load zsh-users/zsh-syntax-highlighting
-
-# zinit ice lucid atload"_zsh_autosuggest_start"
-# zinit load zsh-users/zsh-autosuggestions
-
-zinit ice lucid wait'1' has'fzf'
-zinit light Aloxaf/fzf-tab
+source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
+### End of Zinit's installer chunk
 
 setopt promptsubst
 autoload -Uz colors; colors
-zinit ice lucid
-zinit snippet $HOME/.zshrc.d/my.zshtheme
 
-# zinit ice lucid
-# zinit light dracula/zsh
+zinit wait"!" lucid for \
+    is-snippet \
+        $HOME/.zshrc.d/my.zshtheme \
 
-zinit ice lucid
-zinit light dracula/zsh-syntax-highlighting
+zinit lucid as"program" for \
+    pick"fasd" \
+        clvv/fasd \
+    pick"bin/asdf" src"asdf.sh" \
+        @asdf-vm/asdf \
+    pick"bin/(fzf|fzf-tmux)" \
+    atclone"cp shell/completion.zsh _fzf_completion; \
+      cp bin/(fzf|fzf-tmux) $ZPFX/bin" \
+    make"PREFIX=$ZPFX install" \
+        junegunn/fzf \
+    pick"bin/(fzf|fzf-tmux)" \
+    atclone"cp shell/completion.zsh _fzf_completion; \
+      cp bin/(fzf|fzf-tmux) $ZPFX/bin" \
+    make"PREFIX=$ZPFX install" \
+        junegunn/fzf \
+    make'!' atclone'./direnv hook zsh > zhook.zsh' \
+    atpull'%atclone' pick"direnv" src"zhook.zsh" \
+        direnv/direnv
+
+# OMZ Plugins
+zinit wait lucid blockf for \
+        $HOME/.homesick/repos/homeshick \
+        OMZL::git.zsh \
+    atload"unalias grv" \
+        OMZP::git \
+    has'kubectl' \
+        OMZP::kubectl \
+    has'fasd' \
+        OMZP::fasd \
+    has'aws' \
+        OMZP::aws \
+    has'helm' \
+        OMZP::helm \
+    has'direnv' \
+        OMZP::direnv \
+    has'pyenv' \
+        OMZP::pyenv \
+    has'pipenv' \
+        OMZP::pipenv \
+    has'poetry' \
+        OMZP::poetry \
+    has'fzf' \
+        Aloxaf/fzf-tab 
+
+zinit wait lucid as'completion' for \
+    is-snippet \
+        $HOME/.homesick/repos/homeshick/completions/_homeshick \
+    is-snippet \
+        OMZ::plugins/docker/_docker \
+    is-snippet \
+        OMZ::plugins/pass/_pass \
+
+
+zinit wait lucid blockf for\
+    atpull'zinit creinstall -q .' \
+        zsh-users/zsh-completions \
+    atload'__bind_history_keys' \
+        zsh-users/zsh-history-substring-search
+
+
+zinit wait lucid for \
+    atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
+        zsh-users/zsh-syntax-highlighting \
+        dracula/zsh-syntax-highlighting
+
