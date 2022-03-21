@@ -1,5 +1,4 @@
 (after! python
-  (poetry-tracking-mode -1)
   (defun lubricy/project-set-venv (&optional window)
     "Set python venv to `.venv'."
     (let ((venv-path
@@ -33,3 +32,6 @@ to that virtualenv."
        (t
         (pyvenv-deactivate))))
     (add-hook! post-command #'lubricy/pyvenv-track-virtualenv)))
+
+(after! poetry
+  (poetry-tracking-mode -1))

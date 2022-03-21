@@ -231,6 +231,7 @@
        :tweaks
        chinese
        (company +tabnine)
+       conf
        hydra
        ivy
        mac

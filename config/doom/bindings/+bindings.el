@@ -18,6 +18,8 @@
    :desc "toggle between implementation and test"   "t" #'projectile-toggle-between-implementation-and-test)
   (:prefix ("b" . "buffer")
    :desc "show buffer"                     "b" #'display-buffer
+   :desc "view raw buffer"                 "R" (cmd! (fundamental-mode)
+                                                     (revert-buffer nil nil t))
    :desc "Auto format current buffer"      "f" #'format-all-buffer)
   (:when (featurep! :completion ivy)
    (:prefix ("b" . "buffer")

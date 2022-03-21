@@ -39,7 +39,7 @@ zinit lucid as"program" for \
         direnv/direnv
 
 # OMZ Plugins
-zinit wait lucid blockf for \
+zinit wait light-mode lucid blockf for \
         $HOME/.homesick/repos/homeshick \
         OMZL::git.zsh \
     atload"unalias grv" \
@@ -60,6 +60,8 @@ zinit wait lucid blockf for \
         OMZP::pipenv \
     has'poetry' \
         OMZP::poetry \
+    has'pipx' \
+        thuandt/zsh-pipx \
     has'fzf' \
         Aloxaf/fzf-tab 
 
