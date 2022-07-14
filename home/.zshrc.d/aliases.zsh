@@ -31,13 +31,34 @@ if command -v parallel >/dev/null 2>&1; then
   alias par='parallel --progress'
   alias parp='parallel --progress --pipe'
 fi
+
+verlte() {
+    [  "$1" = "`echo -e "$1\n$2" | sort -V | head -n1`" ]
+}
+
+verlt() {
+    [ "$1" = "$2" ] && return 1 || verlte $1 $2
+}
+
+
 foo_venv () {
-  dir=${1:-.venv}
+  local dir=${1:-.venv}
+  local name=${1:-$(basename $(pwd))}
   if [ ! -d $dir ]; then
-    echo "creating venv in $dir"
-    python3 -m venv $dir
+    local venv_options=("$dir" "--prompt" "$name")
+    if verlte "3.9" "$(python3 -V | cut -d ' ' -f2)"; then
+      venv_options+=("--upgrade-deps")
+    else
+      local manual_update_pip=1
+    fi
+    echo "creating $dir for $name ..."
+    python3 -m venv "${venv_options[@]}"
   fi
   source $dir/bin/activate
+
+  if [ "${manual_update_pip+x}" ]; then
+    pip install --upgrade pip setuptools
+  fi
 }
 foo_pipenv () {
   if [ -z "$1" ]; then

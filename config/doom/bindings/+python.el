@@ -1,5 +1,6 @@
 (after! poetry
   (defvar poetry-mode-map (make-sparse-keymap))
+  (poetry-tracking-mode -1)
   (map! :localleader
         :prefix ("p" . "poetry")
         :map python-mode-map

@@ -4,41 +4,46 @@ set -eo pipefail
 exec-message () {
     C='\033[0;32m'
     N='\033[0m' # No Color
-    printf "${C}executing:${N} ${@}\n"
+    printf "${C}executing:${N} %s\n" "$*"
 }
 
 hint () {
     C='\033[0;33m'
     N='\033[0m' # No Color
-    printf "${C}hint: ${@}${N}\n"
+    printf "${C}hint: %s${N}\n" "$*"
 }
 
-ARGS=$@
+ARGS=("$@")
 
 maybe_execute() {
     HOOK=$1
+    if [ "$(echo $GIT_TRACE_GLOBAL_HOOK | tr '[:upper:]' '[:lower:]')" == "true" ]; then
+        echo "$HOOK ${ARGS[@]}"
+    fi
+
     if [ -f "$HOOK" ]; then
         if [ -x "$HOOK" ]; then
-             exec-message $HOOK
-            "$HOOK" $ARGS
+            exec-message "$HOOK"
+            "$HOOK" "${ARGS[@]}"
         else
-            if [ 'false' != $(git config --default true --get advice.ignoredHook |\
-                tr '[:upper:]' '[:lower:]') ]; then
-                            hint The \'$HOOK\' hook was ignored because it\'s not set as executable.
-                            hint You can disable this warning with \`git config advice.ignoredHook false\`.
+            if [ 'false' != "$(git config --default true --get advice.ignoredHook |\
+                tr '[:upper:]' '[:lower:]')" ]; then
+                hint "The '$HOOK' hook was ignored because it's not set as executable."
+                hint "You can disable this warning with \`git config advice.ignoredHook false\`."
             fi
         fi
     fi
 }
 
-maybe_execute "$0.before"
+# cat /dev/tty
 
-HOOK_NAME=$(basename $0)
+echo "$STDIN" | maybe_execute "$0.before"
+
+HOOK_NAME=$(basename "$0")
 LOCAL_HOOKS=$(git config --local \
     --default "$(git rev-parse --git-dir)/hooks" \
     --get core.hooksPath)
 HOOK=$LOCAL_HOOKS/$HOOK_NAME
 
-maybe_execute "$HOOK"
-maybe_execute "$0.after"
-
+echo "$STDIN" | maybe_execute "$HOOK"
+echo "$STDIN" | maybe_execute "$0.after"

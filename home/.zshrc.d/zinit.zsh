@@ -36,7 +36,9 @@ zinit lucid as"program" for \
         junegunn/fzf \
     make'!' atclone'./direnv hook zsh > zhook.zsh' \
     atpull'%atclone' pick"direnv" src"zhook.zsh" \
-        direnv/direnv
+        direnv/direnv \
+    pick"git-open" \
+        paulirish/git-open
 
 # OMZ Plugins
 zinit wait light-mode lucid blockf for \

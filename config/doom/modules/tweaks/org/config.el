@@ -1,6 +1,6 @@
 (after! org
   (setq org-agenda-search-view-always-boolean t
-        org-attach-store-link-p 'attach
+        org-attach-store-link-p 'attached
         org-attach-dir-relative t)
   (setq org-todo-keywords
         '((sequence "TODO(t)" "NEXT(n)" "PROG(p)" "|" "DONE(d)")
