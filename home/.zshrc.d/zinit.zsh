@@ -29,11 +29,6 @@ zinit lucid as"program" for \
       cp bin/(fzf|fzf-tmux) $ZPFX/bin" \
     make"PREFIX=$ZPFX install" \
         junegunn/fzf \
-    pick"bin/(fzf|fzf-tmux)" \
-    atclone"cp shell/completion.zsh _fzf_completion; \
-      cp bin/(fzf|fzf-tmux) $ZPFX/bin" \
-    make"PREFIX=$ZPFX install" \
-        junegunn/fzf \
     make'!' atclone'./direnv hook zsh > zhook.zsh' \
     atpull'%atclone' pick"direnv" src"zhook.zsh" \
         direnv/direnv \
@@ -71,9 +66,9 @@ zinit wait lucid as'completion' for \
     is-snippet \
         $HOME/.homesick/repos/homeshick/completions/_homeshick \
     is-snippet \
-        OMZ::plugins/docker/_docker \
+        OMZP::docker/_docker \
     is-snippet \
-        OMZ::plugins/pass/_pass \
+        OMZP::pass/_pass \
 
 
 zinit wait lucid blockf for\

@@ -1,11 +1,11 @@
 ;;; ~/.doom.d/config.el -*- lexical-binding: t; -*-
 
-;; Place your private configuration here
+ ;; Place your private configuration here
 
 
 ;; I've swapped these keys on my keyboard
-(setq x-meta-keysym         'alt
-      x-alt-keysym          'meta
+(setq x-super-keysym        'meta
+      x-alt-keysym          'alt
       mac-option-modifier   'alt
       mac-command-modifier  'meta
       mac-function-modifier 'control
