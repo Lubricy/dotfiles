@@ -41,8 +41,6 @@ zinit wait light-mode lucid blockf for \
         OMZL::git.zsh \
     atload"unalias grv" \
         OMZP::git \
-    has'kubectl' \
-        OMZP::kubectl \
     has'fasd' \
         OMZP::fasd \
     has'aws' \
@@ -53,6 +51,8 @@ zinit wait light-mode lucid blockf for \
         OMZP::direnv \
     has'pyenv' \
         OMZP::pyenv \
+    has'kubectl' \
+        OMZP::kubectl \
     has'pipenv' \
         OMZP::pipenv \
     has'poetry' \

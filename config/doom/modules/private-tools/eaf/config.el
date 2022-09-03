@@ -1,5 +1,6 @@
 (use-package! eaf
   :defer t
+  :init (evil-set-initial-state 'eaf-mode 'emacs)
   :config
   (use-package! ctable)
   (use-package! deferred)

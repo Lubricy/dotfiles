@@ -172,7 +172,7 @@
                                   (org-agenda-span 1)
                                   (org-agenda-start-day nil)))
                       (todo "NEXT" ((org-agenda-overriding-header "All NEXT items"))))
-                    (when (featurep! :private-tools corporate +jira)
+                    (when (modulep! :private-tools corporate +jira)
                       '((todo "" ((org-agenda-files '("~/org/jira"))
                                   (org-agenda-overriding-header "All Jira items")))))
                     '((todo "PROG" ((org-agenda-overriding-header "In Progress")))

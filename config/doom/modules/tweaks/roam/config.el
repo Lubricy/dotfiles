@@ -14,3 +14,9 @@
         org-roam-ui-open-on-start t)
   ;; FIXME workaround since fd/rg follows .gitignore
   (setq org-roam-list-files-commands 'nil))
+
+(use-package! delve
+  :after org-roam
+  :config
+  (add-hook #'delve-mode-hook #'delve-compact-view-mode)
+  (delve-global-minor-mode))

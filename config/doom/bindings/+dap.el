@@ -1,4 +1,4 @@
-(when (featurep! :tools debugger +lsp)
+(when (modulep! :tools debugger +lsp)
   (after! git-gutter-fringe
     (fringe-mode '8)))
 

@@ -1,2 +1,2 @@
-(when (featurep! +tabnine)
+(when (modulep! +tabnine)
   (package! company-tabnine))

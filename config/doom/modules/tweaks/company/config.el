@@ -4,7 +4,7 @@
   (setq company-idle-delay 0.2
         company-minimum-prefix-length 1))
 
-(when (featurep! +tabnine)
+(when (modulep! +tabnine)
   (use-package! company-tabnine
     :after company
     :config

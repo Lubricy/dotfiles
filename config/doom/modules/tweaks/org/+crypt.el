@@ -1,4 +1,4 @@
-;;;###if (featurep! +crypt)
+;;;###if (modulep! +crypt)
 
 (after! org-crypt
   (org-crypt-use-before-save-magic)

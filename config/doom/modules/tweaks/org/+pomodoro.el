@@ -1,4 +1,4 @@
-;;;###if (featurep! +pomodoro)
+;;;###if (modulep! +pomodoro)
 
 (after! org-pomodoro
   (setq org-pomodoro-short-break-sound "~/Music/material_product_sounds/wav/01 Hero Sounds/hero_simple-celebration-01.wav")

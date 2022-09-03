@@ -42,6 +42,7 @@
 
 (load! "+pretty")
 (load! "+timestamp")
+(load! "+hacks")
 
 (dolist (flag doom--current-flags)
   (load! (symbol-name flag)))

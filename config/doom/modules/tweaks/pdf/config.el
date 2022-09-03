@@ -20,7 +20,7 @@
 
 (use-package! pdf-continuous-scroll-mode
   :after pdf-view
-  :when (featurep! +scroll)
+  :when (modulep! +scroll)
   :config
   (defun pdf-continuous-next-half-page ()
     (interactive)

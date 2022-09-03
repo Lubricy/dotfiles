@@ -1,12 +1,12 @@
 (use-package! org-jira
-  :when (featurep! +jira)
+  :when (modulep! +jira)
   :after org
   :init
   (setq-default org-jira-working-dir (concat (file-name-as-directory org-directory) "jira"))
   (add-to-list 'org-agenda-files org-jira-working-dir))
 
 (use-package! excorporate
-  :when (featurep! +calendar)
+  :when (modulep! +calendar)
   :commands (excorporate exco-connection-iterate)
   :init
   :config
@@ -15,7 +15,7 @@
                 (concat (file-name-as-directory org-directory) "calendar.org")))
 
 (use-package! excorporate-org
-  :when (featurep! +calendar)
+  :when (modulep! +calendar)
   :after (excorporate org)
   :config
   ;; HACK
@@ -47,7 +47,7 @@
         (insert "*** Optional invitees:\n")
         (exco-org-insert-invitees optional-invitees)))))
 (use-package! confluence
-  :when (featurep! +confluence)
+  :when (modulep! +confluence)
   :defer t
   :commands (confluence-search confluence-get-page))
 
