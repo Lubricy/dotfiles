@@ -44,5 +44,5 @@
 (load! "+timestamp")
 (load! "+hacks")
 
-(dolist (flag doom--current-flags)
+(dolist (flag (doom-module-context-get 'flags))
   (load! (symbol-name flag)))

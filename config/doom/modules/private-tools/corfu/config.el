@@ -31,8 +31,8 @@
 
 (use-package! corfu
   :custom
-  (corfu-separator ?\s)          ;; Orderless field separator
-  (corfu-preview-current nil)    ;; Disable current candidate preview
+  (corfu-separator ?\s)       ;; Orderless field separator
+  (corfu-preview-current nil) ;; Disable current candidate preview
   (corfu-auto t)
   (corfu-auto-prefix 1)
   (corfu-on-exact-match nil)
@@ -41,18 +41,15 @@
   :hook
   (doom-first-buffer . global-corfu-mode)
   :bind (:map corfu-map
-         ("SPC" . corfu-insert-separator)))
-
-(use-package! corfu-doc
-  :hook
-  (corfu-mode . corfu-doc-mode)
-  :bind (:map corfu-map
-         ("M-n" . corfu-doc-scroll-down)
-         ("M-p" . corfu-doc-scroll-up)
-         ("M-d" . corfu-doc-toggle)))
+              ("SPC" . corfu-insert-separator))
+  ;; :bind (:map corfu-map
+  ;;             ("M-n" . corfu-popupinfo-scroll-down)
+  ;;             ("M-p" . corfu-popupinfo-scroll-up)
+  ;;             ("M-d" . corfu-popupinfo-toggle))
+  )
 
 (use-package! orderless
-  :when (featurep! +orderless)
+  :when (modulep! +orderless)
   :init
   (setq completion-styles '(orderless)
         completion-category-defaults nil

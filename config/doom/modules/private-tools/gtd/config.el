@@ -100,6 +100,7 @@
                   "/%s"
                   "::datetree/")))
   (setq org-archive-location (funcall org-gtd-archive-location))
+  (setq org-gtd-update-ack "2.1.0")
   :config
   (map! :map org-gtd-process-map
         :g "C-c C-c"  'org-gtd-choose
