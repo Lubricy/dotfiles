@@ -197,4 +197,4 @@ alt + shift - 0x18 : ~/.local/bin/yabai_resize h +60
 
 alt - space : ~/.homesick/repos/doom-emacs/bin/org-capture
 alt - p : PASSWORD_STORE_ENABLE_EXTENSIONS=true pass choose
-alt - m : yabai -m query --windows --window | ~/.local/bin/alerter
+alt - m : yabai -m query --windows --window | jq -rc '{app,title,role,subrole}' | ~/.local/bin/alerter
