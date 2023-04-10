@@ -80,6 +80,6 @@ zinit wait lucid blockf for\
 
 zinit wait lucid for \
     atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
-        zsh-users/zsh-syntax-highlighting \
-        dracula/zsh-syntax-highlighting
+        zsh-users/zsh-syntax-highlighting
+        # dracula/zsh-syntax-highlighting \
 

@@ -44,6 +44,12 @@ verlt() {
 foo_venv () {
   local dir=${1:-.venv}
   local name=${1:-$(basename $(pwd))}
+
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    local SED=gsed
+  else
+    local SED=sed
+  fi
   if [ ! -d $dir ]; then
     local venv_options=("$dir" "--prompt" "$name")
     if verlte "3.9" "$(python3 -V | cut -d ' ' -f2)"; then
@@ -52,13 +58,21 @@ foo_venv () {
       local manual_update_pip=1
     fi
     echo "creating $dir for $name ..."
+    if [ -z "${STATIC_VENV+x}" ]; then
+      venv_options+=("--copies")
+    fi
     python3 -m venv "${venv_options[@]}"
+    if [ -z "${SYMLINK_VENV+x}" ]; then
+      echo "patching $dir ..."
+      $SED -i 's#^VIRTUAL_ENV=.*#VIRTUAL_ENV="$(realpath "$(dirname "${BASH_SOURCE[0]-$0}")/../")"#g' $dir/bin/activate
+    fi
   fi
   source $dir/bin/activate
 
-  if [ "${manual_update_pip+x}" ]; then
+  if [ ! -z "${manual_update_pip+x}" ]; then
     pip install --upgrade pip setuptools
   fi
+  find $dir/bin -type f | xargs $SED -i '1s/.*python$/#!\/usr\/bin\/env python/'
 }
 foo_pipenv () {
   if [ -z "$1" ]; then

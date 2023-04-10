@@ -4,21 +4,21 @@ set -eo pipefail
 exec-message () {
     C='\033[0;32m'
     N='\033[0m' # No Color
-    printf "${C}executing:${N} %s\n" "$*"
+    printf "${C}executing:${N} %s\n" "$*" >&2
 }
 
 hint () {
     C='\033[0;33m'
     N='\033[0m' # No Color
-    printf "${C}hint: %s${N}\n" "$*"
+    printf "${C}hint: %s${N}\n" "$*" >&2
 }
 
 ARGS=("$@")
 
 maybe_execute() {
-    HOOK=$1
+    local HOOK=$1
     if [ "$(echo $GIT_TRACE_GLOBAL_HOOK | tr '[:upper:]' '[:lower:]')" == "true" ]; then
-        echo "$HOOK ${ARGS[@]}"
+        hint "$HOOK ${ARGS[*]}"
     fi
 
     if [ -f "$HOOK" ]; then
@@ -35,9 +35,9 @@ maybe_execute() {
     fi
 }
 
-# cat /dev/tty
+STDIN=$(cat)
 
-echo "$STDIN" | maybe_execute "$0.before"
+echo -n STDIN: $STDIN
 
 HOOK_NAME=$(basename "$0")
 LOCAL_HOOKS=$(git config --local \
@@ -45,5 +45,6 @@ LOCAL_HOOKS=$(git config --local \
     --get core.hooksPath)
 HOOK=$LOCAL_HOOKS/$HOOK_NAME
 
-echo "$STDIN" | maybe_execute "$HOOK"
-echo "$STDIN" | maybe_execute "$0.after"
+echo -n "$STDIN" | maybe_execute "$0.before"
+echo -n "$STDIN" | maybe_execute "$HOOK"
+echo -n "$STDIN" | maybe_execute "$0.after"

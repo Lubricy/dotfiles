@@ -34,8 +34,9 @@
     :desc "see all NEXT items"              "n" #'org-gtd-show-all-next
     :desc "show all stuck projects"         "s" #'org-gtd-show-stuck-projects
     :desc "gtd engage"                      "e" #'org-gtd-engage
-    :desc "punch in"                        "i" #'lubricy/punch-in
-    :desc "punch out"                       "o" #'lubricy/punch-out
+    :desc "open inbox"                      "i" #'lubricy/goto-gtd-inbox-file
+    :desc "punch in"                        "I" #'lubricy/punch-in
+    :desc "punch out"                       "O" #'lubricy/punch-out
     :desc "finish editing"                  "d" #'org-gtd-choose))
   (:prefix ("t" . "toggle")
    :desc "Adjust text size"      "t"   #'text-scale-adjust

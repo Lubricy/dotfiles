@@ -49,4 +49,5 @@ _<return>_: Next               _ss_: Next                 _se_: Session         
     ("Q" dap-disconnect :color red))
   (dap-register-debug-template "Node Attach"
                                (list :type "node"
-                                     :request "attach")))
+                                     :request "attach"))
+  (add-hook! dap-ui-sessions-mode #'dap-hydra))

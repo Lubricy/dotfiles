@@ -53,6 +53,11 @@ as the default task."
       (org-with-point-at clock-in-to-task
         (org-clock-in nil)))))
 
+;;;###autoload
+(defun lubricy/goto-gtd-inbox-file ()
+  "Open your private config.el file."
+  (interactive)
+  (switch-to-buffer (org-gtd--inbox-file)))
 
 ;;;###autoload
 (defun +org-roam-refile-or-create ()
