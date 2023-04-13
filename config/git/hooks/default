@@ -37,8 +37,6 @@ maybe_execute() {
 
 STDIN=$(cat)
 
-echo -n STDIN: $STDIN
-
 HOOK_NAME=$(basename "$0")
 LOCAL_HOOKS=$(git config --local \
     --default "$(git rev-parse --git-dir)/hooks" \

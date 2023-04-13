@@ -212,6 +212,7 @@
        misc
        vlf
        mongo
+       codegpt
 
        :config
        ;;literate
