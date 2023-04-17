@@ -38,15 +38,16 @@
   (corfu-on-exact-match nil)
   (corfu-quit-no-match 'separator)
   (corfu-preselect-first t)
+  (corfu-popupinfo-delay 1.0)
   :hook
-  (doom-first-buffer . global-corfu-mode)
+  ((doom-first-buffer . global-corfu-mode)
+   (doom-first-buffer . corfu-popupinfo-mode))
   :bind (:map corfu-map
-              ("SPC" . corfu-insert-separator))
-  ;; :bind (:map corfu-map
-  ;;             ("M-n" . corfu-popupinfo-scroll-down)
-  ;;             ("M-p" . corfu-popupinfo-scroll-up)
-  ;;             ("M-d" . corfu-popupinfo-toggle))
-  )
+              ("M-n" . corfu-popupinfo-scroll-down)
+              ("M-p" . corfu-popupinfo-scroll-up)
+              ("M-d" . corfu-popupinfo-toggle)
+              ("SPC" . corfu-insert-separator)))
+
 
 (use-package! orderless
   :when (modulep! +orderless)

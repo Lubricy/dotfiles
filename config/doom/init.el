@@ -199,7 +199,7 @@
        ;;(rss +org)        ; emacs as an RSS reader
        ;;twitter           ; twitter client https://twitter.com/vnought
        :private-tools
-       blamer
+       git-utils
        (corporate
         +calendar
         +jira

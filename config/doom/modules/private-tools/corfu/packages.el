@@ -1,4 +1,5 @@
-(package! corfu)
+(package! corfu
+  :recipe (:files (:defaults "extensions/*.el")))
 (when (modulep! +orderless)
   (package! orderless))
 (package! kind-icon)

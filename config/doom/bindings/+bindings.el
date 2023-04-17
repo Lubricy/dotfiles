@@ -54,7 +54,7 @@
    :desc "line number"           "n"   #'display-line-numbers-mode
    :desc "tree silde"            "P"   #'org-tree-slide-mode
    :desc "prettify symbols"      "p"   #'global-prettify-symbols-mode
-   (:when (modulep! :private-tools blamer)
+   (:when (modulep! :private-tools git-utils)
     :desc "git blame" "B" #'global-blamer-mode))
   (:when IS-MAC
    (:prefix ("l" . "link")

@@ -12,3 +12,7 @@
   :config
   (setq blamer-self-author-name "You")
   (add-hook! prog-mode #'blamer-mode))
+
+(use-package conventional-commit
+  :after git
+  :hook (git-commit-mode . conventional-commit-setup))
