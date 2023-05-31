@@ -32,3 +32,9 @@
    :g "a" #'+org/find-attached-file-default-directory)
   ;; HACK
   (evil-define-key* 'treemacs treemacs-mode-map (kbd "h") nil))
+
+;; HACK: make dap breakpoint show on fringe
+(after! doom-themes-ext-treemacs
+  (with-eval-after-load 'treemacs
+    (remove-hook 'treemacs-mode-hook #'doom-themes-hide-fringes-maybe)
+    (advice-remove #'treemacs-select-window #'doom-themes-hide-fringes-maybe)))

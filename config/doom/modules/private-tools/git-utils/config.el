@@ -15,4 +15,4 @@
 
 (use-package conventional-commit
   :after git
-  :hook (git-commit-mode . conventional-commit-setup))
+  :hook  (git-commit-mode . conventional-commit-setup))

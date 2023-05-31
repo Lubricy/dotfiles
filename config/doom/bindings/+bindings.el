@@ -83,6 +83,12 @@
      :desc "Stop Roam UI"    "V" (cmd! (org-roam-ui-mode 'toggle))
      ))))
 
+ ;; <localleader> -------------------------------------
+ (:localleader
+  (:prefix ("d" . "debug")
+   :desc "debug"      "d" #'dap-debug
+   :desc "breakpoint" "b" #'dap-breakpoint-toggle))
+
  ;; <completion> ---------------------------------
  (:when (modulep! :completion ivy)
   (:after ivy
