@@ -98,5 +98,6 @@ defaults = def {
   , ("M-r", refresh)
   , ("M-f", fullscreen)
   , ("M-q", spawn "dunstify recompiling && xmonad --recompile && xmonad --restart && dunstify restarted")
+  -- , ("M-/", spawn "")
   ]
 
