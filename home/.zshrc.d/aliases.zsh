@@ -43,7 +43,7 @@ verlt() {
 
 foo_venv () {
   local dir=${1:-.venv}
-  local name=${1:-$(basename $(pwd))}
+  local name=${2:-$(basename $(pwd))}
 
   if [[ "$OSTYPE" == "darwin"* ]]; then
     local SED=gsed
@@ -51,7 +51,7 @@ foo_venv () {
     local SED=sed
   fi
   if [ ! -d $dir ]; then
-    local venv_options=("$dir" "--prompt" "$name")
+    local venv_options=("$dir" "--prompt" "$name${1:+-$1}")
     if verlte "3.9" "$(python3 -V | cut -d ' ' -f2)"; then
       venv_options+=("--upgrade-deps")
     else
@@ -72,7 +72,7 @@ foo_venv () {
   if [ ! -z "${manual_update_pip+x}" ]; then
     pip install --upgrade pip setuptools
   fi
-  find $dir/bin -type f | xargs $SED -i '1s/.*python$/#!\/usr\/bin\/env python/'
+  find $dir/bin -type f | xargs $SED -i '1s/^#!.*\/python\([0-9.]*\)$/#!\/usr\/bin\/env python\1/'
 }
 foo_pipenv () {
   if [ -z "$1" ]; then
