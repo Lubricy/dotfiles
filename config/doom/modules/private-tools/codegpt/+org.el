@@ -123,7 +123,7 @@ as a string when the request completes."
                         org-babel-openai-default-api-version-azure))
          (model org-babel-openai-default-model)
          (deployment (if (equal provider "openai")
-                         (concat "v1/engines/" model "/completions")
+                         (concat "v1/chat/completions")
                        (concat "openai/deployments/" model "/chat/completions")))
          (max-tokens org-babel-openai-default-max-tokens)
          (temperature org-babel-openai-default-temperature)

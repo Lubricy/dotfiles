@@ -176,7 +176,7 @@ alt + shift - f : yabai -m window --toggle sticky;\
                   yabai -m window --toggle pip
 
 
-alt - q : brew services restart yabai
+alt - q : yabai --restart-service
 alt - r : yabai -m space --rotate 90
 
 alt - 0 : yabai -m space --balance

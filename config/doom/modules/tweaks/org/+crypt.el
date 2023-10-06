@@ -1,6 +1,8 @@
 ;;;###if (modulep! +crypt)
 
 (after! org-crypt
+  ;; HACK https://lists.endsoftwarepatents.org/archive/html/bug-gnu-emacs/2014-05/msg00597.html
+  (fset 'epg-wait-for-status 'ignore)
   (org-crypt-use-before-save-magic)
   (setq org-crypt-disable-auto-save 'encrypt)
   (setq org-tags-exclude-from-inheritance (quote ("crypt")))
@@ -13,8 +15,16 @@
            (make-button
             beg +beg
             'face 'org-drawer
-            'action (cmd! (org-decrypt-entry))
-            'mouse-action (cmd! (org-decrypt-entry)))
+            'action (cmd!
+                     ;; (fset 'epg-wait-for-status-backup 'epg-wait-for-status)
+                     (org-decrypt-entry)
+                     ;; (fset 'epg-wait-for-status 'epg-wait-for-status-backup)
+                     )
+            'mouse-action (cmd!
+                           ;; (fset 'epg-wait-for-status-backup 'epg-wait-for-status)
+                           (org-decrypt-entry)
+                           ;; (fset 'epg-wait-for-status 'epg-wait-for-status-backup)
+                           ))
            (org-flag-region +beg end t 'outline))
          ))
       (_ nil)))

@@ -4,6 +4,7 @@
   (setq +enable-global-format-all t))
 
 (map!
+ :i "S-SPC" #'completion-at-point
  :g "M-c" #'clipboard-kill-ring-save
  :g "M-v" #'clipboard-yank
  ;; <leader> -------------------------------------
@@ -63,6 +64,8 @@
     :desc "Finder"               "f"   #'org-mac-link-finder-insert-selected))
   (:prefix ("o" . "open")
    :desc "Google Search"      "g"   #'google-this)
+  (:prefix ("q" . "quit/session")
+   :desc "Restore last session"      "l"   (cmd! (doom/quickload-session t)))
   (:when (modulep! :ui workspaces)
    (:prefix ("TAB" . "workspace")
     :desc "New workspace"             "c"   #'+workspace/new

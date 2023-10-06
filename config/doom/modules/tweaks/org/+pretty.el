@@ -8,7 +8,10 @@
               :header  "»"
               :begin  ""
               :end  ""
-              :result "")
+              :result ""
+              :return "󰌑 "
+              :yield "󱞹 "
+              )
   (let* ((blocks
           '("comment"
             "example"

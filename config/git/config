@@ -7,7 +7,7 @@
 	compression = 0
 	excludesfile = ~/.config/git/global-gitignore
 	ignorecase = false
-	 hooksPath = ~/.config/git/hooks
+	hooksPath = ~/.config/git/hooks
 [pull]
 	rebase = true
 [init]

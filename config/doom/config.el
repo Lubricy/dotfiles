@@ -2,6 +2,11 @@
 
  ;; Place your private configuration here
 
+(if IS-MAC
+    (add-to-list 'default-frame-alist '(undecorated-round . t)))
+
+(setq doom-theme 'doom-dracula
+      doom-themes-padded-modeline t)
 
 ;; I've swapped these keys on my keyboard
 (setq x-super-keysym        'meta
@@ -13,7 +18,6 @@
       user-mail-address "lubricy@gmail.com"
       user-full-name    "Lubricy Fibber")
 
-(setq doom-theme 'doom-dracula)
 
 (load-directory! "bindings")
 (load-directory! "private")
