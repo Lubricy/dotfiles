@@ -14,24 +14,37 @@
       str
     (remove-prefixes (replace-regexp-in-string (car prefixes) "" str) (cdr prefixes))))
 
+(defun pandoc-html-to-text (html)
+  (with-temp-buffer
+    (insert html)
+    (shell-command-on-region (point-min) (point-max) "pandoc -f html -t plain" nil t)
+    (buffer-string)))
+
 (defun process-org-links (text)
   (with-temp-buffer
-     (insert text)
-     (goto-char (point-min))
-     (while (re-search-forward org-bracket-link-regexp nil t)
-       (let* ((link (match-string-no-properties 1))
-              (desc (or (match-string-no-properties 3) (match-string-no-properties 1)))
-              (unescaped-link (replace-regexp-in-string "^file:" "" link))
-              (expanded-link (expand-file-name unescaped-link))
-              (file-name (if (file-exists-p expanded-link) (file-name-nondirectory expanded-link) ""))
-              (file-contents (if (file-exists-p expanded-link)
-                                 (with-temp-buffer (insert-file-contents expanded-link) (buffer-string))
-                               (if (string-match-p "^http" link)
-                                   (ignore-errors (with-current-buffer (url-retrieve-synchronously link) (buffer-string)))))))
-         (replace-match (if file-contents
-                            (concat "\n\n# Filename: " file-name "\n```\n" file-contents "```\n\n")
-                          (or desc link)) t t)))
-     (buffer-string)))
+    (insert text)
+    (goto-char (point-min))
+    (while (re-search-forward org-link-bracket-re nil t)
+      (let* ((match-data-list (match-data))
+             (link (if (>= (length match-data-list) 2) (match-string-no-properties 1) ""))
+             (desc (if (>= (length match-data-list) 4) (match-string-no-properties 3) link)))
+        (cond
+         ((string-match-p "^file:" link)
+          (let* ((unescaped-link (replace-regexp-in-string "^file:" "" link))
+                (expanded-link (expand-file-name unescaped-link)))
+            (when (file-exists-p expanded-link)
+              (let ((file-name (file-name-nondirectory expanded-link))
+                    (file-contents (with-temp-buffer (insert-file-contents expanded-link) (buffer-string))))
+                (when (not (string-empty-p file-contents))
+                  (replace-match
+                   (concat "\n\n# Filename: " file-name "\n```\n" file-contents "```\n\n")
+                   t t))))))
+         ((string-match-p "^http" link)
+          (let ((url-content (save-match-data (request-response-data (request link :sync t)))))
+            (when (not (string-empty-p url-content))
+              (replace-match (format "\n\n# URL: %s\n```\n%s\n```\n\n" link (pandoc-html-to-text url-content)) t t)))))))
+    (buffer-string)))
+
 
 (defun org-element-to-chat-messages ()
   (interactive)
@@ -75,7 +88,8 @@
           messages)))))
 
 (defun parse-org-heading ()
-  "Parse the current L1 heading in the Org-mode buffer and return a list of messages."
+  "Parse the current L1 heading in the Org-mode buffer and return a list of
+  messages."
   (org-mode)
   (mapcar (lambda (message)
             `((:role . ,(car message))
@@ -91,7 +105,8 @@
       (point))))
 
 (defun org-chatcompletion-data ()
-  "Convert the nearest L1 heading before the point in the Org-mode buffer into OpenAI ChatCompletion data compatible with `json-encode`."
+  "Convert the nearest L1 heading before the point in the Org-mode buffer into
+   OpenAI ChatCompletion data compatible with `json-encode`."
   (save-excursion
     (let ((l1-pos (find-nearest-l1-heading)))
       (when l1-pos
@@ -109,6 +124,27 @@
         (setq org-chatcompletion-mode nil)
         (user-error "org-chatcompletion-mode can only be enabled in Org-mode buffers"))))
 
+(defun org-babel-openai-get-api-key ()
+  (unless (boundp 'org-babel-api-key-expiration-time)
+    (setq org-babel-api-key-expiration-time 0))
+  (if (s-equals? org-babel-openai-auth "aad")
+      (let ((expired (> (time-convert nil 'integer) org-babel-api-key-expiration-time)))
+        (if expired
+            (let ((resp (request-response-data
+                         (request "https://login.microsoftonline.com/fmronline.onmicrosoft.com/oauth2/v2.0/token"
+                           :type "POST"
+                           :data `(("client_id" . ,org-babel-openai-auth-aad-client-id)
+                                   ("scope" . "https://cognitiveservices.azure.com/.default")
+                                   ("username" . ,org-babel-openai-auth-username)
+                                   ("password" . ,org-babel-openai-auth-password)
+                                   ("grant_type" . "password"))
+                           :parser 'json-read
+                           :sync t))))
+              (setq org-babel-api-key-expiration-time (+ (time-convert nil 'integer) (alist-get 'expires_in resp)))
+              (setq org-babel-openai-api-key (alist-get 'access_token resp)))
+          org-babel-openai-api-key))
+    org-babel-openai-api-key))
+
 
 (defun openai-chatcompletion-send-request (messages &optional callback)
   "Send a request to the OpenAI ChatCompletion endpoint with the given MESSAGES.
@@ -116,7 +152,7 @@
 The CALLBACK function, if provided, will be called with the assistant's message
 as a string when the request completes."
   (let* ((provider org-babel-openai-default-provider)
-         (api-key org-babel-openai-api-key)
+         (api-key (org-babel-openai-get-api-key))
          (api-url org-babel-openai-api-url)
          (api-version (if (equal provider "openai")
                           org-babel-openai-default-api-version-openai
@@ -135,7 +171,9 @@ as a string when the request completes."
     (request request-url
       :type "POST"
       :headers `(("Content-Type" . "application/json")
-                 ("api-key" . ,api-key))
+                 ,(if (string= org-babel-openai-auth "aad")
+                      `("Authorization" . ,(format "Bearer %s" api-key))
+                    `("api-key" . ,api-key)))
       :data (json-encode `(("messages" . ,messages)
                            ("max_tokens" . ,max-tokens)
                            ("temperature" . ,temperature)
@@ -157,7 +195,8 @@ as a string when the request completes."
 
 
 (defun insert-openai-chatcompletion-response ()
-  "Insert the OpenAI ChatCompletion response at the correct place in the current Org file."
+  "Insert the OpenAI ChatCompletion response at the correct place in the current
+   Org file."
   (interactive)
   (let ((messages (org-chatcompletion-data))
         (placeholder (generate-unique-hash))
@@ -194,4 +233,3 @@ If no language is specified, use example blocks instead."
                              "#+end_example"
                            "#+end_src")))))
     (buffer-string)))
-

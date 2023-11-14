@@ -1,9 +1,30 @@
 ;;; -*- lexical-binding: t; -*-
 
+(defcustom org-babel-openai-auth "apikey"
+  "Default provider for OpenAI ('apikey' or 'aad')."
+  :type 'string
+  :group 'org-babel)
+
 (defcustom org-babel-openai-api-key ""
   "Default API key for OpenAI."
   :type 'string
   :group 'org-babel)
+
+(defcustom org-babel-openai-auth-username ""
+  "Default aad user for OpenAI."
+  :type 'string
+  :group 'org-babel)
+
+(defcustom org-babel-openai-auth-password ""
+  "Default aad password for OpenAI."
+  :type 'string
+  :group 'org-babel)
+
+(defcustom org-babel-openai-auth-aad-client-id ""
+  "Default API key for OpenAI."
+  :type 'string
+  :group 'org-babel)
+
 
 (defcustom org-babel-openai-default-model "gpt-4-32k"
   "Default model for OpenAI."
@@ -24,6 +45,7 @@
   "Default provider for OpenAI ('azure' or 'openai')."
   :type 'string
   :group 'org-babel)
+
 
 (defcustom org-babel-openai-api-url "https://api.openai.com"
   "Default base API URL for OpenAI with the OpenAI provider."

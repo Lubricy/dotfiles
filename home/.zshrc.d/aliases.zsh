@@ -64,7 +64,7 @@ foo_venv () {
     python3 -m venv "${venv_options[@]}"
     if [ -z "${SYMLINK_VENV+x}" ]; then
       echo "patching $dir ..."
-      $SED -i 's#^VIRTUAL_ENV=.*#VIRTUAL_ENV="$(realpath "$(dirname "${BASH_SOURCE[0]-$0}")/../")"#g' $dir/bin/activate
+      find $dir/bin -type f -name 'activate*' | xargs $SED -i 's#"'$(realpath $dir)'"#"$(realpath "$(dirname "${BASH_SOURCE[0]-$0}")/../")"#g'
     fi
   fi
   source $dir/bin/activate

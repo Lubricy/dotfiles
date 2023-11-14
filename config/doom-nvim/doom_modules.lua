@@ -17,7 +17,7 @@ M.source = debug.getinfo(1, "S").source:sub(2)
 
 M.modules = {
   ui = {
-    "dashboard",          -- Start screen
+    -- "dashboard",          -- Start screen
     -- "doom-themes",     -- Additional doom emacs' colorschemes
     -- "indentlines",     -- Show indent lines
     -- "show_registers",  -- popup that shows register contents
@@ -30,20 +30,20 @@ M.modules = {
   doom = {
     -- "compiler",        -- Compile (and run) your code with just pressing three keys!
     -- "contrib",         -- Special plugins intended for Doom Nvim contributors (lua docs, etc)
-    "neorg",              -- Life Organization Tool, used by Doom Nvim user manual
+    -- "neorg",              -- Life Organization Tool, used by Doom Nvim user manual
     -- "runner",          -- Open a REPL for the current language or run the current file
   },
   editor = {
     "autopairs",          -- Autopairs
     "auto-session",       -- A small automated session manager for Neovim
-    "dap",                -- Debug Adapter Protocol
+    -- "dap",                -- Debug Adapter Protocol
     -- "editorconfig",    -- EditorConfig support for Neovim
     "explorer",           -- Tree explorer
-    "formatter",          -- File formatting
-    "gitsigns",           -- Git signs
+    -- "formatter",          -- File formatting
+    -- "gitsigns",           -- Git signs
     "kommentary",         -- Comments plugin
     -- "linter",          -- Asynchronous linter, see errors in your code on the fly
-    "lsp",                -- Language Server Protocols
+    -- "lsp",                -- Language Server Protocols
     -- "minimap",         -- Code minimap, requires github.com/wfxr/code-minimap
     -- "ranger",          -- Ranger File Browser, requires ranger file browser
     "snippets",           -- Code snippets
