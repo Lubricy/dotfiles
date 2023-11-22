@@ -7,10 +7,10 @@
 git clone git://github.com/andsens/homeshick.git $HOME/.homesick/repos/homeshick
 $HOME/.homesick/repos/homeshick/bin/homeshick clone Lubricy/dotfiles
 if command -v emacs; then
-$HOME/.homesick/repos/homeshick/bin/homeshick clone hlissner/doom-emacs
+$HOME/.homesick/repos/homeshick/bin/homeshick clone doomemacs/doomemacs
 fi
 if command -v nvim; then
-$HOME/.homesick/repos/homeshick/bin/homeshick clone NTBBloodbath/doom-nvim
+$HOME/.homesick/repos/homeshick/bin/homeshick clone LunarVim/LunarVim
 fi
 
 THEMES=(iterm sublime)
