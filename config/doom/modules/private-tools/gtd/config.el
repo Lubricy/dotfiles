@@ -46,43 +46,43 @@
     (concat
      (mapcar #'(lambda (c) (if (equal c ?\[) ?\( (if (equal c ?\]) ?\) c))) string-to-transform)))
   (setq org-capture-templates
-        '(("i" " item"
+        '(("i" " item"
            entry (file +org-capture-todo-file)
            "* TODO %?\n  %i\n%a"
            :clock-in t
            :clock-resume t)
-          ("f" " file"
+          ("f" " file"
            entry (file +org-capture-todo-file)
            "* %? :NOTE:\n  %i\n%F\n%a"
            :clock-in t
            :clock-resume t)
-          ("l" " link"
+          ("l" " link"
            entry (file +org-capture-todo-file)
            "* %? :res:\n\n  %i\n%(org-mac-chrome-get-frontmost-url)\n%a"
            :clock-in t
            :clock-resume t)
-          ("e" " email"
+          ("e" " email"
            entry (file +org-capture-todo-file)
            "* NEXT Respond to %? :@laptop:\nSCHEDULED: %t\n  %i\n%(org-mac-outlook-message-get-links)\n%a"
            :clock-in t
            :clock-resume t)
-          ("p" " phone"
+          ("p" "󰏲 phone"
            entry (file +org-capture-notes-file)
            "* PHONE %? :misc:phone:\n%U"
            :clock-in t
            :clock-resume t)
-          ("m" " meeting"
+          ("m" " meeting"
            entry (file +org-capture-notes-file)
            "* MEET with %? :misc:meet:\n%U"
            :clock-in t
            :clock-resume t)
 ;;; org-capture
-          ("P" " Protocol"
+          ("P" "󰿘 Protocol"
            entry (file +org-capture-todo-file)
            "* %a :link:\n\n %:description \n\n#+BEGIN_QUOTE\n%i\n#+END_QUOTE\n"
            :empy-lines 1
            :immediate-finish t)
-          ("L" " auto link"
+          ("L" " auto link"
            entry (file +org-capture-todo-file)
            "* %a :link:\n\n %:description\n"
            :empy-lines 1
@@ -235,6 +235,6 @@
   (org-link-set-parameters "project"
                            :complete (lambda (&rest args)
                                        (concat "project:" (projectile-completing-read
-                                                "Insert project: "
-                                                (occ-get-categories org-projectile-strategy))))
+                                                           "Insert project: "
+                                                           (occ-get-categories org-projectile-strategy))))
                            :follow #'org-projectile-open-project))

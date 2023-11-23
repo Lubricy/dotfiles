@@ -31,7 +31,7 @@
         (cond
          ((string-match-p "^file:" link)
           (let* ((unescaped-link (replace-regexp-in-string "^file:" "" link))
-                (expanded-link (expand-file-name unescaped-link)))
+                 (expanded-link (expand-file-name unescaped-link)))
             (when (file-exists-p expanded-link)
               (let ((file-name (file-name-nondirectory expanded-link))
                     (file-contents (with-temp-buffer (insert-file-contents expanded-link) (buffer-string))))
@@ -136,7 +136,9 @@
                            :data `(("client_id" . ,org-babel-openai-auth-aad-client-id)
                                    ("scope" . "https://cognitiveservices.azure.com/.default")
                                    ("username" . ,org-babel-openai-auth-username)
-                                   ("password" . ,org-babel-openai-auth-password)
+                                   ("password" .  ,(if (string-empty-p org-babel-openai-auth-password)
+                                                       (password-store-get org-babel-openai-auth-password-entry)
+                                                     org-babel-openai-auth-password))
                                    ("grant_type" . "password"))
                            :parser 'json-read
                            :sync t))))

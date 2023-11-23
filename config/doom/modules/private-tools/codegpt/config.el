@@ -20,6 +20,11 @@
   :type 'string
   :group 'org-babel)
 
+(defcustom org-babel-openai-auth-password-entry ""
+  "Default aad password for OpenAI."
+  :type 'string
+  :group 'org-babel)
+
 (defcustom org-babel-openai-auth-aad-client-id ""
   "Default API key for OpenAI."
   :type 'string
@@ -134,19 +139,20 @@
          (messages (openai-format-request body))
          (request-url (concat api-url "/" deployment "?api-version=" api-version)))
 
-    (openai-format-response (request-response-data (request request-url
-                             :type "POST"
-                             :headers `(("Content-Type" . "application/json")
-                                        ("api-key" . ,api-key))
-                             :data (json-encode `(("messages" . ,messages)
-                                                  ("max_tokens" . ,max-tokens)
-                                                  ("temperature" . ,temperature)
-                                                  ("frequency_penalty" . ,frequency-penalty)
-                                                  ("presence_penalty" . ,presence-penalty)
-                                                  ("top_p" . ,top-p)
-                                                  ("stop" . ,stop)))
-                             :parser 'json-read
-                             :sync t)))))
+    (openai-format-response (request-response-data
+                             (request request-url
+                               :type "POST"
+                               :headers `(("Content-Type" . "application/json")
+                                          ("api-key" . ,api-key))
+                               :data (json-encode `(("messages" . ,messages)
+                                                    ("max_tokens" . ,max-tokens)
+                                                    ("temperature" . ,temperature)
+                                                    ("frequency_penalty" . ,frequency-penalty)
+                                                    ("presence_penalty" . ,presence-penalty)
+                                                    ("top_p" . ,top-p)
+                                                    ("stop" . ,stop)))
+                               :parser 'json-read
+                               :sync t)))))
 (load! "+org")
 
 (after! org

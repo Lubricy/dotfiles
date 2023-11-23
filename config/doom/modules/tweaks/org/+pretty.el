@@ -1,14 +1,14 @@
 (after! org-fancy-priorities
   (setq org-priority-faces '((65 . error) (66 . success) (67 . warning)))
-  (setq org-fancy-priorities-list '("" "" "")))
+  (setq org-fancy-priorities-list '("󰘃" "󰝔" "󰘄")))
 
 (after! org
   (plist-put! +ligatures-extra-symbols
               :name    "❯"
               :header  "»"
-              :begin  ""
-              :end  ""
-              :result ""
+              :begin  ""
+              :end  ""
+              :result ""
               :return "󰌑 "
               :yield "󱞹 "
               )
