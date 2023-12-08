@@ -31,8 +31,12 @@ fi
 bindkey -r '^[[A'
 bindkey -r '^[[B'
 function __bind_history_keys() {
-  bindkey '^[[A' history-substring-search-up
-  bindkey '^[[B' history-substring-search-down
+  bindkey -M emacs '^[[A' history-substring-search-up
+  bindkey -M viins '^[[A' history-substring-search-up
+  bindkey -M vicmd '^[[A' history-substring-search-up
+  bindkey -M emacs '^[[B' history-substring-search-down
+  bindkey -M viins '^[[B' history-substring-search-down
+  bindkey -M vicmd '^[[B' history-substring-search-down
 }
 
 typeset -U PATH

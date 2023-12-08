@@ -13,18 +13,49 @@ hint () {
     printf "${C}hint: %s${N}\n" "$*" >&2
 }
 
+
+trim() {
+    local var="$*"
+    # remove leading whitespace characters
+    var="${var#"${var%%[![:space:]]*}"}"
+    # remove trailing whitespace characters
+    var="${var%"${var##*[![:space:]]}"}"
+    printf '%s' "$var"
+}
+
+list_include() {
+    IFS=',' read -ra arr <<< "$1"
+    for i in "${arr[@]}"; do
+        if [[ "$(trim "$i")" == "$(trim "$2")" ]]; then
+            return
+        fi
+    done
+    return 1
+}
+
 ARGS=("$@")
 
 maybe_execute() {
     local HOOK=$1
-    if [ "$(echo $GIT_TRACE_GLOBAL_HOOK | tr '[:upper:]' '[:lower:]')" == "true" ]; then
+    if [ "$(echo "$GIT_TRACE_GLOBAL_HOOK" | tr '[:upper:]' '[:lower:]')" == "true" ]; then
         hint "$HOOK ${ARGS[*]}"
     fi
 
-    if [ -f "$HOOK" ]; then
+    if [ -d "$HOOK" ]; then
+      FAILURE=0
+      for child in "$HOOK"/* ; do
+        maybe_execute "$child" || FAILURE=1
+      done
+      exit $FAILURE
+    elif [ -f "$HOOK" ]; then
         if [ -x "$HOOK" ]; then
+          HOOK_NAME="$(basename "$HOOK")"
+          if list_include "$SKIP" "$HOOK_NAME"; then
+            hint "'$HOOK' skipped."
+          else
             exec-message "$HOOK"
-            "$HOOK" "${ARGS[@]}"
+            "$HOOK" "${ARGS[@]}" || ( hint "use SKIP='$HOOK_NAME' to skip this hook."; exit 1 )
+          fi
         else
             if [ 'false' != "$(git config --default true --get advice.ignoredHook |\
                 tr '[:upper:]' '[:lower:]')" ]; then

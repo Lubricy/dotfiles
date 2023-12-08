@@ -39,6 +39,7 @@ zinit lucid as"program" for \
 zinit wait light-mode lucid blockf for \
         $HOME/.homesick/repos/homeshick \
         OMZL::git.zsh \
+        jeffreytse/zsh-vi-mode \
     atload"unalias grv" \
         OMZP::git \
     has'fasd' \

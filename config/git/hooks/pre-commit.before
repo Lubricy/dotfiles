@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -eo pipefail
+if rg --hidden --glob='!.git/' "$USER" .; then
+    echo "user name $USER found in commit!"
+    exit 1
+fi
+
+exit 0
