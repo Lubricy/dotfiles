@@ -39,6 +39,7 @@ list_include() {
 }
 
 ARGS=("$@")
+STDIN=$(cat)
 
 maybe_execute() {
     local HOOK=$1
@@ -49,7 +50,7 @@ maybe_execute() {
     if [ -d "$HOOK" ]; then
       FAILURE=0
       for child in "$HOOK"/* ; do
-        maybe_execute "$child" || FAILURE=1
+        echo -n "$STDIN" | maybe_execute "$child" || FAILURE=1
       done
       exit $FAILURE
     elif [ -f "$HOOK" ]; then
@@ -73,8 +74,6 @@ maybe_execute() {
         fi
     fi
 }
-
-STDIN=$(cat)
 
 HOOK_NAME=$(basename "$0")
 LOCAL_HOOKS=$(git config --local \

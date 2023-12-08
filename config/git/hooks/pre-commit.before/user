@@ -1,8 +1,8 @@
 #!/bin/bash
 
 set -eo pipefail
-if rg --hidden --glob='!.git/' "$USER" .; then
-    echo "user name $USER found in commit!"
+if git diff --staged --name-only | xargs rg "$USER" /dev/null; then
+    echo "user name $USER found in staged file!"
     exit 1
 fi
 

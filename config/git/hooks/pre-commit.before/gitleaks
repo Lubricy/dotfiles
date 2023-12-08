@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-if command -v gitleaks; then 
-    gitleaks detect
+if command -v gitleaks > /dev/null; then 
+    gitleaks protect --no-banner --staged -v
 else 
     echo "warning: gitleaks not installed."
     exit 0
