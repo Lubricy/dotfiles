@@ -7,6 +7,11 @@ exec-message () {
     printf "${C}executing:${N} %s\n" "$*" >&2
 }
 
+error-message () {
+    C='\033[0;31m'
+    N='\033[0m' # No Color
+    printf "${C}error:${N} %s\n" "$*" >&2
+}
 hint () {
     C='\033[0;33m'
     N='\033[0m' # No Color
@@ -54,7 +59,10 @@ maybe_execute() {
             hint "'$HOOK' skipped."
           else
             exec-message "$HOOK"
-            "$HOOK" "${ARGS[@]}" || ( hint "use SKIP='$HOOK_NAME' to skip this hook."; exit 1 )
+            "$HOOK" "${ARGS[@]}" || ( 
+                error-message "$HOOK failed with exit-code $?"; 
+                hint "use SKIP='$HOOK_NAME' to skip this hook."; 
+                exit 1 )
           fi
         else
             if [ 'false' != "$(git config --default true --get advice.ignoredHook |\

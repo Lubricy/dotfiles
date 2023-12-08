@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+if command -v gitleaks; then 
+    gitleaks detect
+else 
+    echo "warning: gitleaks not installed."
+    exit 0
+fi
