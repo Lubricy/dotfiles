@@ -15,18 +15,21 @@ setopt hist_ignore_space
 # fpath=($HOME/.homesick/repos/homeshick/completions $fpath)
 
 # backward delete path
-my-backward-delete-word() {
-	local WORDCHARS=${WORDCHARS/\//}
-	zle backward-delete-word
-}
-zle -N my-backward-delete-word
-bindkey '^W' my-backward-delete-word
 
 if [ -d $HOME/.zshrc.d ]; then
 	for file in $HOME/.zshrc.d/*.zsh; do
 		source $file
 	done
 fi
+
+my-backward-delete-word() {
+	local WORDCHARS=${WORDCHARS/\//}
+	zle backward-delete-word
+}
+zle -N my-backward-delete-word
+bindkey -M emacs '^W' my-backward-delete-word
+bindkey -M viins '^W' my-backward-delete-word
+bindkey -M vicmd '^W' my-backward-delete-word
 
 bindkey -r '^[[A'
 bindkey -r '^[[B'
