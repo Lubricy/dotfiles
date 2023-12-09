@@ -137,10 +137,10 @@
         :ng "f"   #'dirvish-file-info-menu
         :ng "Y"   #'dirvish-yank-menu
         :ng "r"   #'revert-buffer
-        :ng "S"   #'dirvish-quicksort
-        :ng "s"   (cmd! (let ((dirvish-side-open-file-action 'split))
+        :ng "s"   #'dirvish-quicksort
+        :ng "v"   (cmd! (let ((dirvish-side-open-file-action 'split))
                           (my/dirvish-subtree-toggle)))
-        :ng "v"   (cmd! (let ((dirvish-side-open-file-action 'vsplit))
+        :ng "h"   (cmd! (let ((dirvish-side-open-file-action 'vsplit))
                           (my/dirvish-subtree-toggle)))
         :ng "TAB" #'dirvish-subtree-toggle
         :ng "RET" #'my/dirvish-subtree-toggle

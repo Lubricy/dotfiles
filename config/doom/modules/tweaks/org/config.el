@@ -22,7 +22,6 @@
              #'lubricy/org-babel-node-setenv
              #'+org-pretty-mode)
   (add-hook! org-babel-after-execute
-             #'lubricy/babel-ansi
              #'shk-fix-inline-images)
   ;; TODO find a more elegant way to require these
   (require 'org-tempo)
@@ -42,7 +41,6 @@
 
 (load! "+pretty")
 (load! "+timestamp")
-(load! "+hacks")
 
 (dolist (flag (doom-module-context-get 'flags))
   (load! (symbol-name flag)))
