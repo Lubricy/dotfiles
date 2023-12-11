@@ -1,5 +1,5 @@
 (use-package! websocket
-    :after org-roam)
+  :after org-roam)
 
 (use-package! org-roam-ui
   :after org-roam ;; or :after org
@@ -13,10 +13,15 @@
         org-roam-ui-update-on-save t
         org-roam-ui-open-on-start t)
   ;; FIXME workaround since fd/rg follows .gitignore
-  (setq org-roam-list-files-commands 'nil))
+  (setq org-roam-list-files-commands 'nil)
+  (setq org-roam-dailies-capture-templates
+        `(("d" "default" entry
+           (file "templates/chat.org")
+           :target (file+head "%<%Y-%m-%d>.org"
+                              "#+title: %<%Y-%m-%d>\n")))))
 
-;; (use-package! delve
-;;   :after org-roam
-;;   :config
-;;   (add-hook #'delve-mode-hook #'delve-compact-view-mode)
-;;   (delve-global-minor-mode))
+  ;; (use-package! delve
+  ;;   :after org-roam
+  ;;   :config
+  ;;   (add-hook #'delve-mode-hook #'delve-compact-view-mode)
+  ;;   (delve-global-minor-mode))

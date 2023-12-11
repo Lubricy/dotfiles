@@ -1,11 +1,11 @@
 (after! org
+  (add-to-list 'org-modules 'org-id)
   (setq org-agenda-search-view-always-boolean t
         org-attach-store-link-p 'attached
         org-attach-dir-relative t)
   (setq org-todo-keywords
         '((sequence "TODO(t)" "NEXT(n)" "PROG(p)" "|" "DONE(d)")
-          (sequence "WAIT(w@/!)" "HOLD(h@/!)" "|" "CNCL(x@/!)" "TRASH(s)")
-          (sequence "CALL(c)" "MEET(m)" "|" "REST(r)"))
+          (sequence "WAIT(w@/!)" "HOLD(h@/!)" "|" "CNCL(c@/!)" "TRASH(s)"))
         org-todo-keyword-faces
         '(("TODO" . +org-todo-onhold)
           ("NEXT" . org-todo)
@@ -14,10 +14,17 @@
           ("WAIT" . +org-todo-onhold)
           ("HOLD" . +org-todo-onhold)
           ("CNCL" . +org-todo-cancel)
-          ("TRASH" . org-done)
-          ("MEET" . +org-todo-active)
-          ("CALL" . +org-todo-active)
-          ("REST" . +org-todo-active)))
+          ("TRASH" . org-done)))
+
+  (unless (string-match-p "\\.gpg" org-agenda-file-regexp)
+    (setq org-agenda-file-regexp
+          (replace-regexp-in-string "\\\\\\.org" "\\\\.org\\\\(\\\\.gpg\\\\)?"
+                                    org-agenda-file-regexp)))
+  (setq +org-capture-todo-file "inbox.org")
+  ;; The following setting creates a unique task ID for the heading in the
+  ;; PROPERTY drawer when I use C-c l. This allows me to move the task around
+  ;; arbitrarily in my org files and the link to it still works.
+  (setq org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id)
   (add-hook! org-mode
              #'lubricy/org-babel-node-setenv
              #'+org-pretty-mode)
@@ -32,15 +39,14 @@
 (after! ob-async
   (pushnew! ob-async-no-async-languages-alist "jupyter"))
 
-(after! org-roam
-  (setq org-roam-capture-templates
-        '(("d" "default" plain "%?"
-           :target (file+head "default/%<%Y%m%d%H%M%S>-${slug}.org"
-                              "#+title: ${title}\n")
-           :unnarrowed t))))
 
+(load! "+appt")
+(load! "+agenda")
+(load! "+clock")
 (load! "+pretty")
 (load! "+timestamp")
 
 (dolist (flag (doom-module-context-get 'flags))
   (load! (symbol-name flag)))
+
+(load! "+protocol")

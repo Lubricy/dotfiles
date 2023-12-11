@@ -16,16 +16,18 @@
     (let ((remain (string-to-number min-to-app)))
       (when (lubricy/appt-display-interval-fn remain)
         (lubricy/send-notification
-         (format "Appointment in %s minutes" min-to-app) ; Title
-         (format "%s" msg)))
+         (format "%s" msg)
+         (format "In %s minutes" min-to-app) ; Title
+         ))
       (when (= remain 0)
         (lubricy/send-notification
-         "Appointment Now"              ; Title
-         (format "%s" msg)))))
+         (format "%s" msg)
+         "Now"              ; Title
+         ))))
   
   (setq appt-display-interval '1
         appt-message-warning-time '6 ;; send first warning 6 minutes before appointment
-        appt-display-mode-line t   ;; don't show in the modeline
+        appt-display-mode-line 'nil   ;; don't show in the modeline
         appt-display-format 'window) ;; pass warnings to the designated window function
 
   (setq appt-disp-window-function #'lubricy/appt-display-native))

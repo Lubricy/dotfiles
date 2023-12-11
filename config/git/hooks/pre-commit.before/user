@@ -3,12 +3,8 @@
 set -eo pipefail
 
 EXIT_CODE=0
-SKIP='post-commit.before,post-commit,post-commit.after' git commit --quiet --no-verify -m "!!!!!!temp commit for stash check!!!!!!" 2>/dev/null
-git stash --quiet
-git reset --quiet --soft HEAD~1
 if git diff --staged --name-only | cat - <(echo /dev/null) | xargs rg "$USER"; then
     echo "Username '$USER' found in staged file!"
     EXIT_CODE=1
 fi
-git stash pop --quiet
 exit "$EXIT_CODE"

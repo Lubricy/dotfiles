@@ -13,18 +13,18 @@
         " "))
 
 ;; Set orderless filtering for LSP-mode completions
-(add-hook! 'lsp-completion-mode-hook
-  (setf (alist-get 'lsp-capf completion-category-defaults) '((styles . (orderless)))))
+;; (add-hook! 'lsp-completion-mode-hook
+;;   (setf (alist-get 'lsp-capf completion-category-defaults) '((styles . (orderless)))))
 
 ;; Set bindings
 (map!
-      (:prefix "C-x"
-       :i "C-k" #'cape-dict
-       :i "C-f" #'cape-file
-       :i "C-o" #'completion-at-point
-       :i "s" #'cape-ispell
-       :i "C-n" #'cape-keyword
-       :i "C-s" #'dabbrev-completion))
+ (:prefix "C-x"
+  :i "C-k" #'cape-dict
+  :i "C-f" #'cape-file
+  :i "C-o" #'completion-at-point
+  :i "s" #'cape-ispell
+  :i "C-n" #'cape-keyword
+  :i "C-s" #'dabbrev-completion))
 
 ;; Fallback cleanly to consult in TUI
 (setq-default completion-in-region-function #'consult-completion-in-region)
@@ -37,7 +37,7 @@
   (corfu-auto-prefix 1)
   (corfu-on-exact-match nil)
   (corfu-quit-no-match 'separator)
-  (corfu-preselect-first t)
+  ;; (corfu-preselect-first t)
   (corfu-popupinfo-delay 1.0)
   :hook
   ((doom-first-buffer . global-corfu-mode)

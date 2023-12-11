@@ -234,8 +234,10 @@
        conf
        hydra
        mac
+       dashboard
        languages
        (org
+        +gtd
         +appt
         +crypt)
        pdf

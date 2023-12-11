@@ -13,7 +13,7 @@
  :g "M-v" #'clipboard-yank
  ;; <leader> -------------------------------------
  (:leader
-  :desc "Org capture"             "x"    #'org-capture
+  :desc "Org capture"             "x"    (cmd! (org-capture 'nil "i"))
   :desc "Pop up scratch buffer"   "X"    #'doom/open-scratch-buffer
   :desc "Left window"             :n "<left>"    #'evil-window-left
   :desc "Right window"            :n "<right>"   #'evil-window-right
@@ -33,16 +33,17 @@
      :desc "Switch to workspace buffer"     "W" #'+ivy/switch-workspace-buffer))
   (:when (modulep! :private-tools gtd)
     (:prefix ("d" . "Get Things Done")
-     :desc "add item to inbox"               "c" #'org-gtd-capture
+     :desc "add item to inbox"               "c" #'org-capture
      :desc "see what's on your plate today"  "a" #'org-agenda-list
      :desc "process entire inbox"            "p" #'org-gtd-process-inbox
      :desc "see all NEXT items"              "n" #'org-gtd-show-all-next
-     :desc "show all stuck projects"         "s" #'org-gtd-show-stuck-projects
+     :desc "show all stuck projects"         "s" #'org-gtd-review-stuck-projects
+     :desc "show all stuck projects"         "h" #'org-gtd-review-stuck-habit-items
      :desc "gtd engage"                      "e" #'org-gtd-engage
-     :desc "open inbox"                      "i" #'lubricy/goto-gtd-inbox-file
-     :desc "punch in"                        "I" #'lubricy/punch-in
-     :desc "punch out"                       "O" #'lubricy/punch-out
-     :desc "finish editing"                  "d" #'org-gtd-choose))
+     :desc "open inbox"                      "I" #'lubricy/goto-gtd-inbox-file
+     :desc "punch in"                        "i" #'lubricy/punch-in
+     :desc "punch out"                       "o" #'lubricy/punch-out
+     :desc "finish editing"                  "d" #'org-gtd-organize))
   (:prefix ("t" . "toggle")
    :desc "Adjust text size"      "t"   #'text-scale-adjust
    :desc "Auto format on save"   "a"   #'format-all-mode
@@ -69,7 +70,7 @@
   (:prefix ("o" . "open")
    :desc "Google Search"      "g"   #'google-this)
   (:prefix ("q" . "quit/session")
-   :desc "Restore last session"      "l"   (cmd! (doom/quickload-session t)))
+   :desc "Restore last session"      "l" #'lubricy/quickload-session)
   (:when (modulep! :ui workspaces)
     (:prefix ("TAB" . "workspace")
      :desc "New workspace"             "c"   #'+workspace/new
@@ -88,8 +89,21 @@
       :desc "Create headline" "h" #'+org-roam-refile-or-create
       :desc "Open Roam UI"    "v" (cmd! (org-roam-ui-mode t))
       :desc "Stop Roam UI"    "V" (cmd! (org-roam-ui-mode 'toggle))
-      ))))
+      )))
 
+  (:prefix ("j" . "journal")
+   :desc "Today"                    "j" #'org-roam-dailies-capture-today
+   :desc "Tomorrow"                 "n" #'org-roam-dailies-capture-tomorrow
+   :desc "Yesterday"                "p" #'org-roam-dailies-capture-yesterday
+   :desc "Date"                    "d" #'org-roam-dailies-capture-date
+   (:prefix ("g" . "goto")
+    :desc "Today"                    "g" #'org-roam-dailies-goto-today
+    :desc "Tomorrow"                 "n" #'org-roam-dailies-goto-tomorrow
+    :desc "Yesterday"                "p" #'org-roam-dailies-goto-yesterday
+    :desc "Forward"                  "f" #'org-roam-dailies-goto-next-note
+    :desc "Backward"                 "b" #'org-roam-dailies-goto-previous-note
+    :desc "Date"                     "d" #'org-roam-dailies-goto-date
+    )))
  ;; <localleader> -------------------------------------
  (:localleader
   (:prefix ("d" . "debug")

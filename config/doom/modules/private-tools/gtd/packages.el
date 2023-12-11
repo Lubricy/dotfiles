@@ -2,5 +2,5 @@
 ;;; tools/gtd/packages.el
 
 (package! org-gtd)
-(package! org-ql)
-(package! org-projectile)
+;; (package! org-ql)
+;; (package! org-projectile)
