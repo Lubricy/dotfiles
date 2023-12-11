@@ -60,15 +60,24 @@
    :desc "line number"           "n"   #'display-line-numbers-mode
    :desc "tree silde"            "P"   #'org-tree-slide-mode
    :desc "prettify symbols"      "p"   #'global-prettify-symbols-mode
+   (:when (modulep! :private-tools dirvish)
+     :desc "Tree Follow" "o" #'dirvish-side-follow-mode)
    (:when (modulep! :private-tools git-utils)
-     :desc "git blame" "B" #'global-blamer-mode))
+     :desc "git blame" "B" #'global-blamer-mode)
+   )
   (:when IS-MAC
     (:prefix ("l" . "link")
      :desc "Google Chrome"        "c"   #'org-mac-link-chrome-insert-frontmost-url
      :desc "Microsoft Outlook"    "o"   #'org-mac-link-outlook-message-insert-selected
      :desc "Finder"               "f"   #'org-mac-link-finder-insert-selected))
   (:prefix ("o" . "open")
-   :desc "Google Search"      "g"   #'google-this)
+   :desc "Google Search"      "g"   #'google-this
+   (:when (modulep! :private-tools dirvish)
+     :desc "Project sidebar"              "p" #'dirvish-side
+     :desc "Find file in project sidebar" "P" (cmd!
+                                               (if  (dirvish-side--session-visible-p)
+                                                   (dirvish-side--auto-jump)
+                                                 (dirvish-side)))))
   (:prefix ("q" . "quit/session")
    :desc "Restore last session"      "l" #'lubricy/quickload-session)
   (:when (modulep! :ui workspaces)

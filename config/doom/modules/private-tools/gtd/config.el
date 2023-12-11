@@ -33,13 +33,15 @@
         (forward-line 0)
       (goto-char (point-max))
       (unless (bolp) (insert "\n"))
-      (insert "* " headline "\n"
+      (insert "* " headline   "\n"
               ":PROPERTIES:" "\n"
               ":TRIGGER: relatives(forward-no-wrap todo-only 1 no-sort) todo!(NEXT)" "\n"
               ":CATEGORY: " (projectile-project-name project) "\n"
               ":ORG_GTD: Projects" "\n"
-              ":END:" "\n")
-      (forward-line -6))))
+              ":END:" "\n\n"
+              "[[elisp:(projectile-switch-project-by-name \"" (abbreviate-file-name project) "\")][Open Project]]" "\n\n")
+      (search-backward headline)
+      (move-beginning-of-line 'nil))))
 
 (defun +org-capture-per-project-fix-todo ()
   (save-excursion
@@ -91,25 +93,6 @@
       ("k" "Knowledge to be stored" org-gtd-knowledge)]
      [("t" "Trash" org-gtd-trash)]])
 
-
-  (dolist (item
-           `(;;; org-capture-protocol
-             ("p" " Project"
-              entry (function ,(lambda () (+org-capture-per-project "notes.org" 'nil)))
-              (file "templates/item.org")
-              :empy-lines 1
-              :clock-in 't
-              :clock-resume 't
-              :before-finalize (+org-capture-per-project-fix-todo)
-              )
-             ("o" " Other Project..."
-              entry (function ,(lambda () (+org-capture-per-project "notes.org" 'nil 't)))
-              (file "templates/item.org")
-              :empy-lines 1
-              :clock-in 't
-              :clock-resume 't
-              :before-finalize (+org-capture-per-project-fix-todo)
-              )))
-    (add-to-list 'org-capture-templates item :append)))
+  )
 
 ;; (setq org-capture-templates (butlast org-capture-templates 2))

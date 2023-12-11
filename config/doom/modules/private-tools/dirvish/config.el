@@ -104,7 +104,7 @@
    dirvish-subtree-state-style 'arrow
    dirvish-subtree-prefix "  ")
   (dirvish-override-dired-mode)
-  (dirvish-side-follow-mode)
+  (dirvish-side-follow-mode -1)
   (dirvish-peek-mode)
 
   ;; (set-face-foreground 'dired-directory "#d4b8fb")
