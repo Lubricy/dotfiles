@@ -39,19 +39,19 @@
   (advice-add 'org-agenda :before #'org-agenda-update)
   (advice-add 'org-todo-list :before #'org-agenda-update)
 
-  (face-spec-set 'org-agenda-dimmed-todo-face '((((background light)) (:foreground "DarkRed"))
-                                                (((background dark)) (:foreground "DarkRed"))))
+  (face-spec-set 'org-agenda-dimmed-todo-face
+                 '((((background light)) (:foreground "DarkRed"))
+                   (((background dark)) (:foreground "DarkRed"))))
   (setq org-agenda-start-with-follow-mode t)
   (map!
-   :after evil
-   :map evil-org-agenda-mode-map
-   :m "<tab>"  #'org-agenda-show-and-scroll-up
-   :m "<return>" #'org-agenda-goto
-   :m "M-<return>" #'org-agenda-switch-to)
-  (map!
-   :map org-agenda-mode-map
-   :g "<tab>"  #'org-agenda-show-and-scroll-up
-   :g "<return>" #'org-agenda-goto
-   :g "M-<return>" #'org-agenda-switch-to)
+   :mode evil-org-agenda-mode
+   :m [tab]      #'org-agenda-show-and-scroll-up
+   :m [return]   #'org-agenda-goto
+   :m [M-return] #'org-agenda-switch-to)
+  ;; (map!
+  ;;  :map org-agenda-mode-map
+  ;;  :g "<tab>"      #'org-agenda-show-and-scroll-up
+  ;;  :g "<return>"   #'org-agenda-goto
+  ;;  :g "M-<return>" #'org-agenda-switch-to)
 
   (add-hook! 'org-agenda-after-show-hook #'org-narrow-to-subtree))

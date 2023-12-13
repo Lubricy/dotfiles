@@ -172,6 +172,7 @@ as a string when the request completes."
          (request-url (concat api-url "/" deployment "?api-version=" api-version)))
     (request request-url
       :type "POST"
+      :timeout 3600
       :headers `(("Content-Type" . "application/json")
                  ,(if (string= org-babel-openai-auth "aad")
                       `("Authorization" . ,(format "Bearer %s" api-key))

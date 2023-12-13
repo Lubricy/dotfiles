@@ -1,13 +1,17 @@
 (after! org
   (setq
    org-capture-templates
-   '(("i" " item" entry
+   '(("i" " Item" entry
       (file "inbox.org")
       (file "templates/item.org")
       :empy-lines 1
       :clock-in 't
       :clock-resume 't)
-     ("E" " email"
+     ("C" "󰅌 Clipboard" entry
+      (file "inbox.org")
+      (file "templates/clipboard.org")
+      :empy-lines 1)
+     ("E" " Email" entry
       (file "inbox.org")
       (file "templates/email.org")
       :empy-lines 1)))

@@ -57,19 +57,31 @@
   :init
   (setq org-gtd-directory "~/org/")
   (setq org-gtd-refile-to-any-target 'nil)
-  (setq org-gtd-archive-location
-        (lambda ()
-          (concat "archive/"
-                  (format-time-string "%Y" (current-time))
-                  "/%s"
-                  "::datetree/")))
-  (setq org-archive-location (funcall org-gtd-archive-location))
+  (setq org-gtd-archive-file-format "archive/%s/gtd_archive.org")
+  (setq org-archive-location
+        (concat "archive/"
+                (format-time-string "%Y" (current-time))
+                "/%s"
+                "::datetree/"))
 
   (setq org-gtd-update-ack "3.0.0")
   :config
   (setq org-edna-use-inheritance 1)
   (org-edna-mode 1)
   (setq org-gtd-engage-prefix-width 20)
+  (defun +org-set-roam-tags-command ()
+    (unless (org-gtd-organize-type-member-p
+             '(quick-action
+               project-task))
+      (org-back-to-heading)
+      (let* ((input (org-make-tag-string (org-get-tags)))
+             (crm-separator "[ \t]*:[ \t]*"))
+        (org-set-tags
+         (completing-read-multiple
+          "Tags: "
+          (org-roam-tag-completions)
+          'nil 'nil input)))))
+  (setq org-gtd-organize-hooks '(+org-set-roam-tags-command))
   (map! :map org-gtd-clarify-map
         :g "C-c C-c"  'org-gtd-organize
         :g "C-c C-k"  'kill-current-buffer
@@ -77,7 +89,14 @@
         :n "Z Q"  'kill-current-buffer
         :n [S-return] 'org-gtd-organize)
 
+  (defun lubricy/org-gtd-knowledge--apply ()
+    "Once the user has filed this knowledge, we can execute this logic."
+    (org-todo 'none)
+    (setq-local org-gtd--organize-type 'knowledge)
+    (org-gtd-organize-apply-hooks)
+    (+org-roam-refile-or-create))
 
+  (setq org-gtd-knowledge-func #'lubricy/org-gtd-knowledge--apply)
   (transient-define-prefix org-gtd-organize ()
     "Choose how to categorize the current item."
     ["Actionable"
@@ -91,8 +110,7 @@
     ["Non-actionable"
      [("i" "Incubate" org-gtd-incubate)
       ("k" "Knowledge to be stored" org-gtd-knowledge)]
-     [("t" "Trash" org-gtd-trash)]])
+     [("t" "Trash" org-gtd-trash)]]))
 
-  )
 
 ;; (setq org-capture-templates (butlast org-capture-templates 2))

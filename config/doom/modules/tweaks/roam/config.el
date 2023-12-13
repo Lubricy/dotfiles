@@ -1,6 +1,11 @@
 (use-package! websocket
   :after org-roam)
 
+(setq org-roam-capture-templates
+      '(("d" "default" plain "%?" :target
+         (file+head "default/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+         :unnarrowed t)))
+
 (use-package! org-roam-ui
   :after org-roam ;; or :after org
   ;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
@@ -20,8 +25,8 @@
            :target (file+head "%<%Y-%m-%d>.org"
                               "#+title: %<%Y-%m-%d>\n")))))
 
-  ;; (use-package! delve
-  ;;   :after org-roam
-  ;;   :config
-  ;;   (add-hook #'delve-mode-hook #'delve-compact-view-mode)
-  ;;   (delve-global-minor-mode))
+;; (use-package! delve
+;;   :after org-roam
+;;   :config
+;;   (add-hook #'delve-mode-hook #'delve-compact-view-mode)
+;;   (delve-global-minor-mode))
