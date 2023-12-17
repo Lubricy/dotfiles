@@ -1,5 +1,6 @@
 (after! org
-  (add-to-list 'org-modules 'org-id)
+  (add-to-list 'org-modules 'org-id t)
+  (add-to-list 'org-modules 'org-habit t)
   (setq org-agenda-search-view-always-boolean t
         org-attach-store-link-p 'attached
         org-attach-dir-relative t)

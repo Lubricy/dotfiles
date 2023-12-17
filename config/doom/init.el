@@ -189,6 +189,8 @@
         +lsp
         +tree-sitter)                   ; JSON, but readable
        ;;zig               ; C, but simpler
+       ;; custom
+       cypher
 
        :email
        ;;(mu4e +org +gmail)

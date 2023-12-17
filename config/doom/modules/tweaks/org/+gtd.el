@@ -35,3 +35,6 @@
               :before-finalize (+org-capture-per-project-fix-todo)
               )))
     (add-to-list 'org-capture-templates item :append)))
+
+(after! org-gtd
+  (advice-add #'org-gtd-process--stop :after (cmd! (basic-save-buffer))))

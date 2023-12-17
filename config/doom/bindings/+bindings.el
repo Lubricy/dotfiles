@@ -7,6 +7,7 @@
       :ng "ESC" #'transient-quit-one
       :ng "q" #'execute-extended-command)
 
+
 (map!
  :i "S-SPC" #'completion-at-point
  :g "M-c" #'clipboard-kill-ring-save
@@ -33,10 +34,12 @@
      :desc "Switch to workspace buffer"     "W" #'+ivy/switch-workspace-buffer))
   (:when (modulep! :private-tools gtd)
     (:prefix ("d" . "Get Things Done")
-     :desc "add item to inbox"               "c" #'org-capture
+     :desc "capture item"                    "c" #'+org-gtd-dwim
+     :desc "capture item"                    "C" #'org-capture
      :desc "see what's on your plate today"  "a" #'org-agenda-list
      :desc "process entire inbox"            "p" #'org-gtd-process-inbox
      :desc "see all NEXT items"              "n" #'org-gtd-show-all-next
+     :desc "see all TODO items"              "t" #'org-todo-list
      :desc "show all stuck projects"         "s" #'org-gtd-review-stuck-projects
      :desc "show all stuck projects"         "h" #'org-gtd-review-stuck-habit-items
      :desc "gtd engage"                      "e" #'org-gtd-engage

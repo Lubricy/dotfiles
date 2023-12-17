@@ -1,6 +1,6 @@
 ;;; ~/.doom.d/config.el -*- lexical-binding: t; -*-
 
- ;; Place your private configuration here
+;; Place your private configuration here
 
 (if IS-MAC
     (add-to-list 'default-frame-alist '(undecorated-round . t)))
@@ -18,6 +18,9 @@
       user-mail-address "lubricy@gmail.com"
       user-full-name    "Lubricy Fibber")
 
+
+
+(run-with-idle-timer 5 nil #'lubricy/clock-in-idle)
 
 (load-directory! "bindings")
 (load-directory! "private")

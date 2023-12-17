@@ -2,10 +2,12 @@
   (dolist (item
            '(;;; org-capture-protocol
              ("P" "󰿘 Protocol"
-              entry (file+headline "links.org" "Bookmarks")
+              entry (file "inbox.org")
               (file "templates/protocol.org")
               :empy-lines 1
-              :immediate-finish t)
+              :clock-in 't
+              :clock-resume 't
+              )
              ("L" " auto link"
               entry (file+headline "links.org" "Bookmarks")
               (file "templates/auto-link.org")

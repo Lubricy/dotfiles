@@ -88,6 +88,7 @@
   :type 'string
   :group 'org-babel)
 
+;;;###autoload
 (defun openai-format-request (text)
   "Convert plain text to OpenAI request format."
   (let ((lines (split-string text "\n")))
@@ -98,6 +99,7 @@
                 `((role . ,role) (content . ,content))))
             lines)))
 
+;;;###autoload
 (defun openai-format-response (response)
   "Convert OpenAI response format to plain text."
   (let ((choices (alist-get 'choices response)))
@@ -106,7 +108,7 @@
         (concat (alist-get 'role (alist-get 'message message)) ": "
                 (alist-get 'content (alist-get 'message message)))))))
 
-
+;;;###autoload
 (defun org-babel-execute:openai (body params)
   "Execute an OpenAI code block in org-babel."
   (let* ((provider (or (cdr (assq :provider params))

@@ -52,12 +52,12 @@
            nil t)
       (forward-line 0)
       (org-gtd-projects-fix-todo-keywords (point-marker)))))
+
 (use-package! org-gtd
   :after org
   :init
   (setq org-gtd-directory "~/org/")
   (setq org-gtd-refile-to-any-target 'nil)
-  (setq org-gtd-archive-file-format "archive/%s/gtd_archive.org")
   (setq org-archive-location
         (concat "archive/"
                 (format-time-string "%Y" (current-time))
@@ -66,6 +66,7 @@
 
   (setq org-gtd-update-ack "3.0.0")
   :config
+  (setq org-gtd-archive-file-format "archive/%s/gtd_archive.org")
   (setq org-edna-use-inheritance 1)
   (org-edna-mode 1)
   (setq org-gtd-engage-prefix-width 20)

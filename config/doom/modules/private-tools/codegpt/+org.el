@@ -5,21 +5,25 @@
 (require 'request)
 
 ;; Generate a unique hash to be used as a placeholder.
+;;;###autoload
 (defun generate-unique-hash ()
   "Generate a unique hash to be used as a placeholder."
   (format "<#%s#>" (md5 (format "%s%s" (current-time) (random 1000000)))))
 
+;;;###autoload
 (defun remove-prefixes (str prefixes)
   (if (null prefixes)
       str
     (remove-prefixes (replace-regexp-in-string (car prefixes) "" str) (cdr prefixes))))
 
+;;;###autoload
 (defun pandoc-html-to-text (html)
   (with-temp-buffer
     (insert html)
     (shell-command-on-region (point-min) (point-max) "pandoc -f html -t plain" nil t)
     (buffer-string)))
 
+;;;###autoload
 (defun process-org-links (text)
   (with-temp-buffer
     (insert text)
@@ -46,6 +50,7 @@
     (buffer-string)))
 
 
+;;;###autoload
 (defun org-element-to-chat-messages ()
   (interactive)
   (save-excursion
@@ -87,15 +92,17 @@
                                          l2-headlines)))
           messages)))))
 
+;;;###autoload
 (defun parse-org-heading ()
   "Parse the current L1 heading in the Org-mode buffer and return a list of
   messages."
-  (org-mode)
+  ;; (org-mode 't)
   (mapcar (lambda (message)
             `((:role . ,(car message))
               (:content . ,(string-trim (cdr message)))))
           (org-element-to-chat-messages)))
 
+;;;###autoload
 (defun find-nearest-l1-heading ()
   "Find the nearest L1 heading before the point."
   (save-excursion
@@ -104,6 +111,7 @@
     (when (= (org-current-level) 1)
       (point))))
 
+;;;###autoload
 (defun org-chatcompletion-data ()
   "Convert the nearest L1 heading before the point in the Org-mode buffer into
    OpenAI ChatCompletion data compatible with `json-encode`."
@@ -124,6 +132,7 @@
         (setq org-chatcompletion-mode nil)
         (user-error "org-chatcompletion-mode can only be enabled in Org-mode buffers"))))
 
+;;;###autoload
 (defun org-babel-openai-get-api-key ()
   (unless (boundp 'org-babel-api-key-expiration-time)
     (setq org-babel-api-key-expiration-time 0))
@@ -148,6 +157,7 @@
     org-babel-openai-api-key))
 
 
+;;;###autoload
 (defun openai-chatcompletion-send-request (messages &optional callback)
   "Send a request to the OpenAI ChatCompletion endpoint with the given MESSAGES.
 
@@ -197,6 +207,7 @@ as a string when the request completes."
                       (funcall callback assistant-message))))))))
 
 
+;;;###autoload
 (defun insert-openai-chatcompletion-response ()
   "Insert the OpenAI ChatCompletion response at the correct place in the current
    Org file."
@@ -219,6 +230,7 @@ as a string when the request completes."
                (when (search-forward placeholder nil t)
                  (replace-match formated-response t t))))))))))
 
+;;;###autoload
 (defun org-openai-format-response (markdown)
   "Transform a Markdown text into an Org-mode text.
 Replace Markdown code blocks with Org-mode source blocks.
