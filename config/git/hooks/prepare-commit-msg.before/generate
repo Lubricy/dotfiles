@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+PROG=${CHAT_COMPLETION_PROGRAM:-oaichat}
+
+if command -v "$CHAT" > /dev/null 2>&1; then
+  DIFF=$(git diff --cached)
+
+  if [ -z "$DIFF" ]; then
+    exit 0
+  else
+    mv "$1" "$1.bak"
+    echo "$DIFF" | "$PROG" -s "template://commit_message.txt" | cat - "$1.bak" > "$1"
+    rm "$1.bak"
+  fi
+fi
