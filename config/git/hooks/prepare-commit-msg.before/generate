@@ -4,7 +4,7 @@ set -eo pipefail
 
 PROG=${CHAT_COMPLETION_PROGRAM:-oaichat}
 
-if command -v "$CHAT" > /dev/null 2>&1; then
+if command -v "$PROG" > /dev/null 2>&1; then
   DIFF=$(git diff --cached)
 
   if [ -z "$DIFF" ]; then

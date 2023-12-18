@@ -83,6 +83,9 @@
                                                  (dirvish-side)))))
   (:prefix ("q" . "quit/session")
    :desc "Restore last session"      "l" #'lubricy/quickload-session)
+  (:when (modulep! :private-tools browser)
+    (:prefix ("s" . "search")
+     :desc "Browser History"      "h"   #'browser-hist-search))
   (:when (modulep! :ui workspaces)
     (:prefix ("TAB" . "workspace")
      :desc "New workspace"             "c"   #'+workspace/new

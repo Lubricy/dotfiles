@@ -1,6 +1,6 @@
 # PROFILE_STARTUP=false
 if [[ "$PROFILE_STARTUP" == true ]]; then
-    zmodload zsh/zprof
+  zmodload zsh/zprof
 fi
 # Lines configured by zsh-newuser-install
 HISTFILE=~/.zsh_history
@@ -17,19 +17,27 @@ setopt hist_ignore_space
 # backward delete path
 
 if [ -d $HOME/.zshrc.d ]; then
-	for file in $HOME/.zshrc.d/*.zsh; do
-		source $file
-	done
+  for file in $HOME/.zshrc.d/*.zsh; do
+    source $file
+  done
 fi
 
 my-backward-delete-word() {
-	local WORDCHARS=${WORDCHARS/\//}
-	zle backward-delete-word
+  local WORDCHARS=${WORDCHARS/\//}
+  zle backward-delete-word
 }
+
 zle -N my-backward-delete-word
 bindkey -M emacs '^W' my-backward-delete-word
-bindkey -M viins '^W' my-backward-delete-word
-bindkey -M vicmd '^W' my-backward-delete-word
+
+function zvm_after_init() {
+  zle -N my-backward-delete-word
+  bindkey -M emacs '^W' my-backward-delete-word
+  zvm_define_widget  my-backward-delete-word
+  zvm_bindkey viins '^W' my-backward-delete-word
+  zvm_bindkey vicmd '^W' my-backward-delete-word
+}
+
 
 bindkey -r '^[[A'
 bindkey -r '^[[B'
@@ -45,5 +53,5 @@ function __bind_history_keys() {
 typeset -U PATH
 # Entirety of my startup file... then
 if [[ "$PROFILE_STARTUP" == true ]]; then
-    zprof
+  zprof
 fi
