@@ -34,8 +34,7 @@
 
   (add-hook! org-agenda-finalize #'org-agenda-delete-empty-blocks)
   (defun org-agenda-update (&rest _)
-    (setq org-agenda-files (directory-files-recursively "~/org/projects" "\\.org$"))
-    (add-to-list 'org-agenda-files "~/org"))
+    (setq org-agenda-files '("~/org")))
   (advice-add 'org-agenda :before #'org-agenda-update)
   (advice-add 'org-todo-list :before #'org-agenda-update)
 
@@ -44,9 +43,10 @@
                    (((background dark)) (:foreground "DarkRed"))))
   (setq org-agenda-start-with-follow-mode t)
   (map!
+   :after evil-org-agenda
    :mode evil-org-agenda-mode
    :m [tab]      #'org-agenda-show-and-scroll-up
-   :m [return]   #'org-agenda-goto
+   :m [return]   #'+org-agenda-open-project
    :m [M-return] #'org-agenda-switch-to)
   ;; (map!
   ;;  :map org-agenda-mode-map

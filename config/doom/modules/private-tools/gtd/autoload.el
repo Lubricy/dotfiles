@@ -20,11 +20,8 @@
 (defun +org-set-cleanup-inbox-todo (&optional state id)
   (let* ((state (or state "TODO"))
          (id (or id "cleanup-inbox"))
-         (marker (org-id-find id 'marker))
-         (buffer (marker-buffer marker))
-         (pos (marker-position marker)))
-    (with-current-buffer buffer
-      (goto-char pos)
+         (marker (org-id-find id 'marker)))
+    (org-with-point-at marker
       (org-todo state))))
 
 ;;;###autoload
@@ -45,3 +42,27 @@
                          'org-gtd-skip-unless-timestamp-empty-or-invalid)
                         (org-agenda-skip-additional-timestamps-same-entry t))))))))
         (org-agenda nil "g"))))
+
+;;;###autoload
+(defun +org-agenda-open-project (&optional arg)
+  (interactive "P")
+  (org-agenda-check-no-diary)
+  (let* ((marker (org-get-at-bol 'org-marker))
+         (hdmarker (or (org-get-at-bol 'org-hd-marker) marker))
+         (pos (marker-position marker))
+         (col (current-column)))
+    (unless (with-current-buffer (marker-buffer marker)
+              (widen)
+              (goto-char pos)
+              (+org-open-project-or-link))
+      (org-agenda-goto))))
+
+;;;###autoload
+(defun +org-open-project-or-link (&optional arg)
+  (interactive "P")
+  (let ((project (org-entry-get
+                  (point)
+                  "PROJECTILE_PROJECT"
+                  'selective)))
+    (when project
+      (projectile-switch-project-by-name project))))

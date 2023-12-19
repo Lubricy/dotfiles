@@ -64,12 +64,24 @@
                 "/%s"
                 "::datetree/"))
 
+  (setq org-gtd-refile-to-any-target t)
   (setq org-gtd-update-ack "3.0.0")
   :config
   (setq org-gtd-archive-file-format "archive/%s/gtd_archive.org")
   (setq org-edna-use-inheritance 1)
   (org-edna-mode 1)
   (setq org-gtd-engage-prefix-width 20)
+  (setq org-use-property-inheritance '("PROJECTILE_PROJECT"))
+  (defun +org-set-proojectile-project-command ()
+    (when (org-gtd-organize-type-member-p
+           '(project-heading))
+      (org-back-to-heading)
+      (projectile-completing-read
+       "Project repo: " (projectile-relevant-known-projects)
+       :action (lambda (project)
+                 (org-set-property
+                  "PROJECTILE_PROJECT"
+                  project)))))
   (defun +org-set-roam-tags-command ()
     (unless (org-gtd-organize-type-member-p
              '(quick-action
@@ -82,7 +94,9 @@
           "Tags: "
           (org-roam-tag-completions)
           'nil 'nil input)))))
-  (setq org-gtd-organize-hooks '(+org-set-roam-tags-command))
+  (setq org-gtd-organize-hooks
+        '(+org-set-proojectile-project-command
+          +org-set-roam-tags-command))
   (map! :map org-gtd-clarify-map
         :g "C-c C-c"  'org-gtd-organize
         :g "C-c C-k"  'kill-current-buffer
@@ -113,5 +127,12 @@
       ("k" "Knowledge to be stored" org-gtd-knowledge)]
      [("t" "Trash" org-gtd-trash)]]))
 
+
+(after! org
+  (map!
+   :map org-mode-map
+   :localleader
+   :desc "goto project repo"
+   :nv "g p"  #'+org-open-project))
 
 ;; (setq org-capture-templates (butlast org-capture-templates 2))

@@ -25,21 +25,16 @@ as the default task."
   (interactive "p")
   (setq lubricy/keep-clock-running t)
   (appt-activate 1)
-  (if (equal major-mode 'org-agenda-mode)
-      ;;
-      ;; We're in the agenda
-      ;;
-      (if (equal major-mode 'org-agenda-mode)
-          (org-agenda-clock-in '(16))
-        (lubricy/clock-in-last-task))
-    ;;
-    ;; We are not in the agenda
-    ;;
+  (cond
+   ((derived-mode-p 'org-agenda-mode)
+    (org-agenda-clock-in))
+   ((derived-mode-p 'org-mode)
     (save-restriction
       (widen)
-      (if (and (equal major-mode 'org-mode) (not (org-before-first-heading-p)))
-          (org-clock-in '(16))
-        (lubricy/clock-in-last-task)))))
+      (if (org-before-first-heading-p)
+          (org-clock-in)
+        (lubricy/clock-in-idle))))
+   (t (lubricy/clock-in-idle))))
 
 ;;;###autoload
 (defun lubricy/punch-out ()
@@ -54,4 +49,20 @@ as the default task."
 (defun lubricy/clock-in-idle ()
   (org-with-point-at
       (org-id-find org-gtd-idle-id 'marker)
-    (org-clock-in nil)))
+    (org-clock-in '(16))))
+
+;;;###autoload
+(defun lubricy/clock-in-parent-task ()
+  "Move point to the parent (project) task if any and clock in"
+  (let ((parent-task))
+    (save-excursion
+      (save-restriction
+        (widen)
+        (while (and (not parent-task) (org-up-heading-safe))
+          (when (member (nth 2 (org-heading-components)) org-todo-keywords-1)
+            (setq parent-task (point))))
+        (if parent-task
+            (org-with-point-at parent-task
+              (org-clock-in))
+          (when lubricy/keep-clock-running
+            (lubricy/clock-in-idle)))))))
