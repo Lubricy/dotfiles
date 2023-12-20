@@ -9,7 +9,7 @@
               :clock-resume 't
               )
              ("L" " auto link"
-              entry (file+headline "links.org" "Bookmarks")
+              entry (file+headline "roam/links.org" "Scratch")
               (file "templates/auto-link.org")
               :empy-lines 1
               :immediate-finish t)))

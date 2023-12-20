@@ -13,7 +13,7 @@
                (marker-buffer org-clock-default-task)
                (not org-clock-resolving-clocks-due-to-idleness))
       (pop lubricy/task-history)
-      (if-let ((task (car lubricy/task-history)))
+      (if-let ((task (pop lubricy/task-history)))
           (org-with-point-at task
             (org-clock-in))
         (lubricy/clock-in-idle))))

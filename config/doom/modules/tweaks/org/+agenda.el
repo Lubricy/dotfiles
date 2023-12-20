@@ -45,6 +45,10 @@
   (map!
    :after evil-org-agenda
    :mode evil-org-agenda-mode
+   :m "i"       #'org-agenda-clock-in
+   :m "o"       #'org-agenda-clock-out
+   :m "I"       #'org-agenda-diary-entry
+   :m "O"       #'delete-other-windows
    :m [tab]      #'org-agenda-show-and-scroll-up
    :m [return]   #'+org-agenda-open-project
    :m [M-return] #'org-agenda-switch-to)
