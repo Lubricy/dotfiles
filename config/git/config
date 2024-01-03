@@ -13,4 +13,15 @@
 [init]
 	defaultBranch = main
 [include]
-    path = local/config
+  path = local/config
+[diff]
+  tool = difftastic
+
+[difftool]
+  prompt = false
+
+[difftool "difftastic"]
+  cmd = difft "$LOCAL" "$REMOTE"
+
+[pager]
+  difftool = true
