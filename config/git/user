@@ -1,0 +1,7 @@
+[user]
+	name = Lubricy Fibber
+	email = lubricy@gmail.com
+[credential]
+	helper = pass
+[credential "https://github.com"]
+	username = lubricy@gmail.com

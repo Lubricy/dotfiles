@@ -12,16 +12,15 @@
 	rebase = true
 [init]
 	defaultBranch = main
-[include]
-  path = local/config
 [diff]
-  tool = difftastic
-
+	tool = difftastic
 [difftool]
-  prompt = false
-
+	prompt = false
 [difftool "difftastic"]
-  cmd = difft "$LOCAL" "$REMOTE"
-
+	cmd = difft "$LOCAL" "$REMOTE"
 [pager]
-  difftool = true
+	difftool = true
+[include]
+	path = user
+[include]
+	path = local/config
