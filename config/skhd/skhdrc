@@ -190,12 +190,12 @@ shift + alt - 0 : yabai -m space --balance
 # alt + shift - 0x1E : yabai -m window --resize bottom:0:60
 
 # 0x1B = '-' 0x18 = '='
-alt - 0x1B : ~/.local/bin/yabai_resize v -60
-alt - 0x18: ~/.local/bin/yabai_resize v +60
-alt + shift - 0x1B : ~/.local/bin/yabai_resize h -60
-alt + shift - 0x18 : ~/.local/bin/yabai_resize h +60
+alt - 0x1B : yabai_resize v -60
+alt - 0x18: yabai_resize v +60
+alt + shift - 0x1B : yabai_resize h -60
+alt + shift - 0x18 : yabai_resize h +60
 
 alt - space : ~/.homesick/repos/doomemacs/bin/org-capture -ki
 alt - c : ~/.homesick/repos/doomemacs/bin/org-capture -kC
 alt - p : PASSWORD_STORE_ENABLE_EXTENSIONS=true pass choose
-alt - m : yabai -m query --windows --window | jq -rc '{app,title,role,subrole}' | tee ~/.log.txt | ~/.local/bin/alerter
+alt - m : yabai -m query --windows --window | jq -rc '{app,title,role,subrole}' | tee ~/.log.txt | alerter

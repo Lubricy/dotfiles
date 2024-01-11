@@ -23,7 +23,7 @@
   (:prefix ("c" . "code")
    :desc "toggle between implementation and test"   "t" #'projectile-toggle-between-implementation-and-test)
   (:prefix ("b" . "buffer")
-   :desc "show buffer"                     "b" #'display-buffer
+   :desc "show buffer"                     "b" #'consult-project-buffer
    :desc "view raw buffer"                 "R" (cmd! (fundamental-mode)
                                                      (revert-buffer nil nil t))
    :desc "Auto format current buffer"      "f" #'format-all-buffer)
@@ -66,10 +66,10 @@
    (:when (modulep! :private-tools dirvish)
      :desc "Tree Follow" "o" #'dirvish-side-follow-mode)
    (:when (modulep! :private-tools git-utils)
-     :desc "git blame" "B" #'global-blamer-mode)
-   )
-  (:when IS-MAC
-    (:prefix ("l" . "link")
+     :desc "git blame" "B" #'global-blamer-mode))
+  (:prefix ("l" . "link")
+   :desc "People"               "p"   #'contact/insert
+   (:when IS-MAC
      :desc "Google Chrome"        "c"   #'org-mac-link-chrome-insert-frontmost-url
      :desc "Microsoft Outlook"    "o"   #'org-mac-link-outlook-message-insert-selected
      :desc "Finder"               "f"   #'org-mac-link-finder-insert-selected))

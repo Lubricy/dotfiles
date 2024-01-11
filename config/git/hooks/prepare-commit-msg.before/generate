@@ -9,7 +9,7 @@ if command -v "$PROG" > /dev/null 2>&1; then
 
   if [ -z "$DIFF" ]; then
     exit 0
-  elif [[ "${#DIFF}" -gt 8192 ]]; then
+  elif [[ "${#DIFF}" -gt 32768 ]]; then
     echo "warning: git diff is too long (${#DIFF}). skipping generate."
     exit 0
   else

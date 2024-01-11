@@ -212,6 +212,7 @@
        ;; +jira
        ;; +confluence)
        corfu
+       contacts
        dirvish
        docstr
        ;;eaf
