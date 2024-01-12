@@ -57,7 +57,7 @@
   (defun contact--annotator (cand)
     (let ((entries (-filter
                     (lambda (contact)
-                      (--any? (string-match cand it)
+                      (--any? (string-match (format "^%s$" cand) it)
                               (contact-all-formats contact)))
                     (hash-table-values contact-repo)))
           (center (propertize " " 'display '(space :align-to center))))
@@ -66,7 +66,7 @@
         (`(,single) (concat
                      (propertize
                       (format " (%s)" (if (string= (contact/format 'uid single) cand)
-                                          (contact/format 'cn single)
+                                          (contact/format 'name single)
                                         (contact/format 'uid single)))
                       'face 'marginalia-key)
                      center
@@ -122,4 +122,42 @@
                            (format-spec-make
                             ,@(cl-loop for (s c) on (plist-get body :formats) by #'cddr
                                        when (characterp c)
-                                       nconc `(,c (alist-get (quote ,s) props))))))))))
+                                       nconc `(,c (alist-get (quote ,s) props "<unknown>"))))))))))
+
+(after! request
+  (defun github-fetch-user (query)
+    "Search GitHub users with QUERY."
+    (when query
+      (let ((url (format "https://api.github.com/search/users?q=%s&per_page=2" query)))
+        (mapcan
+         (lambda (item)
+           (let ((data  (request-response-data
+                         (request
+                           (alist-get 'url item)
+                           :parser 'json-read
+                           :sync t))))
+             (if (alist-get 'message data) ;; error
+                 'nil
+               `((("uid" . ,(alist-get 'login data "<unknown>"))
+                  ("name" . ,(alist-get 'name data "<unknown>"))
+                  ("html_url" . ,(alist-get 'html_url data "<unknown>"))
+                  ("blog" . ,(alist-get 'blog data "<unknown>"))
+                  ("email" . ,(alist-get 'email data "<unknown>")))))))
+         (alist-get
+          'items
+          (request-response-data
+           (request
+             url
+             :parser 'json-read
+             :sync t)))))))
+
+  (identity-provider-add! github
+    :fetcher #'github-fetch-user
+    :alias gh
+    :formats (uid      ?u
+                       name       ?c
+                       email      ?m
+                       html_url   ?h
+                       link       "[[gh:%u][%c <%m>]]"
+                       --display  "%u\t%c\t%m"
+                       --homepage "https://github.com/%u")))
