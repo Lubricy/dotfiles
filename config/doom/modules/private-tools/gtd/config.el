@@ -67,7 +67,10 @@
   (setq org-gtd-refile-to-any-target t)
   (setq org-gtd-update-ack "3.0.0")
   :config
-  (setq org-gtd-delegate-read-func #'lubricy/find-people)
+  (setq org-gtd-delegate-read-func (cmd! (thread-last
+                                           (contact/find)
+                                           (contact-which)
+                                           (contact/format 'link))))
   (setq org-gtd-archive-file-format "archive/%s/gtd_archive.org")
   (setq org-edna-use-inheritance 1)
   (org-edna-mode 1)

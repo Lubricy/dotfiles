@@ -127,7 +127,8 @@
          :desc "new file" :n "c" #'dired-create-empty-file
          :desc "directory" :n "d" #'dired-create-directory)
         (:prefix-map ("y" . "Copy")
-         :desc "file name" :n "y" #'dired-copy-filename-as-kill
+         :desc "yank"      :n "y" #'dirvish-yank-menu
+         :desc "file name" :n "f" #'dired-copy-filename-as-kill
          :desc "relative"  :n "r" #'dirvish-copy-file-name
          :desc "real path" :n "l" #'dirvish-copy-file-true-path
          :desc "abslute"   :n "a" #'dirvish-copy-file-path)

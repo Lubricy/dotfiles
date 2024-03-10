@@ -42,13 +42,9 @@
           (goto-char (org-element-property :begin link))
           (dolist (tag (contact/org-tags))
             (when (string-equal type tag)
-              (let* ((choice (contact-which (contact/find path)))
-                     (raw-link (format "%s:%s" tag (contact/format "%u" choice)))
-                     (desc (contact/format "%c <%m>" choice)))
+              (let* ((choice (contact-which (contact/find path))))
                 (when (org-in-regexp org-link-any-re 1)
-                  (replace-match (org-link-make-string
-                                  raw-link
-                                  (or desc path)))))))
+                  (replace-match (contact/format 'link choice))))))
           t))))
 
   (add-hook! org-ctrl-c-ctrl-c #'+org/update-contact-link))
@@ -90,9 +86,9 @@
     "m"    #'contact/mailto
     "h"  #'contact/homepage)
   (defun contact/im (key)
-    (browse-url (contact/format "sip:%m" (contact-which key))))
+    (browse-url (format "sip:%s" (contact/format 'mail (contact-which key)))))
   (defun contact/mailto (key)
-    (browse-url (contact/format "mailto:%m" (contact-which key))))
+    (browse-url (format "mailto:%s" (contact/format 'mail (contact-which key)))))
   (defun contact/homepage (key)
     (browse-url (contact/format '--homepage (contact-which key))))
   (add-to-list 'embark-keymap-alist '(contact . embark-contact-actions-map)))
@@ -114,10 +110,11 @@
                                                         (format "%%%c" c)
                                                       c)))
                          (--display . "%u")
-                         (--repersentation . ,(s-join " "
+                         (--repersentation . ,(string-join
                                                       (cl-loop for (_ c) on (plist-get body :formats) by #'cddr
                                                                when (characterp c)
-                                                               collect (format "%%%c" c)))))
+                                                               collect (format "%%%c" c))
+                                                      " ")))
               :formatter (lambda (props)
                            (format-spec-make
                             ,@(cl-loop for (s c) on (plist-get body :formats) by #'cddr
