@@ -47,7 +47,7 @@
 (load! "+pretty")
 (load! "+timestamp")
 
-(dolist (flag (doom-module-context-get 'flags))
+(dolist (flag (doom-module-context-get :flags))
   (load! (symbol-name flag)))
 
 (load! "+protocol")

@@ -115,9 +115,12 @@
     (interactive)
     (if (dirvish-subtree--expanded-p)
         (progn (dired-next-line 1) (dirvish-subtree-remove))
-      (condition-case err (dirvish-subtree--insert)
-        (file-error (dired-find-file))
-        (error (message "%s" (cdr err))))))
+      (let ((entry (dired-get-filename nil t)))
+        (message "%s" entry)
+        (condition-case err (dirvish-subtree--insert)
+          (file-error (dired-find-file))
+          (file-missing (dirvish-find-entry-a entry))
+          (error (message "%s %s" (car err) (cdr err)))))))
   (map! :map dirvish-directory-view-mode-map
         :n  "q"   #'dirvish-quit
         :ng "RET" #'dired-find-file)

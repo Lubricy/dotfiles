@@ -4,5 +4,5 @@
   (after! python
     (add-hook! 'window-state-change-functions 'lubricy/project-set-venv)))
 
-(dolist (flag (doom-module-context-get 'flags))
+(dolist (flag (doom-module-context-get :flags))
   (load! (symbol-name flag)))

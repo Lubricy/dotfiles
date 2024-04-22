@@ -16,12 +16,12 @@
 
 (doom! :input
        ;;bidi              ; (tfel ot) thgir etirw uoy gnipleh
-       chinese
+       ;;chinese
        ;;japanese
        ;;layout            ; auie,ctsrnm is the superior home row
 
        :completion
-       ;; corfu
+       corfu
        ;; company             ; the ultimate code completion backend
        ;; helm              ; the *other* search engine for love and life
        ;; ido               ; the other *other* search engine...
@@ -91,15 +91,15 @@
        ;;biblio            ; Writes a PhD for you (citation needed)
        (debugger +lsp)       ; FIXME stepping through code, to help you add bugs
        direnv
-       docker
+                                        ;docker
        editorconfig      ; let someone else argue about tabs vs spaces
        ;;ein               ; tame Jupyter notebooks with emacs
-       (eval +overlay)       ; run code, run (also, repls)
+                                        ;(eval +overlay)       ; run code, run (also, repls)
        ;;gist              ; interacting with github gists
        lookup                         ; navigate your code and its documentation
        lsp                            ; M-x vscode
        magit                          ; a git porcelain for Emacs
-       make                           ; run make tasks from Emacs
+                                        ;make                           ; run make tasks from Emacs
        (pass +auth)                   ; password manager for nerds
        pdf                            ; pdf enhancements
        ;;prodigy           ; FIXME managing external services & code builders
@@ -189,8 +189,10 @@
         +lsp
         +tree-sitter)                   ; JSON, but readable
        ;;zig               ; C, but simpler
+
        ;; custom
        cypher
+       k8s
 
        :email
        ;;(mu4e +org +gmail)
@@ -200,29 +202,30 @@
        :app
        ;;calendar
        ;;emms
-       everywhere                 ; *leave* Emacs!? You must be joking
+       ;;everywhere                 ; *leave* Emacs!? You must be joking
        ;;irc               ; how neckbeards socialize
        ;;(rss +org)        ; emacs as an RSS reader
        ;;twitter           ; twitter client https://twitter.com/vnought
        :private-tools
-       browser
+       ;;browser
        git-utils
        ;;(corporate
        ;; +calendar
        ;; +jira
        ;; +confluence)
-       corfu
+       ;; corfu
        contacts
        dirvish
-       docstr
+       ;;docstr
        ;;eaf
        gtd
        http
        mermaid
        misc
-       vlf
+       ;;vlf
        mongo
-       codegpt
+       ;;codegpt
+       gptel
 
        :config
        ;;literate
@@ -233,7 +236,7 @@
        (default +bindings +smartparens)
 
        :tweaks
-       chinese
+       ;;chinese
        ;; (company +tabnine)
        conf
        hydra
@@ -245,8 +248,8 @@
         +appt
         +crypt)
        pdf
-       (projectile +ivy)
+       projectile
        roam
        tramp
-       treemacs
+       ;; treemacs
        vterm)
