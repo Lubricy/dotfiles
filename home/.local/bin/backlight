@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-device=acpi_video0
-device_path=/sys/class/backlight/"$device"
-read -r level < "$device_path"/actual_brightness
-read -r max < "$device_path"/max_brightness
-printf ' %d%%' "$((level * 100 / max))"

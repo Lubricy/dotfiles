@@ -1,0 +1,1 @@
+../shared/zshrc.d/.zshrc.d

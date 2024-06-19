@@ -1,0 +1,6 @@
+(when (modulep! +calendar)
+  (package! excorporate))
+(when (modulep! +jira)
+  (package! org-jira))
+(when (modulep! +confluence)
+  (package! confluence))

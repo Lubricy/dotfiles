@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+
+bth() {
+    b=${1:-0}; d=''; s=0; S=(B K M G T E P Y Z)
+    while ((b > 1000)); do
+        d="$(printf ".%02d" $((b % 1024 * 100 / 1024)))"
+        b=$((b / 1024))
+        let s++
+    done
+    if ((b >= 100)); then
+        d=''
+    fi
+    echo "$b$d ${S[$s]}"
+}
+pp() {
+printf "$3%6s↑%6s↓" "$(bth $2)" "$(bth $1)"
+}
+
+osx_bw() {
+netstat -ib -I $1 | awk '/Link/{print $7,$10}'
+}
+
+linux_bw() {
+echo $(cat /sys/class/net/$1/statistics/rx_bytes) $(cat /sys/class/net/$1/statistics/tx_bytes)
+}
+
+other_bw() {
+echo "bandwidth for $OSTYPE is not implemented (yet)"
+}
+
+bw() {
+case "$OSTYPE" in
+  solaris*) other_bw $1 ;;
+  darwin*)  osx_bw   $1 ;; 
+  linux*)   linux_bw $1 ;;
+  bsd*)     other_bw $1 ;;
+  msys*)    other_bw $1 ;;
+  *)        echo "unknown: $OSTYPE" ;;
+esac
+}
+
+getInterval() {
+IFACE=$1
+INTERVAL=$3
+read -r BD BU <<< "$(bw $IFACE)"
+sleep $INTERVAL
+read -r AD AU <<< "$(bw $IFACE)"
+DN=$(($AD - $BD))
+UP=$(($AU - $BU))
+pp $DN $UP $2
+}
+
+main() {
+  if [ ! "$BANDWIDTH_IFACE" ]
+  then
+    echo BANDWIDTH_IFACE not set!
+    return -1
+  fi
+  for i in $BANDWIDTH_IFACE
+  do
+    a=(${i//:/ })
+    getInterval "${a[0]}" "${a[1]}" 1 &
+    sleep 0.1
+  done
+  wait
+}
+main

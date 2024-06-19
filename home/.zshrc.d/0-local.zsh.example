@@ -1,9 +1,0 @@
-export PATH=$HOME/.homebrew/bin:$PATH
-export http_proxy=socks5://localhost:1080
-export HTTP_PROXY=socks5://localhost:1080
-export https_proxy=socks5://localhost:1080
-export HTTPS_PROXY=socks5://localhost:1080
-export HOMEBREW_GITHUB_API_TOKEN=637baea57b2e75987cc6a98f5fee844d85de565e
-export PIPENV_VENV_IN_PROJECT=1
-export PIPENV_MAX_DEPTH=10
-export BANDWIDTH_IFACE="en0:"

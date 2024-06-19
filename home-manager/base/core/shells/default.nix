@@ -1,0 +1,37 @@
+{pkgs, fzf-tab, ...}:
+let
+  shellAliases = {
+    k = "kubectl";
+    cat = "bat";
+
+    urldecode = "python3 -c 'import sys, urllib.parse as ul; print(ul.unquote_plus(sys.stdin.read()))'";
+    urlencode = "python3 -c 'import sys, urllib.parse as ul; print(ul.quote_plus(sys.stdin.read()))'";
+  };
+in {
+  # only works in bash/zsh, not nushell
+  home.shellAliases = shellAliases;
+
+  programs.bash = {
+    enable = true;
+    enableCompletion = true;
+    bashrcExtra = ''
+      export PATH="$HOME/.local/bin:$PATH"
+    '';
+  };
+  programs.zsh = {
+    enable = true;
+    syntaxHighlighting.enable = true;
+    historySubstringSearch.enable = true;
+    plugins = [
+      {
+        name = "fzf-tab";
+        file = "fzf-tab.plugin.zsh";
+        src = "${fzf-tab}";
+      }
+    ];
+    oh-my-zsh = {
+      enable = true;
+      plugins = [ "git" "kubectl" ];
+    };
+  };
+}

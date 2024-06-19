@@ -1,0 +1,122 @@
+#!/usr/bin/env bash
+
+JQ=jq
+
+ZOOMPATH="$HOME/Library/Application Support/zoom.us/data/VirtualBkgnd_Custom/"
+# to use this add an arbitary vertual background image in zoom and check the folder above
+# replace the UUID below with the uuid (filename) of the newly added image
+UUID="${ZOOM_BACKGROUND_UUID}"
+
+# Coordinates for Dalian
+LAT=38.9140
+LNG=121.6147
+
+
+daytime () {
+  # sunrise-sunset
+  read -r -a timespan < <(
+    curl -fsSL \
+      --proxy $HTTP_PROXY \
+      "https://api.sunrise-sunset.org/json?lat=$LAT&lng=$LNG&formatted=0" |\
+    $JQ -rj '.results | .sunrise," ",.sunset')
+
+  SUNRISE=$(date -j -u -f "%FT%T" "${timespan[0]}" +"%s" 2> /dev/null)
+  SUNSET=$(date -j -u -f "%FT%T" "${timespan[1]}" +"%s" 2> /dev/null)
+  NOW="$(date +%s)"
+  if [ "$SUNSET" -ge "$NOW" ] && [ "$NOW" -ge "$SUNRISE" ]; then
+    echo DAY
+  else
+    echo NIGHT
+  fi
+}
+
+get_pexels () {
+  KW_DAY='abstract art backgrounds'
+  KW_NIGHT='abstract art backgrounds dark'
+  KW_NOW="KW_$(daytime)"
+  : ${ZOOM_BG_KEYWORDS:="${!KW_NOW}"}
+
+  TOTAL=$(curl \
+    -H "Authorization: $PEXELS_API_KEY" \
+    -fsSL -G \
+    --proxy $HTTP_PROXY \
+    --data-urlencode "query=$ZOOM_BG_KEYWORDS" \
+    "https://api.pexels.com/v1/search" |\
+    $JQ -r '.total_results')
+
+  if [ "$TOTAL" -gt "30" ]; then
+    RANDINT=$(jot -r 1 1 30)
+  else
+    RANDINT=$(jot -r 1 1 "$TOTAL")
+  fi
+
+
+  IMG=$(curl \
+    -H "Authorization: $PEXELS_API_KEY" \
+    -fsSL -G \
+    --proxy $HTTP_PROXY \
+    --data-urlencode "query=$ZOOM_BG_KEYWORDS" \
+    --data-urlencode "per_page=1" \
+    --data-urlencode "page=$RANDINT" \
+    "https://api.pexels.com/v1/search" |\
+    $JQ -r '.photos[0] | .src.landscape')
+  curl \
+    -fsSL \
+    --proxy $HTTP_PROXY \
+    -o "$1" \
+    "$IMG"
+}
+
+get_unsplash () {
+  KW_DAY='universe,bright'
+  KW_NIGHT='universe,dark'
+  KW_NOW="KW_$(daytime)"
+  
+  # keywords to search on unsplash
+  : ${ZOOM_BG_KEYWORDS:="${!KW_NOW}"}
+  curl \
+    -fsSL -G \
+    --proxy $HTTP_PROXY \
+    --data-urlencode "$ZOOM_BG_KEYWORDS" \
+    -o "$1" \
+    'https://source.unsplash.com/1600x900/' 
+}
+
+usage() { echo "Usage: $0 [-f] [-p] [-e <engine>] [-k <keywords>]" 1>&2; exit 1; }
+
+main () {
+  : ${ENGINE:='pexels'}
+  # hack to detect if a zoom meeting is in progress 
+  PROGNAME='CptHost'
+  if pgrep -x "$PROGNAME" > /dev/null 2>&1 && [ -z "${FORCE}" ]; then
+    echo "zoom meeting in progress, abort" 
+  else
+    get_$ENGINE "${ZOOMPATH}${UUID}"
+    if [ ! -z "${PREVIEW}" ]; then
+      open -a Preview.app "${ZOOMPATH}${UUID}"
+    fi
+  fi
+}
+
+while getopts ":fpk:e:" o; do
+    case "${o}" in
+        p)
+            PREVIEW=1
+            ;;
+        f)
+            FORCE=1
+            ;;
+        k)
+            ZOOM_BG_KEYWORDS="$OPTARG"
+            ;;
+        e)
+            ENGINE="$OPTARG"
+            ;;
+        *)
+            usage
+            ;;
+    esac
+done
+shift $((OPTIND-1))
+
+main

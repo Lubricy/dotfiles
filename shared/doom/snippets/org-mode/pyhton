@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: #+begin_src jupyter-python
+# uuid: jpp
+# key: jpp
+# condition: t
+# --
+
+#+begin_src jupyter-python
+`%`$0
+#+end_src
