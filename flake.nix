@@ -56,8 +56,8 @@
 
     };
     # An IDE layer for Neovim with sane defaults.
-    lunarvim = {
-      url = "github:LunarVim/LunarVim";
+    kickstart = {
+      url = "github:nvim-lua/kickstart.nvim";
       flake = false;
     };
     # Replace zsh's default completion selection menu with fzf

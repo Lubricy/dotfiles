@@ -146,19 +146,19 @@
         "type": "github"
       }
     },
-    "lunarvim": {
+    "kickstart": {
       "flake": false,
       "locked": {
-        "lastModified": 1717141468,
-        "narHash": "sha256-lFX9vmNwbpd4dPpILS4B6Qea5OtqUd7ecaRLEzlkK3g=",
-        "owner": "LunarVim",
-        "repo": "LunarVim",
-        "rev": "85ccca97acfea9a465e354e18bb2f6109ba417f8",
+        "lastModified": 1715363002,
+        "narHash": "sha256-x1rwQ4tau8XqSTkCos0dF93SBQsJeIjfp2fCgflpl48=",
+        "owner": "nvim-lua",
+        "repo": "kickstart.nvim",
+        "rev": "5aeddfdd5d0308506ec63b0e4f8de33e2a39355f",
         "type": "github"
       },
       "original": {
-        "owner": "LunarVim",
-        "repo": "LunarVim",
+        "owner": "nvim-lua",
+        "repo": "kickstart.nvim",
         "type": "github"
       }
     },
@@ -323,7 +323,7 @@
         "emacs-overlay": "emacs-overlay",
         "fzf-tab": "fzf-tab",
         "home-manager": "home-manager",
-        "lunarvim": "lunarvim",
+        "kickstart": "kickstart",
         "nix-darwin": "nix-darwin",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",

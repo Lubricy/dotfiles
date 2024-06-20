@@ -33,7 +33,7 @@
     # It's really useful when you work on a project for a long time.
   ];
 
-  home.file."jq".source = mylib.fromShared "jq";
+  home.file.".jq".source = mylib.fromShared "jq";
 
   programs = {
     direnv = {

@@ -1,4 +1,6 @@
 {lib, ...}: {
+  # TODO: refactor mylib => lib.my
+  # https://github.com/nix-community/home-manager/blob/master/modules/lib/stdlib-extended.nix
   macosSystem = import ./macosSystem.nix;
   nixosSystem = import ./nixosSystem.nix;
 

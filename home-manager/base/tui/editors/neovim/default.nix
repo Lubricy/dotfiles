@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  kickstart,
   ...
 }:
 ###############################################################################
@@ -15,10 +16,9 @@ let
     vdiff = "nvim -d";
   };
 in {
-  # home.activation.installAstroNvim = lib.hm.dag.entryAfter ["writeBoundary"] ''
-  #   ${pkgs.rsync}/bin/rsync -avz --chmod=D2755,F744 ${lunarvim}/ ${config.xdg.configHome}/nvim/
-  #   ${pkgs.rsync}/bin/rsync -avz --chmod=D2755,F744 ${./lvim}/ ${config.xdg.configHome}/lvim/
-  # '';
+  home.activation.installKickstartNvim = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    run ${pkgs.rsync}/bin/rsync -avz --chmod=D2755,F744 ${kickstart}/ ${config.xdg.configHome}/nvim/
+  '';
 
   home.shellAliases = shellAliases;
 #  programs.nushell.shellAliases = shellAliases;
