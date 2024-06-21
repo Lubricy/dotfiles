@@ -5,8 +5,8 @@
 
   ;; (when (fboundp 'set-fontset-font)
   ;;   (set-fontset-font t 'mathematical "STIX Two Math"))
-  (setq use-default-font-for-symbols nil)
-  (setq doom-font (font-spec :family "AnonymicePro Nerd Font" :size 14))
+  (setq use-default-font-for-symbols t)
+  (setq doom-font (font-spec :family "AnonymicePro Nerd Font" :size 16))
   ;; (cl-pushnew "STIX Two Math" doom-emoji-fallback-font-families :test #'string=)
   (after! unicode-fonts
     (dolist (unicode-block '("Letterlike Symbols"

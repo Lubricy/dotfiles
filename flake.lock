@@ -162,6 +162,18 @@
         "type": "github"
       }
     },
+    "local-vars": {
+      "locked": {
+        "lastModified": 1718937082,
+        "narHash": "sha256-3U68Od289fRk5yUfzV425InQamvOS1T+jDY0g+yTPOI=",
+        "path": "~/.config/nix-local-vars",
+        "type": "path"
+      },
+      "original": {
+        "id": "nix-local-vars",
+        "type": "indirect"
+      }
+    },
     "nix-darwin": {
       "inputs": {
         "nixpkgs": [
@@ -324,13 +336,15 @@
         "fzf-tab": "fzf-tab",
         "home-manager": "home-manager",
         "kickstart": "kickstart",
+        "local-vars": "local-vars",
         "nix-darwin": "nix-darwin",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",
         "nixpkgs-darwin": "nixpkgs-darwin",
         "nixpkgs-main": "nixpkgs-main",
         "nixpkgs-unstable": "nixpkgs-unstable",
-        "pre-commit-hooks": "pre-commit-hooks"
+        "pre-commit-hooks": "pre-commit-hooks",
+        "zsh-vi-mode": "zsh-vi-mode"
       }
     },
     "systems": {
@@ -345,6 +359,22 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default",
+        "type": "github"
+      }
+    },
+    "zsh-vi-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1713663769,
+        "narHash": "sha256-HMfC4s7KW4bO7H6RYzLnSARoFr1Ez89Z2VGONKMpGbw=",
+        "owner": "jeffreytse",
+        "repo": "zsh-vi-mode",
+        "rev": "287efa19ec492b2f24bb93d1f4eaac3049743a63",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jeffreytse",
+        "repo": "zsh-vi-mode",
         "type": "github"
       }
     }

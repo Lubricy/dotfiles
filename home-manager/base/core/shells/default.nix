@@ -1,4 +1,9 @@
-{pkgs, fzf-tab, ...}:
+{
+  pkgs,
+  fzf-tab,
+  zsh-vi-mode,
+  ...
+}:
 let
   shellAliases = {
     k = "kubectl";
@@ -27,6 +32,11 @@ in {
         name = "fzf-tab";
         file = "fzf-tab.plugin.zsh";
         src = "${fzf-tab}";
+      }
+      {
+        name = "zsh-vi-mode";
+        file = "zsh-vi-mode.plugin.zsh";
+        src = "${zsh-vi-mode}";
       }
     ];
     oh-my-zsh = {

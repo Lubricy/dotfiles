@@ -65,6 +65,11 @@
       url = "github:Aloxaf/fzf-tab";
       flake = false;
     };
+    # A better and friendly vi(vim) mode plugin for ZSH.
+    zsh-vi-mode = {
+      url = "github:jeffreytse/zsh-vi-mode";
+      flake = false;
+    };
     # A dark theme
     dracula-sublime = {
       url = "github:dracula/sublime";

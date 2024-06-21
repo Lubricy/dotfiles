@@ -33,13 +33,13 @@
   ;; HACK
   (evil-define-key* 'treemacs treemacs-mode-map (kbd "h") nil))
 
-(after! doom-themes-ext-treemacs
-  (with-eval-after-load 'treemacs
-    ;; HACK: dim treemacs bg with solaire-mode
-    (push '(treemacs-window-background-face . solaire-default-face) solaire-mode-remap-alist)
-    (push '(treemacs-hl-line-face . solaire-hl-line-face) solaire-mode-remap-alist)
-    ;; HACK: make dap breakpoint show on fringe
-    (remove-hook 'treemacs-mode-hook #'doom-themes-hide-fringes-maybe)
-    (advice-remove #'treemacs-select-window #'doom-themes-hide-fringes-maybe)
-    ;; HACK: fix icon issue
-    (treemacs-modify-theme "doom-atom" :config ())))
+;; (after! doom-themes-ext-treemacs
+;;   (with-eval-after-load 'treemacs
+;;     ;; HACK: dim treemacs bg with solaire-mode
+;;     (push '(treemacs-window-background-face . solaire-default-face) solaire-mode-remap-alist)
+;;     (push '(treemacs-hl-line-face . solaire-hl-line-face) solaire-mode-remap-alist)
+;;     ;; HACK: make dap breakpoint show on fringe
+;;     (remove-hook 'treemacs-mode-hook #'doom-themes-hide-fringes-maybe)
+;;     (advice-remove #'treemacs-select-window #'doom-themes-hide-fringes-maybe)
+;;     ;; HACK: fix icon issue
+;;     (treemacs-modify-theme "doom-atom" :config '())))

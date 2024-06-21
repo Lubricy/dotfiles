@@ -20,10 +20,14 @@
 
 
 
-(run-with-idle-timer 5 nil #'lubricy/clock-in-idle)
+;; (run-with-idle-timer 5 nil #'lubricy/clock-in-idle)
+
+;; (defmacro load-directory! (dir &optional root)
+;;   `(let* ((root (or ,root (dir!)))
+;;           (path (expand-file-name ,dir root)))
+;;      (mapc (lambda (file) (load! file)) (directory-files-recursively path "\\.el$"))))
 
 (load-directory! "bindings")
 (load-directory! "private")
-
 (provide 'config)
 ;;; config.el ends here

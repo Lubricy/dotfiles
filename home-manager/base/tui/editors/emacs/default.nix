@@ -118,7 +118,7 @@ in {
               "${pkgs.bash}/bin/bash"
               "-l"
               "-c"
-              "${emacsPkg}/bin/emacs --fg-daemon"
+              "${config.xdg.configHome}/emacs/bin/doom env && ${emacsPkg}/bin/emacs --fg-daemon"
             ];
             StandardErrorPath = "${config.home.homeDirectory}/Library/Logs/emacs-daemon.stderr.log";
             StandardOutPath = "${config.home.homeDirectory}/Library/Logs/emacs-daemon.stdout.log";

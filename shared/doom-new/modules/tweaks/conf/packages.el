@@ -1,1 +1,0 @@
-(package! vimrc-mode)
