@@ -2,8 +2,7 @@
 
 (use-package! gptel
   :config
-  (setq! gptel-default-mode 'org-mode
-         gptel-org-branching-context 't))
+  (setq! gptel-default-mode 'org-mode))
 
 ;;;###autoload
 (defun +gptel-openai-get-api-key ()

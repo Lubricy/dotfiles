@@ -16,6 +16,9 @@
     # pulumiPackages.pulumi-language-python
     # pulumiPackages.pulumi-language-nodejs
 
+    # file sync
+    # mutagen
+
     # aws
     awscli2
     # ssm-session-manager-plugin # Amazon SSM Session Manager Plugin
@@ -24,6 +27,7 @@
 
     # aliyun
     #aliyun-cli
+
     # cloud tools that nix do not have cache for.
     #terraform
     #terraformer # generate terraform configs from existing cloud resources
