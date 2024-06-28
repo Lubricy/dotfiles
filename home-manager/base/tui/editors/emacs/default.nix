@@ -11,7 +11,6 @@
   lib,
   mylib,
   pkgs,
-  pkgs-unstable,
   doomemacs,
   ...
 }@input:
@@ -21,8 +20,8 @@ with lib; let
     export PATH="${config.xdg.configHome}/emacs/bin:$PATH"
   '';
   shellAliases = {
-    e = "emacsclient --create-frame"; # gui
-    et = "emacsclient --create-frame --tty"; # termimal
+    e = "emacsclient \${INSIDE_EMACS:+--create-frame}"; # gui
+    et = "emacsclient \${INSIDE_EMACS:+--create-frame} \${INSIDE_EMACS:+--tty}"; # gui
   };
   myEmacsPackagesFor = emacs: ((pkgs.emacsPackagesFor emacs).emacsWithPackages (epkgs: [
     epkgs.vterm
