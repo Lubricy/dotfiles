@@ -4,7 +4,9 @@ set -eo pipefail
 
 EXIT_CODE=0
 git diff --staged --name-only | while read FILE; do
-  sed -i'' "s#$HOME#~#g" $FILE
-  git add $FILE
+  if [[ -f "$FILE" ]]; then
+    sed -i'' "s#$HOME#~#g" "$FILE"
+    git add "$FILE"
+  fi
 done
 exit "$EXIT_CODE"

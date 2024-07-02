@@ -1,4 +1,4 @@
-{mylib,...}:
+{mylib,config, ...}:
 let
   cd_ls = ''
 foo_cd () {
@@ -22,4 +22,7 @@ in {
     initExtra = cd_ls;
   };
 
+  home.sessionPath = [
+    "${config.home.homeDirectory}/.local/bin"
+  ];
 }

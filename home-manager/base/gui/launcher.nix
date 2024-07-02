@@ -1,36 +1,25 @@
 {pkgs, config, lib,...}:
 with lib;
 let
-  cfg = config.modules.services.scriptkit;
+  cfg = config.modules.launcher.fzf;
 in {
-  options.modules.services.scriptkit = {
-    enable = mkEnableOption "Script Kit Launcher";
+  options.modules.launcher.fzf = {
+    enable = mkEnableOption "FZF Launcher";
   };
   config = mkIf cfg.enable (mkMerge [{
     home.packages = with pkgs; [
-      scriptkit
+      alacritty
+      fzf
     ];
-
-    launchd.enable = true;
-    launchd.agents.scriptkit = {
-      enable = true;
-      config = {
-        ProgramArguments = [
-          "${pkgs.bash}/bin/bash"
-          "-l"
-          "-c"
-          "${pkgs.scriptkit}/Applications/Kit.app/Contents/MacOS/Kit"
-        ];
-        EnvironmentVariables = {
-          KNODE = "${config.xdg.configHome}/scriptkit/knode";
-          KENV = "${config.xdg.configHome}/scriptkit/kenv";
-          KIT = "${config.xdg.configHome}/scriptkit/kit";
-        };
-        StandardErrorPath = "${config.home.homeDirectory}/Library/Logs/scriptkit-daemon.stderr.log";
-        StandardOutPath = "${config.home.homeDirectory}/Library/Logs/scriptkit-daemon.stdout.log";
-        RunAtLoad = true;
-        KeepAlive = true;
-      };
+    services.skhd = {
+      skhdConfig = lib.mkAfter ''
+        alt - p : launcher
+      '';
+    };
+    services.yabai = {
+      extraConfig= lib.mkAfter ''
+      yabai -m rule --add title='^Launcher$' manage=off grid=5:5:1:1:3:3
+    '';
     };
 
   }]);

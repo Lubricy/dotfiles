@@ -52,10 +52,7 @@ yabai -m config focus_follows_mouse          autoraise
 
 
 yabai -m rule --add title='Preferences$' manage=off
-yabai -m rule --add title='^Cerebro$' manage=off
-yabai -m rule --add title='^Kit$' manage=off
 yabai -m rule --add app='^System Settings$' manage=off
 yabai -m rule --add app='^System Information$' manage=off
 yabai -m rule --add title='Notification$' manage=off
 yabai -m rule --add title='Reminders$' manage=off
-yabai -m rule --add title='doom-capture' manage=off grid=5:5:1:1:3:3

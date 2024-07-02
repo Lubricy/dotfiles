@@ -11,6 +11,7 @@
         size = 16;
         normal.family = "AnonymicePro Nerd Font Mono";
       };
+      window.decorations = "Buttonless";
     };
   };
 }

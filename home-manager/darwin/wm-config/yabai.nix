@@ -13,14 +13,10 @@ in {
     # Whether to enable yabai's scripting-addition.
     # SIP must be disabled for this to work.
     # https://github.com/koekeishiya/yabai/wiki/Disabling-System-Integrity-Protection
-    enableScriptingAddition = false;
+    # enableScriptingAddition = false;
     # config = {};
     extraConfig = builtins.readFile (mylib.fromShared "yabai/yabairc");
   };
 
   # custom log path for debugging
-  launchd.user.agents.yabai.serviceConfig = {
-    StandardErrorPath = "${homeDir}/Library/Logs/yabai.stderr.log";
-    StandardOutPath = "${homeDir}/Library/Logs/yabai.stdout.log";
-  };
 }

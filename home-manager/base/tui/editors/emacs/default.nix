@@ -16,13 +16,23 @@
 }@input:
 with lib; let
   cfg = config.modules.editors.emacs;
-  envExtra = ''
-    export PATH="${config.xdg.configHome}/emacs/bin:$PATH"
+  shellExtra = ''
+    function e() {
+        if [ -z "$INSIDE_EMACS" ]; then
+            emacsclient --create-frame "$@"
+        else
+            emacsclient "$@"
+        fi
+    }
+    function et() {
+        if [ -z "$INSIDE_EMACS" ]; then
+            emacsclient --create-frame --tty "$@"
+        else
+            emacsclient "$@"
+        fi
+    }
   '';
-  shellAliases = {
-    e = "emacsclient \${INSIDE_EMACS:+--create-frame}"; # gui
-    et = "emacsclient \${INSIDE_EMACS:+--create-frame} \${INSIDE_EMACS:+--tty}"; # gui
-  };
+
   myEmacsPackagesFor = emacs: ((pkgs.emacsPackagesFor emacs).emacsWithPackages (epkgs: [
     epkgs.vterm
   ]));
@@ -64,9 +74,8 @@ in {
         texlive.combined.scheme-medium
       ];
 
-      programs.bash.bashrcExtra = envExtra;
-      programs.zsh.envExtra = envExtra;
-      home.shellAliases = shellAliases;
+      programs.bash.bashrcExtra = shellExtra;
+      programs.zsh.initExtra = shellExtra;
       #programs.nushell.shellAliases = shellAliases;
 
       home.activation.installDoomEmacs = lib.hm.dag.entryAfter ["writeBoundary"] ''
@@ -76,6 +85,9 @@ in {
       # https://github.com/nix-community/home-manager/blob/master/modules/home-environment.nix
       home.emptyActivationPath = false;
       home.activation.configBoundary = lib.hm.dag.entryAfter ["installPackages"] "";
+      home.sessionPath = [
+        "${config.xdg.configHome}/emacs/bin"
+      ];
     }
 
     (mkIf pkgs.stdenv.isLinux (
@@ -140,6 +152,10 @@ in {
               "shared/doom" = "${config.xdg.configHome}/doom";
             };
           } input.darwinConfig.system.build.setEnvironment);
+
+        services.yabai = {
+          extraConfig = lib.mkAfter "yabai -m rule --add title='doom-capture' manage=off grid=5:5:1:1:3:3";
+        };
       }
     ))
   ]);

@@ -1,5 +1,4 @@
 {
-  pkgs,
   fzf-tab,
   zsh-vi-mode,
   ...
@@ -19,14 +18,10 @@ in {
   programs.bash = {
     enable = true;
     enableCompletion = true;
-    bashrcExtra = ''
-      export PATH="$HOME/.local/bin:$PATH"
-    '';
   };
   programs.zsh = {
     enable = true;
     syntaxHighlighting.enable = true;
-    historySubstringSearch.enable = true;
     plugins = [
       {
         name = "fzf-tab";

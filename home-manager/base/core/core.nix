@@ -1,4 +1,5 @@
 {
+  lib,
   pkgs,
   dracula-sublime,
   ...
@@ -107,10 +108,36 @@
         prefers_reduced_motion = true;
         enter_accept = false;
         history_filter = [
-          "^ls"
+          "^ls$"
           "^clear$"
         ];
       };
     };
   };
+  # disable atuin ui, replace it with fzf
+  programs.zsh.initExtra = lib.mkAfter ''
+    _atuin_search() {
+      local selected
+      selected=$(atuin history list --cmd-only --session --print0 \
+          | fzf --read0 --tac --query "$LBUFFER" \
+            --no-sort \
+            --ansi \
+            --height=40% --margin=1 --padding=1 \
+            --preview-window=up \
+            --prompt 'Session> ' \
+            --bind 'ctrl-r:transform:case "$FZF_PROMPT" in
+                    "Session> ") echo -n "change-prompt(Dir> )+reload(atuin history list --cwd";;
+                    "Dir> ")     echo -n "change-prompt(Global> )+reload(atuin history list";;
+                    "Global> ")  echo -n "change-prompt(Session> )+reload(atuin history list --session";;
+                    esac; echo " --cmd-only --print0)"
+                  ' \
+            --preview 'echo {} | bat -l zsh --color always -pp')
+
+      if [ -n "$selected" ]; then
+        BUFFER=$selected
+        CURSOR=$#BUFFER
+      fi
+      zle reset-prompt
+    }
+    '';
 }
