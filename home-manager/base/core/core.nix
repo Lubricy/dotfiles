@@ -120,11 +120,18 @@
       local selected
       selected=$(atuin history list --cmd-only --session --print0 \
           | fzf --read0 --tac --query "$LBUFFER" \
+            --exact \
             --no-sort \
             --ansi \
             --height=40% --margin=1 --padding=1 \
             --preview-window=up \
             --prompt 'Session> ' \
+            --bind 'zero:transform:case "$FZF_PROMPT" in
+                    "Session> ") echo -n "change-prompt(Dir> )+reload(atuin history list --cwd";;
+                    "Dir> ")     echo -n "change-prompt(Global> )+reload(atuin history list";;
+                    "Global> ")  echo -n "change-prompt(Session> )+reload(atuin history list --session";;
+                    esac; echo " --cmd-only --print0)"
+                  ' \
             --bind 'ctrl-r:transform:case "$FZF_PROMPT" in
                     "Session> ") echo -n "change-prompt(Dir> )+reload(atuin history list --cwd";;
                     "Dir> ")     echo -n "change-prompt(Global> )+reload(atuin history list";;
