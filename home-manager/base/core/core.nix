@@ -7,7 +7,6 @@
   home.packages = with pkgs; [
     # Misc
     tldr
-    cowsay
     gnupg
     gnumake
 

@@ -11,6 +11,14 @@ let
     urldecode = "python3 -c 'import sys, urllib.parse as ul; print(ul.unquote_plus(sys.stdin.read()))'";
     urlencode = "python3 -c 'import sys, urllib.parse as ul; print(ul.quote_plus(sys.stdin.read()))'";
   };
+  shellExtra = ''
+    function nr() {
+      PKG="$1"
+      shift
+      nix run "nixpkgs#$PKG" -- "$@"
+    }
+  '';
+
 in {
   # only works in bash/zsh, not nushell
   home.shellAliases = shellAliases;
@@ -18,10 +26,12 @@ in {
   programs.bash = {
     enable = true;
     enableCompletion = true;
+    bashrcExtra = shellExtra;
   };
   programs.zsh = {
     enable = true;
     syntaxHighlighting.enable = true;
+    initExtra = shellExtra;
     plugins = [
       {
         name = "fzf-tab";
