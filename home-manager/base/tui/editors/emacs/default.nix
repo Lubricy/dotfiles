@@ -33,8 +33,9 @@ with lib; let
     }
   '';
 
-  myEmacsPackagesFor = emacs: ((pkgs.emacsPackagesFor emacs).emacsWithPackages (epkgs: [
-    epkgs.vterm
+  myEmacsPackagesFor = emacs: ((pkgs.emacsPackagesFor emacs).emacsWithPackages (epkgs: with epkgs; [
+    vterm
+    treesit-grammars.with-all-grammars
   ]));
 in {
   options.modules.editors.emacs = {
@@ -131,6 +132,7 @@ in {
               "-c"
               "${config.xdg.configHome}/emacs/bin/doom env && ${emacsPkg}/bin/emacs --fg-daemon"
             ];
+            SoftResourceLimits.NumberOfFiles = 10240;
             StandardErrorPath = "${config.home.homeDirectory}/Library/Logs/emacs-daemon.stderr.log";
             StandardOutPath = "${config.home.homeDirectory}/Library/Logs/emacs-daemon.stdout.log";
             RunAtLoad = true;
