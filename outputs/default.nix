@@ -127,7 +127,7 @@ in {
     }
   );
 
-  templates = import ../templates;
+  templates = import ../templates { inherit lib; };
 
   # Format the nix code in this flake
   formatter = forAllSystems (

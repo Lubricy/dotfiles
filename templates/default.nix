@@ -1,13 +1,11 @@
 {lib,...}:
-with lib builtins;
+with lib; with builtins;
 concatMapAttrs (k: v:
   if v != "regular"
   then {
-    "${v}" = let desc = "./${k}/README.md";in {
-      path = "./${k}";
-      description = if pathExists desc
-                    then readFIle desc
-                    else "A template for generating ${k}.";
+    "${k}" = {
+      path = ./${k};
+      description = "A template for generating ${k}.";
     };
   }
   else {}

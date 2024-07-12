@@ -1,36 +1,15 @@
 # installation
 
-### 1. install zsh
+## 1. install nix
+https://github.com/DeterminateSystems/nix-installer
 
-### 2. execute
+## 2. config local-vars
 
-git clone git://github.com/andsens/homeshick.git $HOME/.homesick/repos/homeshick
-$HOME/.homesick/repos/homeshick/bin/homeshick clone Lubricy/dotfiles
-if command -v emacs; then
-$HOME/.homesick/repos/homeshick/bin/homeshick clone doomemacs/doomemacs
-fi
-if command -v nvim; then
-$HOME/.homesick/repos/homeshick/bin/homeshick clone LunarVim/LunarVim
-fi
+mkdir -p ~/.config
+nix flake new ~/.config/nix-local-vars
+nix registry add nix-local-vars ~/.config/nix-local-vars
+nix flake update local-vars
 
-THEMES=(iterm sublime)
+## 3. install!
+nix run 'github:LnL7/nix-darwin' -- --switch --flake . 
 
-THEMES_DIR="$HOME/.homesick/repos/dracula-themes"
-set +m
-mkdir -p $THEMES_DIR
-clone-theme () {
-  t=$1
-  echo "cloning dracula theme ${t}..." \
-  && git -C "$THEMES_DIR" clone --quiet "https://github.com/dracula/${t}.git" --depth 1 \
- && echo "cloned dracula theme ${t}."
-}
-
-for t in ${THEMES[@]}; do
-    clone-theme "$t" &
-done
-wait
-set -m
-
-### or
-
-### curl -L https://raw.githubusercontent.com/Lubricy/dotfiles/master/README.md | bash
