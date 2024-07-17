@@ -1,4 +1,5 @@
 (after! org
+  (add-hook 'org-mode-hook 'envrc-mode)
   (add-to-list 'org-modules 'org-id t)
   (add-to-list 'org-modules 'org-habit t)
   (setq org-agenda-search-view-always-boolean t
@@ -46,6 +47,7 @@
 (load! "+clock")
 (load! "+pretty")
 (load! "+timestamp")
+(load! "+latex")
 
 (dolist (flag (doom-module-context-get :flags))
   (load! (symbol-name flag)))

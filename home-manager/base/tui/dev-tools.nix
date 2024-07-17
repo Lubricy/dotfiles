@@ -1,6 +1,5 @@
 {
   pkgs,
-  pkgs-unstable,
   mylib,
   ...
 }: {
@@ -21,7 +20,7 @@
     sqlite
 
     # ai related
-    pkgs-unstable.python312Packages.huggingface-hub # huggingface-cli
+    pkgs.unstable.python312Packages.huggingface-hub # huggingface-cli
     nodejs
 
     # misc

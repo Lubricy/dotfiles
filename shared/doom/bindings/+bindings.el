@@ -26,7 +26,7 @@
    :desc "show buffer"                     "b" #'consult-project-buffer
    :desc "view raw buffer"                 "R" (cmd! (fundamental-mode)
                                                      (revert-buffer nil nil t))
-   :desc "Auto format current buffer"      "f" #'format-all-buffer)
+   :desc "Auto format current buffer"      "f" #'apheleia-format-buffer)
   (:when (modulep! :completion ivy)
     (:prefix ("b" . "buffer")
      :desc "Force show buffer"              "F" #'+ivy/switch-buffer-other-window
@@ -49,16 +49,8 @@
      :desc "finish editing"                  "d" #'org-gtd-organize))
   (:prefix ("t" . "toggle")
    :desc "Adjust text size"      "t"   #'text-scale-adjust
-   :desc "Auto format on save"   "a"   #'format-all-mode
-   :desc "Auto format on save"   "A"   (cmd!
-                                        (if (bound-and-true-p +enable-global-format-all)
-                                            (progn
-                                              (remove-hook! after-change-major-mode #'+format-enable-on-save-maybe-h)
-                                              (setq +enable-global-format-all 'nil)
-                                              (message "Format-All mode disabled globally"))
-                                          (add-hook! after-change-major-mode #'+format-enable-on-save-maybe-h)
-                                          (setq +enable-global-format-all t)
-                                          (message "Format-All mode enabled globally")))
+   :desc "Auto format on save"   "a"   #'apheleia-mode
+   :desc "Auto format on save"   "A"   #'apheleia-global-mode
 
    :desc "line number"           "n"   #'display-line-numbers-mode
    :desc "tree silde"            "P"   #'org-tree-slide-mode

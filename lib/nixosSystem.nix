@@ -8,13 +8,13 @@
   specialArgs ? (genSpecialArgs system),
   myvars,
   ...
-}: let
+}@args: let
   inherit (inputs) nixpkgs home-manager nixos-generators;
 in
   nixpkgs.lib.nixosSystem {
     inherit system specialArgs;
-    modules =
-      nixos-modules
+    modules = [(import ./overlays.nix (args))]
+      ++ nixos-modules
       ++ [
         nixos-generators.nixosModules.all-formats
       ]

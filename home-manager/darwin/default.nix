@@ -5,6 +5,7 @@
   ...
 }: {
   home.homeDirectory = "/Users/${myvars.username}";
+  # modules.tools.open-interpreter.enable = true;
   imports =
     (mylib.scanPaths ./.)
     ++ [

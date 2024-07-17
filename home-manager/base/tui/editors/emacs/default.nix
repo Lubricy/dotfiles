@@ -36,6 +36,8 @@ with lib; let
   myEmacsPackagesFor = emacs: ((pkgs.emacsPackagesFor emacs).emacsWithPackages (epkgs: with epkgs; [
     vterm
     treesit-grammars.with-all-grammars
+    # emacs-zmq not working
+    jupyter
   ]));
 in {
   options.modules.editors.emacs = {
@@ -61,6 +63,7 @@ in {
         fd # faster projectile indexing
         zstd # for undo-fu-session/undo-tree compression
 
+
         # go-mode
         # gocode # project archived, use gopls instead
 
@@ -72,7 +75,9 @@ in {
         # :tools lookup & :lang org +roam
         sqlite
         # :lang latex & :lang org (latex previews)
-        texlive.combined.scheme-medium
+        (texlive.combine {
+          inherit (texlive) scheme-medium tikz-cd;
+        })
       ];
 
       programs.bash.bashrcExtra = shellExtra;

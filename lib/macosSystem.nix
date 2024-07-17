@@ -8,13 +8,13 @@
   genSpecialArgs,
   specialArgs ? (genSpecialArgs system),
   ...
-}: let
+}@args: let
   inherit (inputs) nixpkgs-darwin home-manager nix-darwin;
 in
   nix-darwin.lib.darwinSystem {
     inherit system specialArgs;
-    modules =
-      darwin-modules
+    modules = [(import ./overlays.nix args)]
+      ++ darwin-modules
       ++ [
         ({lib, ...}: {
           nixpkgs.pkgs = import nixpkgs-darwin {inherit system;};
