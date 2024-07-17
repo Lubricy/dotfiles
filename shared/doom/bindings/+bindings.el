@@ -82,7 +82,7 @@
     (:prefix ("TAB" . "workspace")
      :desc "New workspace"             "c"   #'+workspace/new
      :desc "Delete session"            "D"   #'+workspace/kill-session
-     :desc "Delete this workspace"     "x"   #'+workspace/delete
+     :desc "Delete this workspace"     "x"   #'+workspace/kill
      :desc "Rename workspace"          ","   #'+workspace/rename
      :desc "swap left"                 "{"   #'+workspace/swap-left
      :desc "swap right"                "}"   #'+workspace/swap-right

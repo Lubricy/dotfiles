@@ -115,7 +115,7 @@ in {
         };
         home.activation.syncDoomEmacs = lib.hm.dag.entryAfter ["configBoundary"] ''
           export EMACS=${emacsPkg}/bin/emacs
-          run --quiet ${config.xdg.configHome}/emacs/bin/doom sync
+          run ${config.xdg.configHome}/emacs/bin/doom sync
         '';
       }
     ))
@@ -146,7 +146,7 @@ in {
         };
         home.activation.syncDoomEmacs = lib.hm.dag.entryAfter ["configBoundary"] ''
           export EMACS=${emacsPkg}/bin/emacs
-          run --quiet ${config.xdg.configHome}/emacs/bin/doom sync
+          run ${config.xdg.configHome}/emacs/bin/doom sync
         '';
 
         home.activation.installDoomConfig = lib.hm.dag.entryBetween ["configBoundary"] ["installPackages"] (
