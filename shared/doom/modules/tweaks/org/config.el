@@ -1,5 +1,4 @@
 (after! org
-  (add-hook 'org-mode-hook 'envrc-mode)
   (add-to-list 'org-modules 'org-id t)
   (add-to-list 'org-modules 'org-habit t)
   (setq org-agenda-search-view-always-boolean t
@@ -28,7 +27,7 @@
   ;; arbitrarily in my org files and the link to it still works.
   (setq org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id)
   (add-hook! org-mode
-             #'lubricy/org-babel-node-setenv
+             #'envrc-mode
              #'+org-pretty-mode)
   (add-hook! org-babel-after-execute
              #'shk-fix-inline-images)
@@ -38,8 +37,8 @@
   (ox-extras-activate '(ignore-headlines)))
 
 
-(after! ob-async
-  (pushnew! ob-async-no-async-languages-alist "jupyter"))
+;; (after! ob-async
+;;   (pushnew! ob-async-no-async-languages-alist "jupyter"))
 
 
 (load! "+appt")

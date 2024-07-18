@@ -36,8 +36,6 @@ with lib; let
   myEmacsPackagesFor = emacs: ((pkgs.emacsPackagesFor emacs).emacsWithPackages (epkgs: with epkgs; [
     vterm
     treesit-grammars.with-all-grammars
-    # emacs-zmq not working
-    jupyter
   ]));
 in {
   options.modules.editors.emacs = {
@@ -78,6 +76,8 @@ in {
         (texlive.combine {
           inherit (texlive) scheme-medium tikz-cd;
         })
+        # :lang org (jupyter)
+        jupyter
       ];
 
       programs.bash.bashrcExtra = shellExtra;

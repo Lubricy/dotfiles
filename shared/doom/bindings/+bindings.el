@@ -23,7 +23,6 @@
   (:prefix ("c" . "code")
    :desc "toggle between implementation and test"   "t" #'projectile-toggle-between-implementation-and-test)
   (:prefix ("b" . "buffer")
-   :desc "show buffer"                     "b" #'consult-project-buffer
    :desc "view raw buffer"                 "R" (cmd! (fundamental-mode)
                                                      (revert-buffer nil nil t))
    :desc "Auto format current buffer"      "f" #'apheleia-format-buffer)
