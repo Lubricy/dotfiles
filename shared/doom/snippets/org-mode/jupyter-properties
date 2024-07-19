@@ -6,6 +6,6 @@
 # --
 
 :PROPERTIES:
-:header-args:${1:jupyter-python+}:  :session ${2:default} :async yes :results scalar
+:header-args:${1:jupyter-python+}:  :session ${2:`(buffer-name)`} :async yes :results scalar
 :END:
 $0

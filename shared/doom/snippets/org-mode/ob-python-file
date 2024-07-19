@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: :results file
+# key: file
+# --
+
+#+begin_src ${1:python} :results file :file ${2:result.png}
+$0
+#+end_src

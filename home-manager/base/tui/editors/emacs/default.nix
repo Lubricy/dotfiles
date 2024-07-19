@@ -60,6 +60,7 @@ in {
         imagemagick # for image-dired
         fd # faster projectile indexing
         zstd # for undo-fu-session/undo-tree compression
+        pandoc # for ox-pandoc
 
 
         # go-mode

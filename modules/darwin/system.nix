@@ -198,7 +198,7 @@
           "FiraCode"
           "JetBrainsMono"
           "Iosevka"
-           "AnonymousPro"
+          "AnonymousPro"
         ];
       })
     ];

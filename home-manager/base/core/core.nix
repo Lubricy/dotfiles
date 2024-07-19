@@ -23,7 +23,7 @@
     # supported languages: only some mainstream languages currently(do not support nix/nginx/yaml/toml/...)
     ast-grep
 
-    sad # CLI search and replace, just like sed, but with diff preview.
+    pandoc
     yq-go # yaml processor https://github.com/mikefarah/yq
 
     # nix related
