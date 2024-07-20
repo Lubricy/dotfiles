@@ -36,7 +36,6 @@
        doom-quit              ; DOOM quit-message prompts when you quit Emacs
        (emoji +unicode)       ; 🙂
        hl-todo                ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
-       hydra
        ;;indent-guides     ; highlighted indent columns
        (ligatures +extra)   ; ligatures and symbols to make your code pretty again
        ;;minimap           ; show a map of the code on the side
@@ -48,7 +47,9 @@
        ;;tabs               a tab bar for Emacs
        treemacs     ; a project drawer, like neotree but cooler
        unicode                ; extended unicode support for various languages
-       (vc-gutter +pretty)    ; vcs diff in the fringe
+       (vc-gutter
+        +pretty
+        +diff-hl)    ; vcs diff in the fringe
        vi-tilde-fringe        ; fringe tildes to mark beyond EOB
        ;;window-select     ; visually switch windows
        workspaces       ; tab emulation, persistence & separate workspaces
@@ -98,12 +99,12 @@
        ;;gist              ; interacting with github gists
        lookup                         ; navigate your code and its documentation
        lsp                            ; M-x vscode
-       magit                          ; a git porcelain for Emacs
+       (magit
+        +forge)                          ; a git porcelain for Emacs
                                         ;make                           ; run make tasks from Emacs
        (pass +auth)                   ; password manager for nerds
        pdf                            ; pdf enhancements
        ;;prodigy           ; FIXME managing external services & code builders
-       rgb                ; creating color strings
        ;;taskrunner        ; taskrunner for all your projects
        terraform          ; infrastructure as code
        ;;tmux              ; an API for interacting with tmux

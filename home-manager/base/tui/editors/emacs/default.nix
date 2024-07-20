@@ -8,6 +8,7 @@
 #
 {
   config,
+  darwinConfig,
   lib,
   mylib,
   pkgs,
@@ -40,17 +41,22 @@ with lib; let
 in {
   options.modules.editors.emacs = {
     enable = mkEnableOption "Emacs Editor";
+    package = mkOption {
+      type = types.package;
+      internal = true;
+      description = "emacs package";
+    };
     doomConfig = mkOption {
-      type= types.str;
+      type = types.str;
       default = "https://github.com/Lubricy/dotfiles";
-      description = "";
+      description = "doom config repo";
     };
   };
 
   config = mkIf cfg.enable (mkMerge [
+    ## Doom dependencies
     {
       home.packages = with pkgs; [
-        ## Doom dependencies
         git
         (ripgrep.override {withPCRE2 = true;})
         gnutls # for TLS connectivity
@@ -84,17 +90,45 @@ in {
       programs.bash.bashrcExtra = shellExtra;
       programs.zsh.initExtra = shellExtra;
       #programs.nushell.shellAliases = shellAliases;
+    }
+    ## Doom Configurations
+    {
 
-      home.activation.installDoomEmacs = lib.hm.dag.entryAfter ["writeBoundary"] ''
-        run ${pkgs.rsync}/bin/rsync -avz --chmod=D2755,F744 ${doomemacs}/ ${config.xdg.configHome}/emacs/
-      '';
-      # TODO find a way to inject path for syncDoomEmacs only
-      # https://github.com/nix-community/home-manager/blob/master/modules/home-environment.nix
-      home.emptyActivationPath = false;
+      xdg.configFile."emacs" = {
+        source = doomemacs;
+      };
+
+      home.sessionVariables = {
+       DOOMLOCALDIR = "${config.xdg.stateHome}/doom";
+       DOOMPROFILELOADFILE = "${config.xdg.stateHome}/doom/etc/load.el";
+      };
+
       home.activation.configBoundary = lib.hm.dag.entryAfter ["installPackages"] "";
       home.sessionPath = [
         "${config.xdg.configHome}/emacs/bin"
       ];
+
+      # TODO find a way to inject path for syncDoomEmacs only
+      # https://github.com/nix-community/home-manager/blob/master/modules/home-environment.nix
+      home.activation.syncDoomEmacs = lib.hm.dag.entryAfter ["configBoundary"] ''
+        set +u
+        source ${darwinConfig.system.build.setEnvironment}
+        source ${config.home.sessionVariablesPackage}/etc/profile.d/hm-session-vars.sh
+        set -u
+        run ${config.xdg.configHome}/emacs/bin/doom sync -u
+      '';
+
+      home.activation.installDoomConfig = lib.hm.dag.entryBetween ["configBoundary"] ["installPackages"] (
+        mylib.linkRepo {
+          repo = {
+            url = cfg.doomConfig;
+            name = "dotfiles";
+          };
+          mappings = {
+            "shared/doom" = "${config.xdg.configHome}/doom";
+          };
+        } input.darwinConfig.system.build.setEnvironment);
+      home.packages = [cfg.package];
     }
 
     (mkIf pkgs.stdenv.isLinux (
@@ -104,7 +138,7 @@ in {
         # https://www.gnu.org/savannah-checkouts/gnu/emacs/emacs.html#Releases
         emacsPkg = myEmacsPackagesFor pkgs.emacs29-pgtk;
       in {
-        home.packages = [emacsPkg];
+        modules.editors.emacs.package = emacsPkg;
         services.emacs = {
           enable = true;
           package = emacsPkg;
@@ -114,10 +148,6 @@ in {
           };
           startWithUserSession = true;
         };
-        home.activation.syncDoomEmacs = lib.hm.dag.entryAfter ["configBoundary"] ''
-          export EMACS=${emacsPkg}/bin/emacs
-          run ${config.xdg.configHome}/emacs/bin/doom sync
-        '';
       }
     ))
 
@@ -127,7 +157,7 @@ in {
         # https://bitbucket.org/mituharu/emacs-mac/src/master/README-mac
         emacsPkg = myEmacsPackagesFor pkgs.emacsNoctuid;
       in {
-        home.packages = [emacsPkg];
+        modules.editors.emacs.package = emacsPkg;
         launchd.enable = true;
         launchd.agents.emacs = {
           enable = true;
@@ -145,21 +175,6 @@ in {
             KeepAlive = true;
           };
         };
-        home.activation.syncDoomEmacs = lib.hm.dag.entryAfter ["configBoundary"] ''
-          export EMACS=${emacsPkg}/bin/emacs
-          run ${config.xdg.configHome}/emacs/bin/doom sync
-        '';
-
-        home.activation.installDoomConfig = lib.hm.dag.entryBetween ["configBoundary"] ["installPackages"] (
-          mylib.linkRepo {
-            repo = {
-              url = cfg.doomConfig;
-              name = "dotfiles";
-            };
-            mappings = {
-              "shared/doom" = "${config.xdg.configHome}/doom";
-            };
-          } input.darwinConfig.system.build.setEnvironment);
 
         services.yabai = {
           extraConfig = lib.mkAfter "yabai -m rule --add title='doom-capture' manage=off grid=5:5:1:1:3:3";

@@ -16,9 +16,10 @@ let
     vdiff = "nvim -d";
   };
 in {
-  home.activation.installKickstartNvim = lib.hm.dag.entryAfter ["writeBoundary"] ''
-    run ${pkgs.rsync}/bin/rsync -avz --chmod=D2755,F744 ${kickstart}/ ${config.xdg.configHome}/nvim/
-  '';
+
+  xdg.configFile."nvim" = {
+    source = kickstart;
+  };
 
   home.shellAliases = shellAliases;
 #  programs.nushell.shellAliases = shellAliases;
