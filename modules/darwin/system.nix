@@ -137,6 +137,8 @@
         };
         # Prevent Photos from opening automatically when devices are plugged in
         "com.apple.ImageCapture".disableHotPlug = true;
+        # prevent pam_tid.so from asking for password when using DisplayLink
+        "com.apple.security.authorization".ignoreArd = true;
       };
 
       loginwindow = {

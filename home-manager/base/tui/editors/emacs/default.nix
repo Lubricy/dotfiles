@@ -115,7 +115,7 @@ in {
         source ${darwinConfig.system.build.setEnvironment}
         source ${config.home.sessionVariablesPackage}/etc/profile.d/hm-session-vars.sh
         set -u
-        run ${config.xdg.configHome}/emacs/bin/doom sync -u
+        run ${config.xdg.configHome}/emacs/bin/doom sync
       '';
 
       home.activation.installDoomConfig = lib.hm.dag.entryBetween ["configBoundary"] ["installPackages"] (
