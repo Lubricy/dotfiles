@@ -1,5 +1,5 @@
 {
-  description = "A very basic flake";
+  description = "Flake for local-vars";
 
   outputs = { self, ... }: {
     default = {
@@ -9,6 +9,6 @@
       home-modules = [];
       darwin-modules = [];
 
-    }
+    };
   };
 }

@@ -1,3 +1,4 @@
 **/*local*
+!/templates/local-vars/
 /config/lvim/lazy-lock.json
 /result

@@ -13,7 +13,7 @@
     # Official NixOS package source, using nixos's unstable branch by default
     nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable-small";
-    nixpkgs-main.url = "github:nixos/nixpkgs";
+    # nixpkgs-main.url = "github:nixos/nixpkgs";
     # nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.05";
 
     # for macos
@@ -37,6 +37,7 @@
    emacs-overlay = {
       url = "github:nix-community/emacs-overlay";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.nixpkgs-stable.follows = "nixpkgs";
     };
 
    # add git hooks to format nix code before commit

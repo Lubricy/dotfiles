@@ -9,7 +9,7 @@
 
 _: self: super: rec {
   # configuration shared for all systems
-  emacsGitNoctuidGeneric = super.emacs-git.override {
+  emacsGitNoctuidGeneric = super.emacs29-pgtk.override {
     withSQLite3 = true;
     withWebP = true;
     withImageMagick = true;
@@ -35,20 +35,20 @@ _: self: super: rec {
             })
             # Use poll instead of select to get file descriptors
             (super.fetchpatch {
-              url = "https://raw.githubusercontent.com/d12frosted/homebrew-emacs-plus/master/patches/emacs-30/poll.patch";
-              sha256 = "sha256-HPuHrsKq17ko8xP8My+IYcJV+PKio4jK41qID6QFXFs=";
+              url = "https://raw.githubusercontent.com/d12frosted/homebrew-emacs-plus/master/patches/emacs-29/poll.patch";
+              sha256 = "sha256-jN9MlD8/ZrnLuP2/HUXXEVVd6A+aRZNYFdZF8ReJGfY=";
             })
             # Add setting to enable rounded window with no decoration (still
             # have to alter default-frame-alist)
             (super.fetchpatch {
-              url = "https://raw.githubusercontent.com/d12frosted/homebrew-emacs-plus/master/patches/emacs-30/round-undecorated-frame.patch";
+              url = "https://raw.githubusercontent.com/d12frosted/homebrew-emacs-plus/master/patches/emacs-29/round-undecorated-frame.patch";
               sha256 = "sha256-uYIxNTyfbprx5mCqMNFVrBcLeo+8e21qmBE3lpcnd+4=";
             })
             # Make Emacs aware of OS-level light/dark mode
             # https://github.com/d12frosted/homebrew-emacs-plus#system-appearance-change
             (super.fetchpatch {
-              url = "https://raw.githubusercontent.com/d12frosted/homebrew-emacs-plus/master/patches/emacs-30/system-appearance.patch";
-              sha256 = "sha256-3QLq91AQ6E921/W9nfDjdOUWR8YVsqBAT/W9c1woqAw=";
+              url = "https://raw.githubusercontent.com/d12frosted/homebrew-emacs-plus/master/patches/emacs-28/system-appearance.patch";
+              sha256 = "sha256-oM6fXdXCWVcBnNrzXmF0ZMdp8j0pzkLE66WteeCutv8=";
             })
           ];
       })
