@@ -36,9 +36,8 @@ let
      ]
      else buildLinkScript mappings
     ) ++ buildLinkScript extraMappings);
-in environment: ''
+in ''
 run cat <<'EOF' | bash -eo pipefail
-  source ${environment}
   removePrefix() {
     local prefix="$1"
     local string="$2"

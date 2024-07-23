@@ -94,8 +94,9 @@ in {
     ## Doom Configurations
     {
 
-      xdg.configFile."emacs" = {
-        source = doomemacs;
+      xdg.configFile = {
+        "emacs".source = doomemacs;
+        "doom".source = config.lib.file.mkOutOfStoreSymlink "${config.xdg.configHome}/repos/dotfiles/shared/doom";
       };
 
       home.sessionVariables = {
@@ -118,16 +119,6 @@ in {
         run ${config.xdg.configHome}/emacs/bin/doom sync
       '';
 
-      home.activation.installDoomConfig = lib.hm.dag.entryBetween ["configBoundary"] ["installPackages"] (
-        mylib.linkRepo {
-          repo = {
-            url = cfg.doomConfig;
-            name = "dotfiles";
-          };
-          mappings = {
-            "shared/doom" = "${config.xdg.configHome}/doom";
-          };
-        } input.darwinConfig.system.build.setEnvironment);
       home.packages = [cfg.package];
     }
 

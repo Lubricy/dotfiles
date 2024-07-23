@@ -1,7 +1,8 @@
-{lib, mylib, pkgs, darwinConfig, ...}:
+{lib, mylib, pkgs, ...}:
 {
-  modules.editors.emacs = {
-    enable = true;
+  modules.editors = {
+    emacs.enable = true;
+    lvim.enable = true;
   };
 
   # language servers
@@ -20,5 +21,5 @@
       hooks.postClone = ''
         git crypt unlock
       '';
-    } darwinConfig.system.build.setEnvironment);
+    });
 }
