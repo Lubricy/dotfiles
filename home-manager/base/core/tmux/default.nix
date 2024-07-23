@@ -21,7 +21,6 @@ in {
     keyMode = "vi";
     mouse = true;
     newSession = true;
-    terminal = "screen-256color";
     extraConfig =
       let
         dir = mylib.fromShared "tmux/tmux";

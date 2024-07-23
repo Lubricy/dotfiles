@@ -24,10 +24,10 @@ _: self: super: rec {
           (old.patches or [])
           ++ [
             # Don't raise another frame when closing a frame
-            # (super.fetchpatch {
-            #   url = "https://raw.githubusercontent.com/d12frosted/homebrew-emacs-plus/master/patches/emacs-28/no-frame-refocus-cocoa.patch";
-            #   sha256 = "QLGplGoRpM4qgrIAJIbVJJsa4xj34axwT3LiWt++j/c=";
-            # })
+            (super.fetchpatch {
+              url = "https://raw.githubusercontent.com/d12frosted/homebrew-emacs-plus/master/patches/emacs-28/no-frame-refocus-cocoa.patch";
+              sha256 = "QLGplGoRpM4qgrIAJIbVJJsa4xj34axwT3LiWt++j/c=";
+            })
             # Fix OS window role so that yabai can pick up Emacs
             (super.fetchpatch {
               url = "https://raw.githubusercontent.com/d12frosted/homebrew-emacs-plus/master/patches/emacs-28/fix-window-role.patch";
