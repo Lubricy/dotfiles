@@ -11,13 +11,7 @@ let
     urldecode = "python3 -c 'import sys, urllib.parse as ul; print(ul.unquote_plus(sys.stdin.read()))'";
     urlencode = "python3 -c 'import sys, urllib.parse as ul; print(ul.quote_plus(sys.stdin.read()))'";
   };
-  shellExtra = ''
-    function nr() {
-      PKG="$1"
-      shift
-      nix run "nixpkgs#$PKG" -- "$@"
-    }
-  '';
+  shellExtra = builtins.readFile ./extra.sh;
 
 in {
   # only works in bash/zsh, not nushell

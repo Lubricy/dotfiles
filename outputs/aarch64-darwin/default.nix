@@ -16,17 +16,17 @@
         "modules/darwin"
         # host specific
       ])
-      ++ myvars.darwin-modules;
+      ++ (myvars.darwin-modules or []);
     home-modules = map mylib.relativeToRoot [
       "home-manager/darwin"
       # host specific
-    ] ++ myvars.home-modules;
+    ] ++ (myvars.home-modules or []);
   };
 
   systemArgs = modules // args;
+  cfg = mylib.macosSystem systemArgs;
 in {
   # macOS's configuration
-  darwinConfigurations.${name} = mylib.macosSystem systemArgs;
-  # packages.default = inputs.nix-darwin.packages.${system}.default;
+  darwinConfigurations.${name} = cfg;
+  packages.default = cfg.system;
 }
-

@@ -27,7 +27,7 @@
   };
   darwinSystems = {
     aarch64-darwin = import ./aarch64-darwin (args // {system = "aarch64-darwin";});
-    #x86_64-darwin = import ./x86_64-darwin (args // {system = "x86_64-darwin";});
+    # x86_64-darwin = import ./x86_64-darwin (args // {system = "x86_64-darwin";});
   };
   allSystems = nixosSystems // darwinSystems;
   allSystemNames = builtins.attrNames allSystems;
@@ -54,13 +54,8 @@ in {
     system: (allSystems.${system}.packages or {})
   );
 
-  # Eval Tests for all NixOS & darwin systems.
-  evalTests = lib.lists.all (it: it.evalTests == {}) allSystemValues;
-
   checks = forAllSystems (
     system: {
-      # eval-tests per system
-      eval-tests = allSystems.${system}.evalTests == {};
 
       pre-commit-check = pre-commit-hooks.lib.${system}.run {
         src = mylib.relativeToRoot ".";

@@ -11,35 +11,31 @@
       systems = [
         # systems for which you want to build the `perSystem` attributes
         "x86_64-linux"
+        "aarch64-linux"
         "aarch64-darwin"
-        # ...
+        "x86_64-darwin"
       ];
       perSystem = { config, pkgs, system, ... }:
         let
           isDarwin = pkgs.lib.strings.hasSuffix "-darwin" system;
           darwinOptions = pkgs.lib.optionalAttrs isDarwin {
             buildInputs = [
-              pkgs.darwin.apple_sdk.frameworks.SystemConfiguration
+              pkgs.darwin.apple_sdk.frameworks.Foundation
             ];
           };
         in
-        {
-          packages = {
-            tools = with pkgs; mkShell {
+          {
+            devShells.tools = with pkgs; mkShell {
               buildInputs = [ cargo rustc ];
             };
-            default = pkgs.rustPlatform.buildRustPackage (pkgs.lib.mkMerge [
-              {
-                name = "rust-app";
-                src = pkgs.lib.cleanSource ./.;
-                cargoLock  = {
-                  lockFile = ./Cargo.lock;
-                  allowBuiltinFetchGit = true;
-                };
-              }
-              darwinOptions
-            ]);
+            packages.default = pkgs.rustPlatform.buildRustPackage ({
+              name = "rust-app";
+              src = pkgs.lib.cleanSource ./.;
+              cargoLock  = {
+                lockFile = ./Cargo.lock;
+                allowBuiltinFetchGit = true;
+              };
+            } // darwinOptions);
           };
-        };
     };
 }

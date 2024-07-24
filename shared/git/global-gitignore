@@ -3,3 +3,4 @@
 .venv
 *flycheck*
 .DS_Store
+.direnv

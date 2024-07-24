@@ -20,6 +20,10 @@
   :desc "Right window"            :n "<right>"   #'evil-window-right
   :desc "Up window"               :n "<up>"      #'evil-window-up
   :desc "Down window"             :n "<down>"    #'evil-window-down
+  (:prefix ("e" . "generate")
+   :desc "send prompt"   "e" #'gptel-send
+   :desc "menu"          "m" #'gptel-menu
+   :desc "add context"   "c" #'gptel-context-add)
   (:prefix ("c" . "code")
    :desc "toggle between implementation and test"   "t" #'projectile-toggle-between-implementation-and-test)
   (:prefix ("b" . "buffer")
