@@ -2,7 +2,21 @@
 
 (use-package! gptel
   :config
-  (setq! gptel-default-mode 'org-mode))
+  (setq! gptel-default-mode 'org-mode)
+  (setq! gptel-org-branching-context 't)
+  (require 'gptel-context)
+  (evil-set-initial-state 'gptel-context-buffer-mode 'emacs)
+  (map!
+   :g "C-c C-g" #'gptel-send
+   :g "C-c g" #'gptel-send
+   (:leader
+    (:prefix ("i" . "insert")
+     :desc "generative AI" "g" #'gptel-send)
+    (:prefix ("e" . "generate")
+     :desc "send prompt" "e" #'gptel-send
+     :desc "menu" "m" #'gptel-menu
+     :desc "add context" "c" #'gptel-context-add
+     :desc "examine context" "C" #'gptel--suffix-context-buffer))))
 
 ;;;###autoload
 (defun +gptel-openai-get-api-key ()

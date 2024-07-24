@@ -35,14 +35,7 @@
     userName = "Lubricy Fibber";
     userEmail = "lubricy@gmail.com";
 
-    ignores = [
-      ".projectile"
-      "*~"
-      "*.swp"
-      ".venv"
-      "*flycheck*"
-      ".DS_Store"
-    ];
+    ignores = lib.splitString "\n" (lib.fileContents (mylib.fromShared "git/global-gitignore"));
 
     includes = [
       { path = "${config.xdg.configHome}/git/local/config"; }

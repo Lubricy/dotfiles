@@ -1,4 +1,12 @@
 ;; -*- lexical-binding: t; -*-
+(map!
+ :leader
+ (:prefix ("i" . "insert")
+          (:prefix ("l" . "link")
+           :desc "People" "p" #'contact/insert))
+ (:prefix ("l" . "link")
+  :desc "People" "p" #'contact/insert))
+
 
 (cl-defstruct (identity-provider
                (:constructor identity-provider--create)
@@ -35,17 +43,21 @@
   (defun +org/update-contact-link (&optional link)
     "Replace LINK with proper data at point"
     (save-excursion
-      (save-match-data
-        (let* ((link (or link (org-element-context)))
-               (type (org-element-property :type link))
-               (path (org-element-property :path link)))
-          (goto-char (org-element-property :begin link))
-          (dolist (tag (contact/org-tags))
-            (when (string-equal type tag)
-              (let* ((choice (contact-which (contact/find path))))
-                (when (org-in-regexp org-link-any-re 1)
-                  (replace-match (contact/format 'link choice))))))
-          t))))
+      (let* ((link (or link (org-element-context)))
+             (type (org-element-property :type link))
+             (path (org-element-property :path link)))
+        (goto-char (org-element-property :begin link))
+        (dolist (tag (contact/org-tags))
+          (when (string-equal type tag)
+            (let* ((choice (contact-which (contact/find path)))
+                   (pos (org-in-regexp org-link-any-re 1)))
+              (when pos
+                (let ((start (car pos))
+                      (end (cdr pos)))
+                  (delete-region start end)
+                  (goto-char start)
+                  (insert (contact/format 'link choice))
+                  't))))))))
 
   (add-hook! org-ctrl-c-ctrl-c #'+org/update-contact-link))
 
@@ -111,10 +123,10 @@
                                                       c)))
                          (--display . "%u")
                          (--repersentation . ,(string-join
-                                                      (cl-loop for (_ c) on (plist-get body :formats) by #'cddr
-                                                               when (characterp c)
-                                                               collect (format "%%%c" c))
-                                                      " ")))
+                                               (cl-loop for (_ c) on (plist-get body :formats) by #'cddr
+                                                        when (characterp c)
+                                                        collect (format "%%%c" c))
+                                               " ")))
               :formatter (lambda (props)
                            (format-spec-make
                             ,@(cl-loop for (s c) on (plist-get body :formats) by #'cddr

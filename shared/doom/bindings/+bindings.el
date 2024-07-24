@@ -8,11 +8,14 @@
       :ng "q" #'execute-extended-command)
 
 
+
 (map!
  :i "S-SPC" #'completion-at-point
  :g "M-c" #'clipboard-kill-ring-save
- :g "M-v" #'clipboard-yank
- ;; <leader> -------------------------------------
+ :g "M-v" #'clipboard-yank)
+
+;; <leader> -------------------------------------
+(map!
  (:leader
   :desc "Org capture"             "x"    (cmd! (org-capture 'nil "i"))
   :desc "Pop up scratch buffer"   "X"    #'doom/open-scratch-buffer
@@ -20,10 +23,6 @@
   :desc "Right window"            :n "<right>"   #'evil-window-right
   :desc "Up window"               :n "<up>"      #'evil-window-up
   :desc "Down window"             :n "<down>"    #'evil-window-down
-  (:prefix ("e" . "generate")
-   :desc "send prompt"   "e" #'gptel-send
-   :desc "menu"          "m" #'gptel-menu
-   :desc "add context"   "c" #'gptel-context-add)
   (:prefix ("c" . "code")
    :desc "toggle between implementation and test"   "t" #'projectile-toggle-between-implementation-and-test)
   (:prefix ("b" . "buffer")
@@ -62,12 +61,18 @@
      :desc "Tree Follow" "o" #'dirvish-side-follow-mode)
    (:when (modulep! :private-tools git-utils)
      :desc "git blame" "B" #'global-blamer-mode))
+
+  (:prefix ("i" . "insert")
+           (:prefix ("l" . "link")
+                    (:when (featurep :system 'macos)
+                      :desc "Google Chrome"        "c"   #'org-mac-link-chrome-insert-frontmost-url
+                      :desc "Microsoft Outlook"    "o"   #'org-mac-link-outlook-message-insert-selected
+                      :desc "Finder"               "f"   #'org-mac-link-finder-insert-selected)))
   (:prefix ("l" . "link")
-   :desc "People"               "p"   #'contact/insert
-   (:when IS-MAC
-     :desc "Google Chrome"        "c"   #'org-mac-link-chrome-insert-frontmost-url
-     :desc "Microsoft Outlook"    "o"   #'org-mac-link-outlook-message-insert-selected
-     :desc "Finder"               "f"   #'org-mac-link-finder-insert-selected))
+           (:when (featurep :system 'macos)
+             :desc "Google Chrome"        "c"   #'org-mac-link-chrome-insert-frontmost-url
+             :desc "Microsoft Outlook"    "o"   #'org-mac-link-outlook-message-insert-selected
+             :desc "Finder"               "f"   #'org-mac-link-finder-insert-selected))
   (:prefix ("o" . "open")
    :desc "Google Search"      "g"   #'google-this
    (:when (modulep! :private-tools dirvish)
@@ -113,8 +118,10 @@
     :desc "Forward"                  "f" #'org-roam-dailies-goto-next-note
     :desc "Backward"                 "b" #'org-roam-dailies-goto-previous-note
     :desc "Date"                     "d" #'org-roam-dailies-goto-date
-    )))
- ;; <localleader> -------------------------------------
+    ))))
+
+;; <localleader> -------------------------------------
+(map!
  (:localleader
   (:prefix ("d" . "debug")
    :desc "debug"      "d" #'dap-debug
@@ -155,7 +162,7 @@
                  (org-agenda-files (directory-files-recursively
                                     org-directory
                                     "org$")))
-              (counsel-org-tag))))
+              (org-set-tags-command))))
    (:when (modulep! :editor evil)
      :after evil
      :map evil-org-mode-map
