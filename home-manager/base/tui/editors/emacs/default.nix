@@ -1,5 +1,5 @@
 # ==============================================
-# Based on doomemacs's auther's config:
+# Based on doomemacs's author's config:
 #   https://github.com/hlissner/dotfiles/blob/master/modules/editors/emacs.nix
 #
 # Emacs Tutorials:
@@ -10,11 +10,10 @@
   config,
   darwinConfig,
   lib,
-  mylib,
   pkgs,
   doomemacs,
   ...
-}@input:
+}:
 with lib; let
   cfg = config.modules.editors.emacs;
   shellExtra = ''
@@ -34,10 +33,11 @@ with lib; let
     }
   '';
 
-  myEmacsPackagesFor = emacs: ((pkgs.emacsPackagesFor emacs).emacsWithPackages (epkgs: with epkgs; [
-    vterm
-    treesit-grammars.with-all-grammars
-  ]));
+  myEmacsPackagesFor = emacs: ((pkgs.emacsPackagesFor emacs).emacsWithPackages (epkgs:
+    with epkgs; [
+      vterm
+      treesit-grammars.with-all-grammars
+    ]));
 in {
   options.modules.editors.emacs = {
     enable = mkEnableOption "Emacs Editor";
@@ -67,10 +67,7 @@ in {
         fd # faster projectile indexing
         zstd # for undo-fu-session/undo-tree compression
         pandoc # for ox-pandoc
-
-
-        # go-mode
-        # gocode # project archived, use gopls instead
+        jdk21_headless # for plantuml
 
         ## Module dependencies
         # :checkers spell
@@ -93,15 +90,14 @@ in {
     }
     ## Doom Configurations
     {
-
       xdg.configFile = {
         "emacs".source = doomemacs;
         "doom".source = config.lib.file.mkOutOfStoreSymlink "${config.xdg.configHome}/repos/dotfiles/shared/doom";
       };
 
       home.sessionVariables = {
-       DOOMLOCALDIR = "${config.xdg.stateHome}/doom";
-       DOOMPROFILELOADFILE = "${config.xdg.stateHome}/doom/etc/load.el";
+        DOOMLOCALDIR = "${config.xdg.stateHome}/doom";
+        DOOMPROFILELOADFILE = "${config.xdg.stateHome}/doom/etc/load.el";
       };
 
       home.activation.configBoundary = lib.hm.dag.entryAfter ["installPackages"] "";

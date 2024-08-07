@@ -1,12 +1,10 @@
 # https://github.com/noctuid/dotfiles/blob/master/nix/overlays/emacs.nix custom Emacs
 # use emacs-plus patches on osx
 # (eventually) use lucid on linux
-
 # relevant links:
 # https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/editors/emacs/generic.nix
 # https://github.com/nix-community/emacs-overlay/blob/master/overlays/emacs.nix
 # https://github.com/d12frosted/homebrew-emacs-plus/tree/master/patches/emacs-30
-
 _: self: super: rec {
   # configuration shared for all systems
   emacsGitNoctuidGeneric = super.emacs29-pgtk.override {
@@ -61,9 +59,10 @@ _: self: super: rec {
         # withGTK2 = false;
         withGTK3 = true;
         withXinput2 = true;
-      }).overrideAttrs(_: {
+      })
+      .overrideAttrs (_: {
         # for full control/testing (e.g. can't do lucid without cairo using
-        # builtin withs)
+        # builtin with's)
         configureFlags = [
           # for a (more) reproducible build
           "--disable-build-details"
@@ -77,26 +76,23 @@ _: self: super: rec {
           "--with-xinput2"
         ];
       });
-  emacsNoctuidWithPackages =
-    ((super.emacsPackagesFor emacsNoctuid).emacsWithPackages (epkgs: [
-      # necessary to install through nix to get libenchant integration working
-      epkgs.jinx
-      # not needed on linux but needed on mac
-      epkgs.vterm
-    ]));
+  emacsNoctuidWithPackages = (super.emacsPackagesFor emacsNoctuid).emacsWithPackages (epkgs: [
+    # necessary to install through nix to get libenchant integration working
+    epkgs.jinx
+    # not needed on linux but needed on mac
+    epkgs.vterm
+  ]);
 
   # for WSL with weston
-  emacsPgtk =
-    (emacsGitNoctuidGeneric.override {
-      # pgtk since wslg uses weston (at least by default)
-      withX = false;
-      withPgtk = true;
-    });
-  emacsPgtkWithPackages =
-    ((super.emacsPackagesFor emacsPgtk).emacsWithPackages (epkgs: [
-      # necessary to install through nix to get libenchant integration working
-      epkgs.jinx
-      # not needed but prevents need to compile on first run
-      epkgs.vterm
-    ]));
+  emacsPgtk = emacsGitNoctuidGeneric.override {
+    # pgtk since wslg uses weston (at least by default)
+    withX = false;
+    withPgtk = true;
+  };
+  emacsPgtkWithPackages = (super.emacsPackagesFor emacsPgtk).emacsWithPackages (epkgs: [
+    # necessary to install through nix to get libenchant integration working
+    epkgs.jinx
+    # not needed but prevents need to compile on first run
+    epkgs.vterm
+  ]);
 }

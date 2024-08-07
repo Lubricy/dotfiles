@@ -223,12 +223,12 @@ as a string when the request completes."
       (openai-chatcompletion-send-request
        messages
        (lambda (response)
-         (let ((formated-response (org-openai-format-response response)))
+         (let ((formatted-response (org-openai-format-response response)))
            (save-excursion
              (with-current-buffer buffer
                (goto-char (point-min))
                (when (search-forward placeholder nil t)
-                 (replace-match formated-response t t))))))))))
+                 (replace-match formatted-response t t))))))))))
 
 ;;;###autoload
 (defun org-openai-format-response (markdown)

@@ -37,8 +37,8 @@
     (format-spec fstring spec)))
 
 ;;;###autoload
-(defun contact--repersentation (contact)
-  (contact/format '--repersentation contact))
+(defun contact--representation (contact)
+  (contact/format '--representation contact))
 
 ;;;###autoload
 (defun contact-fetch (query)
@@ -75,21 +75,21 @@
 ;;;###autoload
 (defun contact-find-cache (query)
   (if query
-      (contact-find--cache (lambda (v) (string-match query (contact--repersentation v))))
+      (contact-find--cache (lambda (v) (string-match query (contact--representation v))))
     (contact-find--cache)))
 
 ;;;###autoload
-(defun contact--compelting-fn (query pred flag)
+(defun contact--completing-fn (query pred flag)
   (when (bound-and-true-p contact--debounce-timer)
     (cancel-timer contact--debounce-timer))
   (let ((candidates (contact-find--cache
                      (lambda (v)
-                       (let ((repersentation (contact--repersentation v)))
+                       (let ((representation (contact--representation v)))
                          (and (--all?
-                               (string-match it repersentation)
+                               (string-match it representation)
                                completion-regexp-list)
-                              (string-match query repersentation)
-                              (if pred (pred repersentation) t)))))))
+                              (string-match query representation)
+                              (if pred (pred representation) t)))))))
     (pcase flag
       ('t ;; all-completions
        (unless (or candidates (string-empty-p query))
@@ -106,7 +106,7 @@
     (`(,single) single)
     (_
      (completing-read
-      "Find Contact: " #'contact--compelting-fn
+      "Find Contact: " #'contact--completing-fn
       nil nil query))))
 
 ;;;###autoload

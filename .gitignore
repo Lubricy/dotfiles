@@ -2,3 +2,4 @@
 !/templates/local-vars/
 /config/lvim/lazy-lock.json
 /result
+/.pre-commit-config.yaml

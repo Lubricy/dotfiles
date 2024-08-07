@@ -573,7 +573,7 @@ uid                   [ultimate] test <test@test.t>
 sub   cv25519/0x9E78E897B6490D6B 2024-01-09 [E]
 
 # encrypt some file before revoke the keypair
-› gpg -aer test@test.t README.md > README.md.asc
+› gpg -a -e -r test@test.t README.md > README.md.asc
 
 # try to decrypt the file, it should works
 › gpg -d README.md.asc
@@ -640,7 +640,7 @@ gpg: reason for revocation: No reason specified
 # ......
 
 # try to encrypt some file via the revoked key, it will fail.
-› gpg -aer 9E78E897B6490D6B README.md
+› gpg -a -e -r 9E78E897B6490D6B README.md
 gpg: 9E78E897B6490D6B: skipped: Unusable public key
 gpg: README.md: encryption failed: Unusable public key
 ```
@@ -654,8 +654,6 @@ will be valid and usable again... which is very dangerous.
 - [Predictable, Passphrase-Derived PGP Keys][Predictable, Passphrase-Derived PGP Keys]
 - [OpenPGP - The almost perfect key pair][OpenPGP - The almost perfect key pair]
 
-[2021年，用更现代的方法使用PGP（上）]:
-  https://ulyc.github.io/2021/01/13/2021%E5%B9%B4-%E7%94%A8%E6%9B%B4%E7%8E%B0%E4%BB%A3%E7%9A%84%E6%96%B9%E6%B3%95%E4%BD%BF%E7%94%A8PGP-%E4%B8%8A/
+[2021年，用更现代的方法使用PGP（上）]: https://ulyc.github.io/2021/01/13/2021%E5%B9%B4-%E7%94%A8%E6%9B%B4%E7%8E%B0%E4%BB%A3%E7%9A%84%E6%96%B9%E6%B3%95%E4%BD%BF%E7%94%A8PGP-%E4%B8%8A/
 [Predictable, Passphrase-Derived PGP Keys]: https://nullprogram.com/blog/2019/07/10/
-[OpenPGP - The almost perfect key pair]:
-  https://blog.eleven-labs.com/en/openpgp-almost-perfect-key-pair-part-1/
+[OpenPGP - The almost perfect key pair]: https://blog.eleven-labs.com/en/openpgp-almost-perfect-key-pair-part-1/

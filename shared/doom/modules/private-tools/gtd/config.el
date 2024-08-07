@@ -75,7 +75,6 @@
   (setq org-edna-use-inheritance 1)
   (org-edna-mode 1)
   (setq org-gtd-engage-prefix-width 20)
-  (setq org-use-property-inheritance '("PROJECTILE_PROJECT"))
   (defun +org-set-proojectile-project-command ()
     (when (org-gtd-organize-type-member-p
            '(project-heading))

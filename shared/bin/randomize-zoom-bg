@@ -3,7 +3,7 @@
 JQ=jq
 
 ZOOMPATH="$HOME/Library/Application Support/zoom.us/data/VirtualBkgnd_Custom/"
-# to use this add an arbitary vertual background image in zoom and check the folder above
+# to use this add an arbitrary vertual background image in zoom and check the folder above
 # replace the UUID below with the uuid (filename) of the newly added image
 UUID="${ZOOM_BACKGROUND_UUID}"
 

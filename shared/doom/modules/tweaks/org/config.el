@@ -16,6 +16,9 @@
           ("HOLD" . +org-todo-onhold)
           ("CNCL" . +org-todo-cancel)
           ("TRASH" . org-done)))
+  (setq org-use-property-inheritance
+        (rx (or "PROJECTILE_PROJECT"
+                (: "GPTEL_" (* nonl)))))
 
   (unless (string-match-p "\\.gpg" org-agenda-file-regexp)
     (setq org-agenda-file-regexp

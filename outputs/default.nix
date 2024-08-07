@@ -56,7 +56,6 @@ in {
 
   checks = forAllSystems (
     system: {
-
       pre-commit-check = pre-commit-hooks.lib.${system}.run {
         src = mylib.relativeToRoot ".";
         hooks = {
@@ -73,7 +72,7 @@ in {
             enable = true;
             settings = {
               write = true; # Automatically format files
-              configPath = "./.prettierrc.yaml"; # relative to the flake root
+              # configPath = "./.prettierrc.yaml"; # relative to the flake root
             };
           };
           # deadnix.enable = true; # detect unused variable bindings in `*.nix`
@@ -111,7 +110,7 @@ in {
     }
   );
 
-  templates = import ../templates { inherit lib; };
+  templates = import ../templates {inherit lib;};
 
   # Format the nix code in this flake
   formatter = forAllSystems (

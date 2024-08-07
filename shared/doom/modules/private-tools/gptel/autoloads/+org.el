@@ -63,7 +63,7 @@
           messages)))))
 
 ;;;###autoload
-(defun +gptel-org-send (&optonal arg)
+(defun +gptel-org-send (&optional arg)
   (interactive "P")
   (let ((gptel-pre-response-hook (lambda ()
                                    (org-insert-heading)

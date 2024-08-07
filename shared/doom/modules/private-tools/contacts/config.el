@@ -122,7 +122,7 @@
                                                         (format "%%%c" c)
                                                       c)))
                          (--display . "%u")
-                         (--repersentation . ,(string-join
+                         (--representation . ,(string-join
                                                (cl-loop for (_ c) on (plist-get body :formats) by #'cddr
                                                         when (characterp c)
                                                         collect (format "%%%c" c))
