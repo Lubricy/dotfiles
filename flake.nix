@@ -1,7 +1,6 @@
 {
   description = "Nix configuration for both NixOS & macOS";
 
-
   outputs = inputs: import ./outputs inputs;
 
   # This is the standard format for flake.nix. `inputs` are the dependencies of the flake,
@@ -34,18 +33,18 @@
       # to avoid problems caused by different versions of nixpkgs dependencies.
       inputs.nixpkgs.follows = "nixpkgs";
     };
-   emacs-overlay = {
+    emacs-overlay = {
       url = "github:nix-community/emacs-overlay";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
       inputs.nixpkgs-stable.follows = "nixpkgs";
     };
 
-   # add git hooks to format nix code before commit
-   pre-commit-hooks = {
-      url = "github:cachix/pre-commit-hooks.nix";
+    # add git hooks to format nix code before commit
+    git-hooks = {
+      url = "github:cachix/git-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-   local-vars = {
+    local-vars = {
       url = "flake:nix-local-vars";
     };
     ########################  Some non-flake repositories  #########################################
@@ -54,7 +53,6 @@
     doomemacs = {
       url = "github:doomemacs/doomemacs";
       flake = false;
-
     };
     # An IDE layer for Neovim with sane defaults.
     kickstart = {

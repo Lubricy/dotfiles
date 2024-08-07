@@ -1,7 +1,7 @@
 {
   self,
   nixpkgs,
-  pre-commit-hooks,
+  git-hooks,
   local-vars,
   ...
 } @ inputs: let
@@ -56,7 +56,7 @@ in {
 
   checks = forAllSystems (
     system: {
-      pre-commit-check = pre-commit-hooks.lib.${system}.run {
+      pre-commit-check = git-hooks.lib.${system}.run {
         src = mylib.relativeToRoot ".";
         hooks = {
           alejandra.enable = true; # formatter
@@ -65,14 +65,13 @@ in {
             enable = true;
             settings = {
               write = true; # Automatically fix typos
-              configPath = "./.typos.toml"; # relative to the flake root
+              exclude = ''"^$"''; # HACK: trigger `--force-exclude`
             };
           };
           prettier = {
             enable = true;
             settings = {
               write = true; # Automatically format files
-              # configPath = "./.prettierrc.yaml"; # relative to the flake root
             };
           };
           # deadnix.enable = true; # detect unused variable bindings in `*.nix`
@@ -105,6 +104,7 @@ in {
         name = "dots";
         shellHook = ''
           ${self.checks.${system}.pre-commit-check.shellHook}
+          git config --local --unset-all core.hooksPath # HACK: prefer global hooksPath
         '';
       };
     }
