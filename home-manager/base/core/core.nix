@@ -27,9 +27,8 @@
     yq-go # yaml processor https://github.com/mikefarah/yq
 
     # nix related
-    #
-    # it provides the command `nom` works just like `nix
-    # with more details log output
+    # run any command on the fly
+    comma
 
     # productivity
   ];
@@ -145,5 +144,5 @@
       fi
       zle reset-prompt
     }
-    '';
+  '';
 }

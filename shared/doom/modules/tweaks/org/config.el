@@ -5,7 +5,7 @@
         org-attach-store-link-p 'attached
         org-attach-dir-relative t)
   (setq org-todo-keywords
-        '((sequence "TODO(t)" "NEXT(n)" "PROG(p)" "|" "DONE(d)")
+        '((sequence "TODO(t)" "NEXT(n)" "PROG(p)" "|" "DONE(d@/@)")
           (sequence "WAIT(w@/!)" "HOLD(h@/!)" "|" "CNCL(c@/!)" "TRASH(s)"))
         org-todo-keyword-faces
         '(("TODO" . +org-todo-onhold)
