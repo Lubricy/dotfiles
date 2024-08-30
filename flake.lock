@@ -178,8 +178,8 @@
     },
     "local-vars": {
       "locked": {
-        "lastModified": 1721712277,
-        "narHash": "sha256-a1hzCcIF5HuAzVndxKAZodJjAShlVpM6k7ojus3zSAE=",
+        "lastModified": 1724995365,
+        "narHash": "sha256-JzQ5KxqTqefnTKpofzDBLSpYAIlYc0QUUKabxd7gEZQ=",
         "path": "~/.config/nix-local-vars",
         "type": "path"
       },

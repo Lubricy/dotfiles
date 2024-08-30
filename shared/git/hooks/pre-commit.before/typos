@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+if command -v typos > /dev/null; then
+    typos -w
+else
+    echo "warning: gitleaks not installed."
+    exit 0
+fi

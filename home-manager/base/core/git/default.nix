@@ -22,6 +22,7 @@
     git-open
     git-crypt
     git-trim
+    typos
   ];
 
   xdg.configFile."git/hooks" = {
@@ -38,7 +39,7 @@
     ignores = lib.splitString "\n" (lib.fileContents (mylib.fromShared "git/global-gitignore"));
 
     includes = [
-      { path = "${config.xdg.configHome}/git/local/config"; }
+      {path = "${config.xdg.configHome}/git/local/config";}
     ];
 
     extraConfig = {

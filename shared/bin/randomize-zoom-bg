@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -eo pipefail
+
 JQ=jq
 
 ZOOMPATH="$HOME/Library/Application Support/zoom.us/data/VirtualBkgnd_Custom/"
@@ -11,6 +13,16 @@ UUID="${ZOOM_BACKGROUND_UUID}"
 LAT=38.9140
 LNG=121.6147
 
+_date() {
+  input_date=$1
+  if date --version >/dev/null 2>&1; then
+    # GNU syntax
+    date -u -d "$input_date" +%s
+  else
+    # BSD syntax
+    date -j -u -f "%Y-%m-%dT%H:%M:%S%z" "$input_date" +%s
+  fi
+}
 
 daytime () {
   # sunrise-sunset
@@ -20,8 +32,8 @@ daytime () {
       "https://api.sunrise-sunset.org/json?lat=$LAT&lng=$LNG&formatted=0" |\
     $JQ -rj '.results | .sunrise," ",.sunset')
 
-  SUNRISE=$(date -j -u -f "%FT%T" "${timespan[0]}" +"%s" 2> /dev/null)
-  SUNSET=$(date -j -u -f "%FT%T" "${timespan[1]}" +"%s" 2> /dev/null)
+  SUNRISE=$(_date "${timespan[0]}" 2> /dev/null)
+  SUNSET=$(_date "${timespan[1]}" 2> /dev/null)
   NOW="$(date +%s)"
   if [ "$SUNSET" -ge "$NOW" ] && [ "$NOW" -ge "$SUNRISE" ]; then
     echo DAY
@@ -31,16 +43,18 @@ daytime () {
 }
 
 get_pexels () {
-  KW_DAY='abstract art backgrounds'
-  KW_NIGHT='abstract art backgrounds dark'
-  KW_NOW="KW_$(daytime)"
-  : ${ZOOM_BG_KEYWORDS:="${!KW_NOW}"}
+  COLOR_DAY="white"
+  COLOR_NIGHT="black"
+  ZOOM_BG_KEYWORDS='abstract art backgrounds'
+  COLOR_NOW="COLOR_$(daytime)"
 
   TOTAL=$(curl \
     -H "Authorization: $PEXELS_API_KEY" \
     -fsSL -G \
     --proxy $HTTP_PROXY \
     --data-urlencode "query=$ZOOM_BG_KEYWORDS" \
+    --data-urlencode "color=$COLOR_NOW" \
+    --data-urlencode "orientation=landscape" \
     "https://api.pexels.com/v1/search" |\
     $JQ -r '.total_results')
 
