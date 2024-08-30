@@ -2,6 +2,7 @@
   (let ((template (buffer-string))
         (diff-str))
     (erase-buffer)
+    (magit-fetch)
     (insert "#+begin_diff\n")
     (magit-git-insert "diff" (format "%s...%s" forge--buffer-base-branch forge--buffer-head-branch))
     (insert "\n#+end_diff")
