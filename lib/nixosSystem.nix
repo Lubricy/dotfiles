@@ -8,7 +8,7 @@
   specialArgs ? {},
   ...
 }: let
-  inherit (inputs) home-manager nixos-generators;
+  inherit (inputs) home-manager nixos-generators nix-index-database;
   inherit (vars) system;
 in
   lib.nixosSystem {
@@ -19,6 +19,7 @@ in
         ../modules/nixos
         ./overlays.nix
         nixos-generators.nixosModules.all-formats
+        nix-index-database.nixosModules.nix-index
         {
           inherit vars;
           imports = nixos-modules;

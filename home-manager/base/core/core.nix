@@ -26,10 +26,6 @@
     pandoc
     yq-go # yaml processor https://github.com/mikefarah/yq
 
-    # nix related
-    # run any command on the fly
-    comma
-
     # productivity
   ];
 

@@ -8,7 +8,7 @@
   specialArgs ? {},
   ...
 }: let
-  inherit (inputs) nixpkgs-darwin home-manager nix-darwin;
+  inherit (inputs) nixpkgs-darwin home-manager nix-darwin nix-index-database;
   inherit (vars) system;
 in
   nix-darwin.lib.darwinSystem {
@@ -17,6 +17,7 @@ in
       [
         ../modules/darwin
         ./overlays.nix
+        nix-index-database.darwinModules.nix-index
         {
           inherit vars;
           nixpkgs.pkgs = import nixpkgs-darwin {inherit system;};
