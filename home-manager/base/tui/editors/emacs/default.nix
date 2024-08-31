@@ -100,7 +100,14 @@ in {
         DOOMPROFILELOADFILE = "${config.xdg.stateHome}/doom/etc/load.el";
       };
 
-      home.activation.configBoundary = lib.hm.dag.entryAfter ["installPackages"] "";
+      home.activation.configBoundary = lib.hm.dag.entryAfter ["installPackages"] ''
+        __OLD_PATH="$PATH"
+        set +u
+        source /etc/set-environment
+        source ${config.home.sessionVariablesPackage}/etc/profile.d/hm-session-vars.sh
+        set -u
+        export PATH="$__OLD_PATH:$PATH"
+      '';
       home.sessionPath = [
         "${config.xdg.configHome}/emacs/bin"
       ];
@@ -108,11 +115,8 @@ in {
       # TODO find a way to inject path for syncDoomEmacs only
       # https://github.com/nix-community/home-manager/blob/master/modules/home-environment.nix
       # source ${darwinConfig.system.build.setEnvironment}
-      home.emptyActivationPath = false;
+      # home.emptyActivationPath = false;
       home.activation.syncDoomEmacs = lib.hm.dag.entryAfter ["configBoundary"] ''
-        set +u
-        source ${config.home.sessionVariablesPackage}/etc/profile.d/hm-session-vars.sh
-        set -u
         run ${config.xdg.configHome}/emacs/bin/doom sync
       '';
 

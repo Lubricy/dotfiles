@@ -1,5 +1,6 @@
 {
   lib,
+  config,
   nixpkgs,
   ...
 }: {
@@ -36,4 +37,6 @@
   # make `nix repl '<nixpkgs>'` use the same nixpkgs as the one used by this flake.
   # discard all the default paths, and only use the one from this flake.
   nix.nixPath = lib.mkForce ["/etc/nix/inputs"];
+  # taken from github:nixos/nixpkgs/nixos/modules/config/shells-environment.nix
+  environment.etc."set-environment".source = config.system.build.setEnvironment;
 }
