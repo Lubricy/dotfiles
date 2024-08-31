@@ -1,12 +1,11 @@
-{lib, ...}:
-{
+{lib, ...}: {
   repo,
   mappings ? {},
   extraMappings ? {},
-  hooks ? {}
-}:
-let
-  buildLinkScript = lib.attrsets.mapAttrsToList
+  hooks ? {},
+}: let
+  buildLinkScript =
+    lib.attrsets.mapAttrsToList
     (path: link: ''
       if [ -e "$repoPath/${path}" ]; then
         if [ ! -e "${link}" ]; then
@@ -20,46 +19,49 @@ let
       fi
     '');
   linkFiles = lib.strings.concatLines (
-    (if lib.lists.length (builtins.attrNames mappings) == 0
-     then [
-       ''
-        if [ -d "$repoPath/home" ]; then
-          for file in $(find "$repoPath/home" -type l -print); do
-            link="$HOME/$(removePrefix "$repoPath/home/" "$file")"
-            if [ ! -e "$link" ]; then
-              mkdir -p $(dirname "$link")
-              ln -s "$file" "$link"
-            fi
-          done
-        fi
-      ''
-     ]
-     else buildLinkScript mappings
-    ) ++ buildLinkScript extraMappings);
+    (
+      if lib.lists.length (builtins.attrNames mappings) == 0
+      then [
+        ''
+          if [ -d "$repoPath/home" ]; then
+            for file in $(find "$repoPath/home" -type l -print); do
+              link="$HOME/$(removePrefix "$repoPath/home/" "$file")"
+              if [ ! -e "$link" ]; then
+                mkdir -p $(dirname "$link")
+                ln -s "$file" "$link"
+              fi
+            done
+          fi
+        ''
+      ]
+      else buildLinkScript mappings
+    )
+    ++ buildLinkScript extraMappings
+  );
 in ''
-run cat <<'EOF' | bash -eo pipefail
-  removePrefix() {
-    local prefix="$1"
-    local string="$2"
-    echo "''${string#$prefix}"
-  }
+  run cat <<'EOF' | bash -eo pipefail
+    removePrefix() {
+      local prefix="$1"
+      local string="$2"
+      echo "''${string#$prefix}"
+    }
 
-  main() {
-    dest="$HOME/.config/repos"
-    repoPath="$dest/${repo.name}"
+    main() {
+      dest="$HOME/.config/repos"
+      repoPath="$dest/${repo.name}"
 
-    if [ ! -d "$repoPath" ]; then
-      mkdir -p $dest
-      git clone "${repo.url}" "$repoPath"
-      pushd "$repoPath"
-      ${hooks.postClone or ""}
-      popd
-    else
-      echo "$repoPath exists. Skipping..."
-    fi
-    ${linkFiles}
-  }
+      if [ ! -d "$repoPath" ]; then
+        mkdir -p $dest
+        git clone "${repo.url}" "$repoPath"
+        pushd "$repoPath"
+        ${hooks.postClone or ""}
+        popd
+      else
+        echo "$repoPath exists. Skipping..."
+      fi
+      ${linkFiles}
+    }
 
-  main
-EOF
+    main
+  EOF
 ''

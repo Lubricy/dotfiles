@@ -31,6 +31,7 @@ in {
   darwinModules.default = import (self.lib.dot.relativeToRoot "modules/darwin");
   hmModules = rec {
     base = import (self.lib.dot.relativeToRoot "home-manager/base");
+    nixos = import (self.lib.dot.relativeToRoot "home-manager/nixos");
     darwin = import (self.lib.dot.relativeToRoot "home-manager/darwin");
     default = base;
   };

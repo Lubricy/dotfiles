@@ -21,7 +21,6 @@
 # TODO Fell free to modify this file to fit your needs.
 #
 ##########################################################################
-
 {
   # Install packages from nix's official package repository.
   #
@@ -32,21 +31,19 @@
   environment.systemPackages = with pkgs; [
     neovim
     git
-    nushell # my custom shell
+    # nushell # custom shell
     gnugrep # replacee macos's grep
     gnutar # replacee macos's tar
 
     # darwin only apps
     utm # virtual machine
   ];
-  environment.variables =
-    {
-      # Fix https://github.com/LnL7/nix-darwin/wiki/Terminfo-issues
-      TERMINFO_DIRS = map (path: path + "/share/terminfo") config.environment.profiles ++ ["/usr/share/terminfo"];
+  environment.variables = {
+    # Fix https://github.com/LnL7/nix-darwin/wiki/Terminfo-issues
+    TERMINFO_DIRS = map (path: path + "/share/terminfo") config.environment.profiles ++ ["/usr/share/terminfo"];
 
-      EDITOR = "nvim";
-    };
-
+    EDITOR = "nvim";
+  };
 
   # Create /etc/zshrc that loads the nix-darwin environment.
   # this is required if you want to use darwin's default shell - zsh

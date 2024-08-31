@@ -2,6 +2,6 @@
   imports =
     (lib.dot.scanPaths ./.)
     ++ [
-      ../common
+      ../base
     ];
 }

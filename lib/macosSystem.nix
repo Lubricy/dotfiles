@@ -5,13 +5,14 @@
   vars,
   darwin-modules,
   home-modules ? [],
+  specialArgs ? [],
   ...
 }: let
   inherit (inputs) nixpkgs-darwin home-manager nix-darwin;
   inherit (vars) system;
 in
   nix-darwin.lib.darwinSystem {
-    specialArgs = {inherit lib system;} // inputs;
+    specialArgs = {inherit lib system;} // inputs // specialArgs;
     modules =
       [
         ../modules/darwin
@@ -31,7 +32,7 @@ in
             home-manager.useUserPackages = true;
 
             home-manager.backupFileExtension = "bak";
-            home-manager.extraSpecialArgs = inputs;
+            home-manager.extraSpecialArgs = inputs // specialArgs;
             home-manager.users."${config.vars.username}".imports = home-modules ++ [{inherit vars;}];
           })
         ]
