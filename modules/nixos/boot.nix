@@ -1,6 +1,4 @@
 {pkgs, ...}: {
-  networking.useDHCP = false;
-  networking.interfaces.enp34s0.useDHCP = true;
   services.lvm.enable = true;
   boot = {
     initrd.services.lvm.enable = true;

@@ -5,7 +5,7 @@
   vars,
   nixos-modules,
   home-modules ? [],
-  specialArgs ? [],
+  specialArgs ? {},
   ...
 }: let
   inherit (inputs) home-manager nixos-generators;

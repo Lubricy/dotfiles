@@ -5,7 +5,7 @@
   vars,
   darwin-modules,
   home-modules ? [],
-  specialArgs ? [],
+  specialArgs ? {},
   ...
 }: let
   inherit (inputs) nixpkgs-darwin home-manager nix-darwin;
