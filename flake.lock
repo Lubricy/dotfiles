@@ -176,18 +176,6 @@
         "type": "github"
       }
     },
-    "local-vars": {
-      "locked": {
-        "lastModified": 1724995365,
-        "narHash": "sha256-JzQ5KxqTqefnTKpofzDBLSpYAIlYc0QUUKabxd7gEZQ=",
-        "path": "~/.config/nix-local-vars",
-        "type": "path"
-      },
-      "original": {
-        "id": "nix-local-vars",
-        "type": "indirect"
-      }
-    },
     "nix-darwin": {
       "inputs": {
         "nixpkgs": ["nixpkgs-darwin"]
@@ -295,7 +283,6 @@
         "git-hooks": "git-hooks",
         "home-manager": "home-manager",
         "kickstart": "kickstart",
-        "local-vars": "local-vars",
         "nix-darwin": "nix-darwin",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",

@@ -1,11 +1,6 @@
-{
-  config,
-  mylib,
-  myvars,
-  ...
-}: {
+{lib, ...}: {
   services.skhd = {
     enable = true;
-    skhdConfig = builtins.readFile (mylib.fromShared "skhd/skhdrc");
+    skhdConfig = builtins.readFile (lib.dot.fromShared "skhd/skhdrc");
   };
 }

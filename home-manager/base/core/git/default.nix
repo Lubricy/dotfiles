@@ -2,8 +2,6 @@
   config,
   lib,
   pkgs,
-  myvars,
-  mylib,
   ...
 }: {
   # `programs.git` will generate the config file: ~/.config/git/config
@@ -26,7 +24,7 @@
   ];
 
   xdg.configFile."git/hooks" = {
-    source = mylib.fromShared "git/hooks";
+    source = lib.dot.fromShared "git/hooks";
   };
 
   programs.git = {
@@ -36,7 +34,7 @@
     userName = "Lubricy Fibber";
     userEmail = "lubricy@gmail.com";
 
-    ignores = lib.splitString "\n" (lib.fileContents (mylib.fromShared "git/global-gitignore"));
+    ignores = lib.splitString "\n" (lib.fileContents (lib.dot.fromShared "git/global-gitignore"));
 
     includes = [
       {path = "${config.xdg.configHome}/git/local/config";}

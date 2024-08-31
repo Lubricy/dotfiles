@@ -1,11 +1,13 @@
-{lib, ...}: {
-  # TODO: refactor mylib => lib.my
+{
+  lib,
+  inputs,
+}: {
   # https://github.com/nix-community/home-manager/blob/master/modules/lib/stdlib-extended.nix
-  macosSystem = import ./macosSystem.nix;
-  nixosSystem = import ./nixosSystem.nix;
+  macosSystem = import ./macosSystem.nix {inherit lib inputs;};
+  nixosSystem = import ./nixosSystem.nix {inherit lib inputs;};
 
   attrs = import ./attrs.nix {inherit lib;};
-  linkRepo = import ./linkRepo.nix {inherit lib; };
+  linkRepo = import ./linkRepo.nix {inherit lib;};
 
   # use path relative to the root of the project
   relativeToRoot = lib.path.append ../.;

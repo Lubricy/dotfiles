@@ -162,10 +162,6 @@ in {
             KeepAlive = true;
           };
         };
-
-        services.yabai = {
-          extraConfig = lib.mkAfter "yabai -m rule --add title='doom-capture' manage=off grid=5:5:1:1:3:3";
-        };
       }
     ))
   ]);

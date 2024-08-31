@@ -1,37 +1,39 @@
 {
   lib,
   inputs,
+}: {
+  vars,
   darwin-modules,
   home-modules ? [],
-  myvars,
-  system,
-  genSpecialArgs,
-  specialArgs ? (genSpecialArgs system),
   ...
-}@args: let
+}: let
   inherit (inputs) nixpkgs-darwin home-manager nix-darwin;
+  inherit (vars) system;
 in
   nix-darwin.lib.darwinSystem {
-    inherit system specialArgs;
-    modules = [(import ./overlays.nix args)]
-      ++ darwin-modules
-      ++ [
-        ({lib, ...}: {
+    specialArgs = {inherit lib system;} // inputs;
+    modules =
+      [
+        ../modules/darwin
+        ./overlays.nix
+        {
+          inherit vars;
           nixpkgs.pkgs = import nixpkgs-darwin {inherit system;};
-        })
+          imports = darwin-modules;
+        }
       ]
       ++ (
         lib.optionals ((lib.lists.length home-modules) > 0)
-          [
-            home-manager.darwinModules.home-manager
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
+        [
+          home-manager.darwinModules.home-manager
+          ({config, ...}: {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
 
-              home-manager.backupFileExtension = "bak";
-              home-manager.extraSpecialArgs = specialArgs;
-              home-manager.users."${myvars.username}".imports = home-modules;
-            }
-          ]
+            home-manager.backupFileExtension = "bak";
+            home-manager.extraSpecialArgs = inputs;
+            home-manager.users."${config.vars.username}".imports = home-modules ++ [{inherit vars;}];
+          })
+        ]
       );
   }

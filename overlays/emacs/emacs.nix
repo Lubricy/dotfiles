@@ -1,1 +1,1 @@
-{inputs, ...}: inputs.emacs-overlay.overlays.emacs
+{emacs-overlay, ...}: emacs-overlay.overlays.emacs

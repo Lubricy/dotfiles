@@ -1,6 +1,9 @@
-{inputs, system, ...}:
-(self: super: {
-  unstable = import inputs.nixpkgs-unstable {
+{
+  system,
+  nixpkgs-unstable,
+  ...
+}: (self: super: {
+  unstable = import nixpkgs-unstable {
     inherit system;
     overlays = super.overlays;
   };

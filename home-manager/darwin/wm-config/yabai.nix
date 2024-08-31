@@ -1,11 +1,4 @@
-{
-  config,
-  myvars,
-  mylib,
-  ...
-}: let
-  homeDir = config.users.users."${myvars.username}".home;
-in {
+{lib, ...}: {
   # https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/by-name/ya/yabai/package.nix
   services.yabai = {
     enable = true;
@@ -15,7 +8,7 @@ in {
     # https://github.com/koekeishiya/yabai/wiki/Disabling-System-Integrity-Protection
     # enableScriptingAddition = false;
     # config = {};
-    extraConfig = builtins.readFile (mylib.fromShared "yabai/yabairc");
+    extraConfig = builtins.readFile (lib.dot.fromShared "yabai/yabairc");
   };
 
   # custom log path for debugging

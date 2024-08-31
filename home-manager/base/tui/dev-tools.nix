@@ -1,6 +1,6 @@
 {
   pkgs,
-  mylib,
+  lib,
   ...
 }: {
   #############################################################
@@ -15,7 +15,6 @@
   #############################################################
 
   home.packages = with pkgs; [
-
     # db related
     sqlite
 
@@ -32,7 +31,7 @@
     # It's really useful when you work on a project for a long time.
   ];
 
-  home.file.".jq".source = mylib.fromShared "jq";
+  home.file.".jq".source = lib.dot.fromShared "jq";
 
   programs = {
     direnv = {
