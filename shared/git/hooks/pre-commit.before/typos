@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 if command -v typos > /dev/null; then
-    typos -w
+  git diff --cached --name-only --diff-filter=ACM |\
+    xargs --no-run-if-empty typos --write-changes --force-exclude
 else
-    echo "warning: gitleaks not installed."
+    echo "warning: typos not installed."
     exit 0
 fi
