@@ -16,5 +16,6 @@
         ./home.nix
       ];
     };
+    packages.${system}.default = dotfiles.inputs.nix-darwin.packages.${system}.default;
   };
 }
