@@ -100,6 +100,7 @@ in {
     system: nixpkgs.legacyPackages.${system}.alejandra
   );
 
+  overlays.default = import ../lib/overlays.nix ({lib = self.lib;} // inputs);
   # Add attribute sets into outputs, for debugging
   # debugAttrs = {inherit nixosSystems darwinSystems allSystems allSystemNames;};
 }

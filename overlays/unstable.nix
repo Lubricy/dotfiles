@@ -1,10 +1,5 @@
-{
-  system,
-  nixpkgs-unstable,
-  ...
-}: (self: super: {
+{nixpkgs-unstable, ...}: (self: super: {
   unstable = import nixpkgs-unstable {
-    inherit system;
-    overlays = super.overlays;
+    inherit (super) system overlays;
   };
 })
