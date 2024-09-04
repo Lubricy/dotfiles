@@ -8,7 +8,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     dotfiles = {
-      url = github:Lubricy/dotfiles;
+      url = "github:Lubricy/dotfiles";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -39,5 +39,6 @@
       # to pass through arguments to home.nix
       extraSpecialArgs = dotfiles.inputs // inputs;
     };
+    packages.${system}.default = home-manager.packages.${system}.default;
   };
 }
