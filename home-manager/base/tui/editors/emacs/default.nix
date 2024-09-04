@@ -8,7 +8,6 @@
 #
 {
   config,
-  # darwinConfig,
   lib,
   pkgs,
   doomemacs,
@@ -100,6 +99,7 @@ in {
         DOOMPROFILELOADFILE = "${config.xdg.stateHome}/doom/etc/load.el";
       };
 
+      # NOTE: set-environment populated in modules/darwin/nix-core.nix
       home.activation.configBoundary = lib.hm.dag.entryAfter ["installPackages"] ''
         __OLD_PATH="$PATH"
         set +u
@@ -112,9 +112,6 @@ in {
         "${config.xdg.configHome}/emacs/bin"
       ];
 
-      # TODO find a way to inject path for syncDoomEmacs only
-      # https://github.com/nix-community/home-manager/blob/master/modules/home-environment.nix
-      # source ${darwinConfig.system.build.setEnvironment}
       # home.emptyActivationPath = false;
       home.activation.syncDoomEmacs = lib.hm.dag.entryAfter ["configBoundary"] ''
         run ${config.xdg.configHome}/emacs/bin/doom sync

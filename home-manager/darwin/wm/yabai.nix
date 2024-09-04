@@ -1,8 +1,10 @@
-{ config, darwinConfig, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.yabai;
 
   toYabaiConfig = opts:
@@ -10,15 +12,17 @@ let
       (p: v: "yabai -m config ${p} ${toString v}")
       opts);
 
-  configFile = mkIf (cfg.config != { } || cfg.extraConfig != "")
+  configFile =
+    mkIf (cfg.config != {} || cfg.extraConfig != "")
     "${pkgs.writeScript "yabairc" (
-      (if (cfg.config != {})
-       then "${toYabaiConfig cfg.config}"
-       else "")
-      + optionalString (cfg.extraConfig != "") ("\n" + cfg.extraConfig + "\n"))}";
-in
-
-{
+      (
+        if (cfg.config != {})
+        then "${toYabaiConfig cfg.config}"
+        else ""
+      )
+      + optionalString (cfg.extraConfig != "") ("\n" + cfg.extraConfig + "\n")
+    )}";
+in {
   options = with types; {
     services.yabai.enable = mkOption {
       type = bool;
@@ -34,7 +38,7 @@ in
 
     services.yabai.config = mkOption {
       type = attrs;
-      default = { };
+      default = {};
       example = literalExpression ''
         {
           focus_follows_mouse = "autoraise";
@@ -65,18 +69,19 @@ in
 
   config = mkMerge [
     (mkIf (cfg.enable) {
-      home.packages  = [ cfg.package ];
+      home.packages = [cfg.package];
 
       launchd.agents.yabai = {
         enable = true;
         config = {
-          ProgramArguments = [ "${cfg.package}/bin/yabai" ]
-                             ++ optionals (cfg.config != { } || cfg.extraConfig != "") [ "-c" configFile ];
+          ProgramArguments =
+            ["${cfg.package}/bin/yabai"]
+            ++ optionals (cfg.config != {} || cfg.extraConfig != "") ["-c" configFile];
 
           KeepAlive = true;
           RunAtLoad = true;
           EnvironmentVariables = {
-            PATH = "${cfg.package}/bin:${darwinConfig.environment.systemPath}";
+            PATH = "${cfg.package}/bin:/bin"; # yabai need `sh` exists in $PATH
           };
 
           StandardErrorPath = "${config.home.homeDirectory}/Library/Logs/yabai.stderr.log";
