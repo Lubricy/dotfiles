@@ -94,6 +94,15 @@ in {
         "doom".source = config.lib.file.mkOutOfStoreSymlink "${config.xdg.configHome}/repos/dotfiles/shared/doom";
       };
 
+      home.activation.fetchDotfilesForEmacs = lib.hm.dag.entryAfter ["configBoundary"] ''
+        __dotfileRepoPath="${config.vars.dotfilesLocalPath}"
+        if [ -d "$__dotfileRepoPath" ]; then
+          echo "$__dotfileRepoPath exists. Skipping..."
+        else
+          git clone "${config.vars.dotfilesUrl}" "$__dotfileRepoPath"
+        fi
+      '';
+
       home.sessionVariables = {
         DOOMLOCALDIR = "${config.xdg.stateHome}/doom";
         DOOMPROFILELOADFILE = "${config.xdg.stateHome}/doom/etc/load.el";

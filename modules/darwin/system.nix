@@ -40,6 +40,7 @@
       # customize dock
       dock = {
         autohide = true; # automatically hide and show the dock
+        autohide-delay = 0.0; # Remove the Dock opening delay. autohide must be set to true
         # show-recents = false; # do not show recent apps in dock
         # do not automatically rearrange spaces based on most recent use.
         mru-spaces = false;

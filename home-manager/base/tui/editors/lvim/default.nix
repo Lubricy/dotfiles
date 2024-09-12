@@ -3,9 +3,8 @@
   lib,
   pkgs,
   ...
-}:
-with lib;
-let
+}: let
+  inherit (lib) mkOption mkEnableOption types mkIf;
   cfg = config.modules.editors.lvim;
   shellAliases = {
     v = "nvim";
@@ -18,41 +17,51 @@ in {
       type = types.bool;
       default = true;
       description = ''
-          Symlink {command}`vi` to {command}`lvim` binary.
-        '';
+        Symlink {command}`vi` to {command}`lvim` binary.
+      '';
     };
 
     vimAlias = mkOption {
       type = types.bool;
       default = true;
       description = ''
-          Symlink {command}`vim` to {command}`lvim` binary.
-        '';
+        Symlink {command}`vim` to {command}`lvim` binary.
+      '';
     };
     nvimAlias = mkOption {
       type = types.bool;
       default = true;
       description = ''
-          Symlink {command}`nvim` to {command}`lvim` binary.
-        '';
+        Symlink {command}`nvim` to {command}`lvim` binary.
+      '';
     };
     defaultEditor = mkOption {
       type = types.bool;
       default = true;
       description = ''
-          Whether to configure {command}`lvim` as the default
-          editor using the {env}`EDITOR` environment variable.
-        '';
+        Whether to configure {command}`lvim` as the default
+        editor using the {env}`EDITOR` environment variable.
+      '';
     };
   };
   config = mkIf cfg.enable {
     home.shellAliases = shellAliases;
-    home.sessionVariables = mkIf cfg.defaultEditor { EDITOR = "lvim"; };
+    home.sessionVariables = mkIf cfg.defaultEditor {EDITOR = "lvim";};
 
     #  programs.nushell.shellAliases = shellAliases;
-    home.packages = [ (pkgs.lunarvim.override {
-      inherit (cfg) viAlias vimAlias nvimAlias;
-    }) ];
+    home.packages = [
+      (pkgs.lunarvim.override {
+        inherit (cfg) viAlias vimAlias nvimAlias;
+      })
+    ];
+    home.activation.fetchDotfilesForLvim = lib.hm.dag.entryAfter ["configBoundary"] ''
+      __dotfileRepoPath="${config.vars.dotfilesLocalPath}"
+      if [ -d "$__dotfileRepoPath" ]; then
+        echo "$__dotfileRepoPath exists. Skipping..."
+      else
+        git clone "${config.vars.dotfilesUrl}" "$__dotfileRepoPath"
+      fi
+    '';
     xdg.configFile."lvim".source = config.lib.file.mkOutOfStoreSymlink "${config.xdg.configHome}/repos/dotfiles/shared/lvim";
   };
 }
