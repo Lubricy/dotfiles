@@ -1,13 +1,8 @@
 ;;; ~/.doom.d/+bindings.el -*- lexical-binding: t; -*-
 
-(when (modulep! :editor format +onsave)
-  (setq +enable-global-format-all t))
-
 (map! :map transient-map
       :ng "ESC" #'transient-quit-one
       :ng "q" #'execute-extended-command)
-
-
 
 (map!
  :i "S-SPC" #'completion-at-point

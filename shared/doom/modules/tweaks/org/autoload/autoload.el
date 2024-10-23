@@ -4,6 +4,16 @@
     (org-redisplay-inline-images)))
 
 ;;;###autoload
+(defun ek/babel-ansi ()
+  (when-let ((beg (org-babel-where-is-src-block-result nil nil)))
+    (save-excursion
+      (goto-char beg)
+      (when (looking-at org-babel-result-regexp)
+        (let ((end (org-babel-result-end))
+              (ansi-color-context-region nil))
+          (ansi-color-apply-on-region beg end))))))
+
+;;;###autoload
 (defun lubricy/org-babel-node-setenv (&optional root)
   (interactive "DProject root:")
   (let ((root (or root (projectile-locate-dominating-file default-directory "package.json"))))

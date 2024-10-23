@@ -4,20 +4,14 @@
   :config
   (setq! gptel-default-mode 'org-mode)
   (setq! gptel-org-branching-context 't)
+  (setq! gptel-directives
+         '((default . "You are a large language model living in Emacs and a helpful assistant. Respond concisely. I'm looking for best result possible. Before you give me the answer, ask me everything you need to know to give me the best result possible. Be sure to ask questions one at a time since this is an interactive session.")
+           (programming . "You are a large language model and a careful programmer. Provide code and only code as output without any additional text, prompt or note.")
+           (writing . "You are a large language model and a writing assistant. Respond concisely.")
+           (chat . "You are a large language model and a conversation partner. Respond concisely. I'm looking for best result possible. Before you give me the answer, ask me everything you need to know to give me the best result possible. Be sure to ask questions one at a time since this is an interactive session.")))
+
   (require 'gptel-context)
-  (evil-set-initial-state 'gptel-context-buffer-mode 'emacs)
-  (map!
-   :g "C-c C-g" #'gptel-send
-   :g "C-c g" #'gptel-send
-   (:leader
-    (:prefix ("i" . "insert")
-     :desc "generative AI" "g" #'gptel-send)
-    (:prefix ("e" . "generate")
-     :desc "send prompt" "e" #'gptel-send
-     :desc "generative complete" "r" #'starhugger-trigger-suggestion
-     :desc "menu" "m" #'gptel-menu
-     :desc "add context" "c" #'gptel-context-add
-     :desc "examine context" "C" #'gptel--suffix-context-buffer))))
+  (evil-set-initial-state 'gptel-context-buffer-mode 'emacs))
 
 ;;;###autoload
 (defun +gptel-openai-get-api-key ()
@@ -42,19 +36,12 @@
       +gptel-openai-api-key))
   +gptel-openai-api-key)
 
-
 (use-package! starhugger
   :after prog-mode
   :config
   (setq starhugger-completion-backend-function #'starhugger-ollama-auth-completion-api)
-  (map!
-   :map starhugger-inlining-mode-map
-   :g "<SPC>" (starhugger-inline-menu-item #'starhugger-accept-suggestion-by-line)
-   :g "<RET>" (starhugger-inline-menu-item #'starhugger-accept-suggestion)
-   :g "n" (starhugger-inline-menu-item #'starhugger-show-next-suggestion)
-   :g "p" (starhugger-inline-menu-item #'starhugger-show-prev-suggestion)))
-
-
+  (add-to-list 'global-mode-string '(:propertize (starhugger-auto-mode "")
+                                     face doom-modeline-notification)))
 
 (defcustom starhugger-ollama-additional-headers-alist
   '((options) (stream . :false))
