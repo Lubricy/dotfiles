@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 if command -v typos > /dev/null; then
   git diff --cached --name-only --diff-filter=ACM |\
-    xargs --no-run-if-empty typos --write-changes --force-exclude
+    xargs --no-run-if-empty typos --write-changes --force-exclude --config ${XDG_CONFIG_DIR:-$HOME/.config}/git/typos.default.toml
 else
     echo "warning: typos not installed."
     exit 0
