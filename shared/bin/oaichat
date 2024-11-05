@@ -4,9 +4,9 @@ set -eo pipefail
 
 # customizable variables
 MODEL=${OAI_MODEL:-'@cf/meta/llama-3.2-11b-vision-instruct'}
-TOKEN=${OAI_API_KEY}
-BASE_URL=${OAI_BASE_URL:-'https://api.cloudflare.com/client/v4/accounts/'}
-CLIENT_ID=${OAI_CLIENT_ID:}
+TOKEN=${OAI_API_KEY:-"$(pass t/cf-ai | head -n 1)"}
+BASE_URL=${OAI_BASE_URL:-'https://api.cloudflare.com/client/v4/accounts'}
+CLIENT_ID=${OAI_CLIENT_ID:-"$(pass t/cf-ai | tail -n 1)"}
 TEMPLATES_DIR=${OAI_TEMPLATES_DIR:-"${XDG_CONFIG_HOME:-"$HOME/.config"}/oaichat"}
 PROVIDER=${OAI_MODEL_PROVIDER:-'cloudflare'}
 
@@ -85,9 +85,13 @@ PAYLOAD="$(jq -n \
 
 case "$PROVIDER" in
   "cloudflare")
-      ENDPOINT="$BASE_URL/ai/run/$MODEL" ;;
+      ENDPOINT="$BASE_URL/$CLIENT_ID/ai/run/$MODEL" 
+      PARSER='.result.response'
+      ;;
   "openai")
-      ENDPOINT="$BASE_URL/chat/completions" ;;
+      ENDPOINT="$BASE_URL/chat/completions" 
+      PARSER='.choices[].message.content'
+      ;;
   *)
     echo "Error: unknown provider \"$PROVIDER\""
     exit 1
@@ -97,4 +101,4 @@ curl -fsSL -XPOST \
     -H "Authorization: Bearer $TOKEN" \
     -H 'Content-type: application/json' \
     -d "$PAYLOAD" "$ENDPOINT" |\
-    jq -r '.choices[].message.content'
+    jq -r "$PARSER"
