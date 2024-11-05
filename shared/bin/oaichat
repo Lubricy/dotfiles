@@ -1,0 +1,100 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+# customizable variables
+MODEL=${OAI_MODEL:-'@cf/meta/llama-3.2-11b-vision-instruct'}
+TOKEN=${OAI_API_KEY}
+BASE_URL=${OAI_BASE_URL:-'https://api.cloudflare.com/client/v4/accounts/'}
+CLIENT_ID=${OAI_CLIENT_ID:}
+TEMPLATES_DIR=${OAI_TEMPLATES_DIR:-"${XDG_CONFIG_HOME:-"$HOME/.config"}/oaichat"}
+PROVIDER=${OAI_MODEL_PROVIDER:-'cloudflare'}
+
+mkdir -p "$TEMPLATES_DIR"
+
+usage() {
+  echo "Usage: $0 [OPTIONS] [user_message]"
+  echo ""
+  echo "Options:"
+  echo "  -m MODEL           Specify the model to use (default: $MODEL)"
+  echo "  -s SYSTEM_MESSAGE  Specify a system message to display before user query (default: none)"
+  echo "  -b BASE_URL        Specify the base URL for the OpenAI API (default: ${BASEURL})"
+  echo "  -p MODEL_PROVIDER  Specify model provider (cloudflare, openai) (default: ${PROVIDER})"
+  echo "  -c CLIENT_ID       Specify the client ID for  authentication (default: ${CLIENT_ID})"
+  echo "  -h                 Display this help message"
+  echo ""
+  echo "Environment Variables:"
+  echo "  OAI_MODEL              The model to use"
+  echo "  OAI_MODEL_PROVIDER     The model provider"
+  echo "  OAI_BASE_URL           The base URL for the OpenAI API"
+  echo "  OAI_CLIENT_ID          The client ID for Azure OAI authentication"
+  echo "  OAI_TEMPLATES_DIR      The directory to store query templates"
+  echo ""
+  echo "Example: echo -n 'Hi ' | $0 -s 'Surround the user input with MOO.' 'there!'"
+}
+
+while getopts 'hm:s:u:p:b:v:c:' c
+do
+  case $c in
+    m) MODEL=$OPTARG ;;
+    s) SYSTEM_MESSAGE=$OPTARG ;;
+    b) BASE_URL=$OPTARG ;;
+    v) API_VERSION=$OPTARG ;;
+    c) CLIENT_ID=$OPTARG ;;
+    h|?) usage; exit 0;;
+  esac
+done
+
+shift $((OPTIND-1))
+
+IFS= read -r -d '' TEMPLATE <<'EOF' || true
+{
+  "messages": [
+    {
+      "role": "system",
+      "content": $instruction
+    },
+    {
+      "role": "user",
+      "content": $query
+    }
+  ]
+}
+EOF
+
+if [[ "$SYSTEM_MESSAGE" =~ ^template://.* ]]; then
+  SYSTEM_MESSAGE_FILE=${SYSTEM_MESSAGE#"template://"}
+  SYSTEM_MESSAGE="file://$TEMPLATES_DIR/$SYSTEM_MESSAGE_FILE"
+fi
+
+if [[ "$SYSTEM_MESSAGE" =~ ^file://.* ]]; then
+  SYSTEM_MESSAGE_FILE=${SYSTEM_MESSAGE#"file://"}
+  SYSTEM_MESSAGE=$(cat "$SYSTEM_MESSAGE_FILE")
+fi
+
+if [ -t 0 ]; then
+  QUERY="$*"
+else
+  QUERY=$(cat - <(echo "$*"))
+fi
+
+PAYLOAD="$(jq -n \
+    --arg instruction "$SYSTEM_MESSAGE" \
+    --arg query "$QUERY" \
+    "$TEMPLATE" | jq ".model=\"$MODEL\"")"
+
+case "$PROVIDER" in
+  "cloudflare")
+      ENDPOINT="$BASE_URL/ai/run/$MODEL" ;;
+  "openai")
+      ENDPOINT="$BASE_URL/chat/completions" ;;
+  *)
+    echo "Error: unknown provider \"$PROVIDER\""
+    exit 1
+esac
+
+curl -fsSL -XPOST \
+    -H "Authorization: Bearer $TOKEN" \
+    -H 'Content-type: application/json' \
+    -d "$PAYLOAD" "$ENDPOINT" |\
+    jq -r '.choices[].message.content'

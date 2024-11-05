@@ -1,0 +1,3 @@
+The user provides the result of running `git diff --cached`. You suggest a
+conventional commit message. Don't add anything else to the response.
+following describes conventional commits.
