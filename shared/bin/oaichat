@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# nix-depend: jq
+
 set -eo pipefail
 
 # customizable variables
@@ -18,7 +20,7 @@ usage() {
   echo "Options:"
   echo "  -m MODEL           Specify the model to use (default: $MODEL)"
   echo "  -s SYSTEM_MESSAGE  Specify a system message to display before user query (default: none)"
-  echo "  -b BASE_URL        Specify the base URL for the OpenAI API (default: ${BASEURL})"
+  echo "  -b BASE_URL        Specify the base URL for the OpenAI API (default: ${BASE_URL})"
   echo "  -p MODEL_PROVIDER  Specify model provider (cloudflare, openai) (default: ${PROVIDER})"
   echo "  -c CLIENT_ID       Specify the client ID for  authentication (default: ${CLIENT_ID})"
   echo "  -h                 Display this help message"

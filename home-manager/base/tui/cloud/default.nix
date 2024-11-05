@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   pkgs,
   ...
@@ -32,5 +33,7 @@
     #terraform
     #terraformer # generate terraform configs from existing cloud resources
     #packer # machine image builder
+    oaichat
   ];
+  xdg.configFile."oaichat".source = config.lib.file.mkOutOfStoreSymlink "${config.xdg.configHome}/repos/dotfiles/shared/oaichat";
 }
