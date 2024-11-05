@@ -5,12 +5,12 @@ set -eo pipefail
 
 # customizable variables
 PROVIDER=${OAI_MODEL_PROVIDER:-'cloudflare'}
-BASE_URL=${OAI_BASE_URL:-'https://api.cloudflare.com/client/v4/accounts'}
 MODEL=${OAI_MODEL:-'@cf/meta/llama-3.2-11b-vision-instruct'}
-CLIENT_ID=${OAI_CLIENT_ID:-"$(pass t/cf-ai | tail -n 1)"}
+CLIENT_ID=${OAI_CLIENT_ID:-"$(pass t/cf-ai | awk '/^client_id:/{print $2}')"}
 TOKEN=${OAI_API_KEY:-"$(pass t/cf-ai | head -n 1)"}
+BASE_URL=${OAI_BASE_URL:-"https://api.cloudflare.com/client/v4/accounts/$CLIENT_ID/ai/v1"}
 TEMPLATES_DIR=${OAI_TEMPLATES_DIR:-"${XDG_CONFIG_HOME:-"$HOME/.config"}/oaichat"}
-
+SYSTEM_MESSAGE='You are a helpful assistant.'
 mkdir -p "$TEMPLATES_DIR"
 
 usage() {
@@ -18,7 +18,8 @@ usage() {
   echo ""
   echo "Options:"
   echo "  -m MODEL           Specify the model to use (default: $MODEL)"
-  echo "  -s SYSTEM_MESSAGE  Specify a system message to display before user query (default: none)"
+  echo "  -s SYSTEM_MESSAGE  Specify a system message to display before user query (default: `${SYSTEM_MESSAGE}`)"
+  echo "  -f                 Response in full (no stream)"
   echo "  -b BASE_URL        Specify the base URL for the OpenAI API (default: ${BASE_URL})"
   echo "  -p MODEL_PROVIDER  Specify model provider (cloudflare, openai) (default: ${PROVIDER})"
   echo "  -c CLIENT_ID       Specify the client ID for  authentication (default: ${CLIENT_ID})"
@@ -34,7 +35,7 @@ usage() {
   echo "Example: echo -n 'Hi ' | $0 -s 'Surround the user input with MOO.' 'there!'"
 }
 
-while getopts 'hm:s:u:p:b:v:c:' c
+while getopts 'hfm:s:u:p:b:v:c:' c
 do
   case $c in
     m) MODEL=$OPTARG ;;
@@ -42,6 +43,7 @@ do
     b) BASE_URL=$OPTARG ;;
     v) API_VERSION=$OPTARG ;;
     c) CLIENT_ID=$OPTARG ;;
+    f) OAI_NO_STREAM=1;;
     h|?) usage; exit 0;;
   esac
 done
@@ -84,22 +86,19 @@ PAYLOAD="$(jq -n \
     --arg query "$QUERY" \
     "$TEMPLATE" | jq ".model=\"$MODEL\"")"
 
-case "$PROVIDER" in
-  "cloudflare")
-      ENDPOINT="$BASE_URL/$CLIENT_ID/ai/run/$MODEL" 
-      PARSER='.result.response'
-      ;;
-  "openai")
-      ENDPOINT="$BASE_URL/chat/completions" 
-      PARSER='.choices[].message.content'
-      ;;
-  *)
-    echo "Error: unknown provider \"$PROVIDER\""
-    exit 1
-esac
+ENDPOINT="$BASE_URL/chat/completions"
 
-curl -fsSL -XPOST \
-    -H "Authorization: Bearer $TOKEN" \
-    -H 'Content-type: application/json' \
-    -d "$PAYLOAD" "$ENDPOINT" |\
-    jq -r "$PARSER"
+if [ -n "$OAI_NO_STREAM" ]; then
+  curl -fsSL -XPOST \
+      -H "Authorization: Bearer $TOKEN" \
+      -H 'Content-type: application/json' \
+      -d "$PAYLOAD" "$ENDPOINT" |\
+      jq -r '.choices[].message.content'
+else
+  curl -fsSNL -XPOST \
+      -H "Authorization: Bearer $TOKEN" \
+      -H 'Content-type: application/json' \
+      -d "$(echo "$PAYLOAD" | jq '.stream=true')" "$ENDPOINT" |\
+      sed -nu '/^data: \[DONE\]$/q; s/^data: //g;p' |\
+      jq --unbuffered -jc '.choices[0].delta.content'
+fi
