@@ -1,16 +1,15 @@
 #!/usr/bin/env bash
 
 # nix-depend: jq
-
 set -eo pipefail
 
 # customizable variables
-MODEL=${OAI_MODEL:-'@cf/meta/llama-3.2-11b-vision-instruct'}
-TOKEN=${OAI_API_KEY:-"$(pass t/cf-ai | head -n 1)"}
-BASE_URL=${OAI_BASE_URL:-'https://api.cloudflare.com/client/v4/accounts'}
-CLIENT_ID=${OAI_CLIENT_ID:-"$(pass t/cf-ai | tail -n 1)"}
-TEMPLATES_DIR=${OAI_TEMPLATES_DIR:-"${XDG_CONFIG_HOME:-"$HOME/.config"}/oaichat"}
 PROVIDER=${OAI_MODEL_PROVIDER:-'cloudflare'}
+BASE_URL=${OAI_BASE_URL:-'https://api.cloudflare.com/client/v4/accounts'}
+MODEL=${OAI_MODEL:-'@cf/meta/llama-3.2-11b-vision-instruct'}
+CLIENT_ID=${OAI_CLIENT_ID:-"$(pass t/cf-ai | tail -n 1)"}
+TOKEN=${OAI_API_KEY:-"$(pass t/cf-ai | head -n 1)"}
+TEMPLATES_DIR=${OAI_TEMPLATES_DIR:-"${XDG_CONFIG_HOME:-"$HOME/.config"}/oaichat"}
 
 mkdir -p "$TEMPLATES_DIR"
 
