@@ -1,0 +1,6 @@
+(defwidget center []
+  (box :orientation "h"
+       :space-evenly false
+       :halign "center"
+       :class "pill"
+       (window_w)))

@@ -14,10 +14,10 @@
       nixos-modules = [
         ./configuration.nix
       ];
-      home-modules = [
-        dotfiles.hmModules.nixos
-        ./home.nix
-      ];
+      # home-modules = [
+      #   dotfiles.hmModules.nixos
+      #   ./home.nix
+      # ];
     };
   };
 }

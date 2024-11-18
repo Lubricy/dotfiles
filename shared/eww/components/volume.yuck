@@ -1,0 +1,21 @@
+(defvar vol_reveal false)
+(defvar vol_mute false)
+(defpoll volume_percent :interval "3s" "amixer get Master | grep 'Left:' | awk -F'[][]' '{ print $2 }' | tr -d '%'")
+(defwidget volume []
+  (eventbox
+   :onhover "${EWW_CMD} update vol_reveal=true"
+   :onhoverlost "${EWW_CMD} update vol_reveal=false"
+   (box :class "module-2" :space-evenly "false" :orientation "h" :spacing "3"
+        (button   :onclick "actions/toggle-mute"
+                  :class "volume_icon"
+                  { vol_mute ? "" : volume_percent > 50 ? "" : "" })
+        (revealer :transition "slideleft"
+                  :reveal vol_reveal
+                  :duration "350ms"
+                  (scale :class "volbar"
+                         :value volume_percent
+                         :orientation "h"
+                         :tooltip "${volume_percent}%"
+                         :max 100
+                         :min 0
+                         :onchange "amixer set Master {}%" )))))

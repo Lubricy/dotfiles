@@ -89,10 +89,11 @@ in {
     }
     ## Doom Configurations
     {
-      xdg.configFile = {
-        "emacs".source = doomemacs;
-        "doom".source = config.lib.file.mkOutOfStoreSymlink "${config.xdg.configHome}/repos/dotfiles/shared/doom";
-      };
+      xdg.configFile =
+        lib.dot.linkShared config ["doom"]
+        // {
+          "emacs".source = doomemacs;
+        };
 
       home.activation.fetchDotfilesForEmacs = lib.hm.dag.entryAfter ["configBoundary"] ''
         __dotfileRepoPath="${config.vars.dotfilesLocalPath}"

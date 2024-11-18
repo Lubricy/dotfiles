@@ -4,6 +4,7 @@ let
   };
 in {
   imports = [
+    ./modules
     ./hardware-configuration.nix
   ];
   nix.envVars = envVars;

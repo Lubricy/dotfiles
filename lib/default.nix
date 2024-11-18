@@ -11,6 +11,10 @@
 
   # use path relative to the root of the project
   relativeToRoot = lib.path.append ../.;
+  linkShared = config: names:
+    lib.genAttrs names (dir: {
+      source = config.lib.file.mkOutOfStoreSymlink "${config.xdg.configHome}/repos/dotfiles/shared/${dir}";
+    });
   fromShared = lib.path.append ../shared/.;
   scanPaths = path:
     builtins.map

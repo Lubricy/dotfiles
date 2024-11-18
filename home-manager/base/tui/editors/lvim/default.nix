@@ -62,6 +62,6 @@ in {
         git clone "${config.vars.dotfilesUrl}" "$__dotfileRepoPath"
       fi
     '';
-    xdg.configFile."lvim".source = config.lib.file.mkOutOfStoreSymlink "${config.xdg.configHome}/repos/dotfiles/shared/lvim";
+    xdg.configFile = lib.dot.linkShared config ["lvim"];
   };
 }

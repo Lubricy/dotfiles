@@ -35,5 +35,5 @@
     #packer # machine image builder
     oaichat
   ];
-  xdg.configFile."oaichat".source = config.lib.file.mkOutOfStoreSymlink "${config.xdg.configHome}/repos/dotfiles/shared/oaichat";
+  xdg.configFile = lib.dot.linkShared config ["oaichat"];
 }

@@ -1,0 +1,25 @@
+;; resources
+;;
+(defwidget circle [value class]
+           (box :class "res_box"
+                :orientation "v"
+                :valign "center"
+                :halign "center"
+                :spacing 15
+                :space-evenly "false"
+                (box :class "res_circle"
+                     :orientation "v"
+                     :valign "center"
+                     :halign "center"
+                     (circular-progress :class class
+                                        :value value
+                                        :thickness 8
+                                        (label :class "res_text"
+                                               :text "")))))
+(defwidget resources []
+  (box :class "winbox"
+       (box :orientation "h"
+            (circle :value {EWW_CPU.avg}
+                    :class "res_cpu")
+            (circle :value {EWW_RAM.used_mem_perc}
+                    :class "res_mem"))))

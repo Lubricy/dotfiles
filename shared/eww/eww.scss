@@ -1,0 +1,63 @@
+* {
+  all: unset;
+}
+
+.pill {
+  background-color: rgba(255, 0, 0, 0.3);
+  padding: 0 1em;
+  margin: 0.2em 0.1em;
+  border-radius: 9999px;
+  border-width: 100px;
+  border-color: red;
+}
+
+.workspace-under {
+  // background-color: red;
+}
+
+.workspace-entry {
+  margin: 0.2em;
+  padding: 0 1em;
+  border-radius: 9999px;
+  font-size: 0.8em;
+}
+
+.occupied {
+  background-color: rgba(0, 255, 0, 0.5);
+}
+.empty {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.current {
+  border-bottom-width: 100px;
+  border-color: red;
+}
+.res_box {
+  // background-color: #F0E9E1;
+  // border: 1px solid #E6DFD7;
+  padding: 1px 2px 1px 2px;
+}
+.res_circle {
+  background-color: rgba(255, 0, 0, 0.5);
+  border: 0px solid #161616;
+  border-radius: 100%;
+  padding: 0px;
+}
+
+.res_text {
+  background-color: rgba(0, 0, 0, 1);
+  border: 1px solid #161616;
+  border-radius: 16px;
+  font-size: 10px;
+  padding: 10px;
+  margin: 0px 0px 0px 0px;
+  font-weight: bold;
+}
+
+.res_cpu {
+  color: #fd6b85;
+}
+
+.res_mem {
+  color: #b1a6ee;
+}

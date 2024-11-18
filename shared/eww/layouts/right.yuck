@@ -1,0 +1,19 @@
+(include "components/clock.yuck")
+(include "components/volume.yuck")
+(include "components/resources.yuck")
+
+
+(defwidget right []
+  (box :orientation "h"
+       :space-evenly false
+       :halign "end"
+       :class "pill"
+       (volume)
+       (resources)
+       (box :class "test"
+            "def"
+            (combo-box-text
+             :class "center_modules"
+             :items [])
+            "ghi")
+       "abc"))

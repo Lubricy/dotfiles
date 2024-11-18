@@ -99,7 +99,12 @@ in {
     # alejandra is a nix formatter with a beautiful output
     system: nixpkgs.legacyPackages.${system}.alejandra
   );
-
+  packages = forAllSystems (system: {
+    unfree = import nixpkgs {
+      inherit system;
+      config.allowUnfree = true;
+    };
+  });
   overlays.default = import ../lib/overlays.nix ({lib = self.lib;} // inputs);
   # Add attribute sets into outputs, for debugging
   # debugAttrs = {inherit nixosSystems darwinSystems allSystems allSystemNames;};

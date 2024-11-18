@@ -27,6 +27,10 @@
     yq-go # yaml processor https://github.com/mikefarah/yq
 
     # productivity
+
+    # scripts
+    realise-symlink
+    oaichat
   ];
 
   programs = {

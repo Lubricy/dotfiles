@@ -1,0 +1,24 @@
+;; windoew title
+(deflisten window
+    :initial ""
+    "listeners/hypr/active-window" )
+(defwidget window_w []
+  (box
+   (label :text "${window}"
+          :limit-width 80)))
+
+;; workspace
+(deflisten workspaces "listeners/hypr/workspaces")
+(deflisten current_workspace "listeners/hypr/active-workspace")
+(defwidget workspaces_w []
+  (eventbox :onscroll "actions/hypr/change-workspace {}"
+            :class "workspaces-widget"
+            (box :space-evenly true
+                 (label :text "${workspaces}${current_workspace}" :visible false)
+                 (for workspace in workspaces
+                      (eventbox :onclick "hyprctl dispatch workspace ${workspace.id}"
+                                (box :class "workspace-entry ${workspace.windows > 0 ? "occupied" : "empty"} ${workspace.id == current_workspace ? "current" : ""}"
+                                     :space-evenly false
+                                     :orientation "v"
+                                     (label :text "${workspace.id}"
+                                            :class "workspace-text" )))))))
