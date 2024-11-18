@@ -78,6 +78,7 @@ in {
           alejandra
           deadnix
           statix
+          nil
           # spell checker
           typos
           # code formatter

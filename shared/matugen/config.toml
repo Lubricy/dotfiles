@@ -3,7 +3,14 @@ command = "swww"
 arguments = ["img", "--transition-type", "center"]
 set = true
 
-
 [templates.eww]
-input_path = './templates/colors.css'
-output_path = '~/.config/eww/colors.css'
+input_path = '~/.config/matugen/templates/eww-colors.scss.tpl'
+output_path = '~/.config/eww/colors.scss'
+
+[templates.alacritty]
+input_path = '~/.config/matugen/templates/alacritty.toml.tpl'
+output_path = '~/.config/alacritty/colors.toml'
+
+[templates.hyprland]
+input_path = '~/.config/matugen/templates/hyprland-colors.conf.tpl'
+output_path = '~/.config/hypr/colors.conf'

@@ -1,9 +1,10 @@
+@import "colors";
 * {
   all: unset;
 }
 
 .pill {
-  background-color: rgba(255, 0, 0, 0.3);
+  background-color: $primary_container;
   padding: 0 1em;
   margin: 0.2em 0.1em;
   border-radius: 9999px;
@@ -23,14 +24,16 @@
 }
 
 .occupied {
-  background-color: rgba(0, 255, 0, 0.5);
+  background-color: $primary;
+  color: $on_primary;
 }
 .empty {
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: $background;
+  color: $on_primary;
 }
 .current {
   border-bottom-width: 100px;
-  border-color: red;
+  border-color: $on_background;
 }
 .res_box {
   // background-color: #F0E9E1;

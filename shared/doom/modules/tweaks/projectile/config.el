@@ -2,10 +2,7 @@
   (setq projectile-project-search-path '("~/Projects/")
         projectile-create-missing-test-files t
         projectile-run-use-comint-mode t)
-  (add-to-list 'projectile-globally-ignored-files ".direnv")
-  ;; (after! python
-  ;;   (add-hook! 'window-state-change-functions 'lubricy/project-set-venv))
-  )
+  (add-to-list 'projectile-globally-ignored-files ".direnv"))
 
-(dolist (flag (doom-module-context-get :flags))
+(dolist (flag (doom-module :tweaks 'projectile :flags))
   (load! (symbol-name flag)))
