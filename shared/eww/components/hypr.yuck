@@ -1,24 +1,39 @@
 ;; windoew title
 (deflisten window
-    :initial ""
     "listeners/hypr/active-window" )
 (defwidget window_w []
-  (box
-   (label :text "${window}"
-          :limit-width 80)))
+  (box :space-evenly false
+       (image :class "icon"
+              :icon "${window.class}")
+       (label :text "${window.title}"
+              :class "title"
+              :show-truncated true
+              :limit-width 80)))
 
 ;; workspace
 (deflisten workspaces "listeners/hypr/workspaces")
 (deflisten current_workspace "listeners/hypr/active-workspace")
+(defvar workspace_rev "0")
 (defwidget workspaces_w []
   (eventbox :onscroll "actions/hypr/change-workspace {}"
             :class "workspaces-widget"
-            (box :space-evenly true
+            (box :space-evenly false
                  (label :text "${workspaces}${current_workspace}" :visible false)
                  (for workspace in workspaces
-                      (eventbox :onclick "hyprctl dispatch workspace ${workspace.id}"
-                                (box :class "workspace-entry ${workspace.windows > 0 ? "occupied" : "empty"} ${workspace.id == current_workspace ? "current" : ""}"
+                      (eventbox :onhover "${EWW_CMD} update workspace_rev=${workspace.id}"
+                                :onhoverlost "${EWW_CMD} update workspace_rev=0"
+                                (box :class "workspace-entry ${arraylength(workspace.windows) > 0 ? "occupied" : "empty"} ${workspace.id == current_workspace ? "current" : ""}"
                                      :space-evenly false
-                                     :orientation "v"
-                                     (label :text "${workspace.id}"
-                                            :class "workspace-text" )))))))
+                                     :orientation "h"
+                                     (revealer :transition "slideleft"
+                                               :reveal { workspace_rev != "${workspace.id}" }
+                                               (button :onclick "hyprctl dispatch workspace ${workspace.id}"
+                                                       (label :text "${workspace.id}"
+                                                              :class "workspace-text")))
+                                     (revealer :transition "slideright"
+                                               :reveal { workspace_rev == "${workspace.id}" }
+                                               (box
+                                                (for window in {workspace.windows}
+                                                     (button :onclick "hyprctl dispatch focuswindow address:${window.address}"
+                                                             (image :icon {window.class}
+                                                                    :tooltip {window.title} )))))))))))

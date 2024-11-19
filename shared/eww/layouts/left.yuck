@@ -1,6 +1,6 @@
+
 (defwidget left []
-  (box :orientation "h"
-       :space-evenly false
+  (box :space-evenly false
        :halign "start"
-       :class "pill"
-       (workspaces_w)))
+       (pill (launch))
+       (pill (workspaces_w))))

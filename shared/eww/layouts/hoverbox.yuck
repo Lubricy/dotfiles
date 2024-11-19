@@ -1,0 +1,7 @@
+(defwidget hoverbox [window]
+  (eventbox :onhover "${EWW_CMD} open ${window}"
+            :onhoverlost "${EWW_CMD} close ${window}"
+            (box :class "module"
+                 :space-evenly "false"
+                 :orientation "h"
+                 (children))))

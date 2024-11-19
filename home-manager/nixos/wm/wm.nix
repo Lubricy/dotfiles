@@ -8,8 +8,8 @@
 
   home.packages = with pkgs; [
     eww
-    unstable.matugen
     swww
+    unstable.matugen
   ];
   xdg.configFile = lib.dot.linkShared config ["eww" "matugen"];
 

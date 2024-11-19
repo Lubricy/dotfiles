@@ -3,17 +3,16 @@
   all: unset;
 }
 
+.debug {
+  border: solid red 1px;
+}
+
 .pill {
   background-color: $primary_container;
   padding: 0 1em;
   margin: 0.2em 0.1em;
   border-radius: 9999px;
-  border-width: 100px;
-  border-color: red;
-}
-
-.workspace-under {
-  // background-color: red;
+  color: $on_primary_container;
 }
 
 .workspace-entry {
@@ -21,35 +20,91 @@
   padding: 0 1em;
   border-radius: 9999px;
   font-size: 0.8em;
+  &.occupied {
+    background-color: $primary;
+    color: $on_primary;
+  }
+  &.empty {
+    background-color: $surface;
+    color: $on_surface;
+  }
+  &.current {
+    border-bottom-width: 100px;
+    background-color: $primary_fixed;
+    color: $on_primary_fixed;
+  }
 }
 
-.occupied {
-  background-color: $primary;
-  color: $on_primary;
+.title {
+  margin-left: 0.4em;
 }
-.empty {
+
+.module {
+  // padding: 0 0.3em;
+  margin: 0 0.3em;
+}
+
+.card {
   background-color: $background;
-  color: $on_primary;
 }
-.current {
-  border-bottom-width: 100px;
-  border-color: $on_background;
+
+scale trough {
+  all: unset;
+  background-color: $background;
+  box-shadow: 0 2px 3px 2px $shadow;
+  border-radius: 16px;
+  min-height: 10px;
+  min-width: 70px;
+  margin: 0px 10px 0px 0px;
 }
+
+.icon {
+  padding-left: 0.4em;
+  padding-right: 0.7em;
+}
+.vol_icon {
+  padding-left: 0.4em;
+  padding-right: 0.7em;
+}
+
+.graph {
+  min-width: 100px;
+  &.download trough {
+    color: red;
+  }
+  &.upload trough {
+    color: green;
+  }
+}
+.number {
+  min-width: 5em;
+}
+
+.volbar trough highlight {
+  background-image: linear-gradient(
+    to right,
+    $primary 30%,
+    $secondary 50%,
+    $primary_fixed 100% * 50
+  );
+  border-radius: 10px;
+}
+
 .res_box {
   // background-color: #F0E9E1;
   // border: 1px solid #E6DFD7;
   padding: 1px 2px 1px 2px;
 }
 .res_circle {
-  background-color: rgba(255, 0, 0, 0.5);
+  background-color: $secondary;
   border: 0px solid #161616;
   border-radius: 100%;
   padding: 0px;
 }
 
 .res_text {
-  background-color: rgba(0, 0, 0, 1);
-  border: 1px solid #161616;
+  background-color: $primary_container;
+  border: 3px solid $primary_container;
   border-radius: 16px;
   font-size: 10px;
   padding: 10px;

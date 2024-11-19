@@ -1,5 +1,6 @@
 (defwidget center []
-  (box :orientation "h"
+  (box :visible {window.title != ""}
+       :orientation "h"
        :space-evenly false
        :halign "center"
        :class "pill"

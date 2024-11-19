@@ -1,0 +1,7 @@
+get_val() {
+    amixer get Master | grep 'Left:' | awk -F'[][]' '{ print $2 }' | tr -d '%'
+}
+
+set_val() {
+    amixer set Master "$1%"
+}

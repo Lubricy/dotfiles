@@ -1,0 +1,7 @@
+(include "components/launcher.yuck")
+(include "components/hypr.yuck")
+(include "components/clock.yuck")
+(include "components/power.yuck")
+(include "components/volume.yuck")
+(include "components/resources.yuck")
+(include "components/network.yuck")

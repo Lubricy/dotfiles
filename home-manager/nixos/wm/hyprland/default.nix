@@ -23,7 +23,8 @@
         "Unknown-1,disable"
       ];
       exec-once = [
-        "eww open bar"
+        "${pkgs.swww}/bin/swww-daemon"
+        "${pkgs.eww}/bin/eww open bar"
       ];
       "debug:disable_logs" = false;
     };

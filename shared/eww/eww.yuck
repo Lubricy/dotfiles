@@ -1,20 +1,15 @@
-(include "components/hypr.yuck")
-(include "layouts/left.yuck")
-(include "layouts/center.yuck")
-(include "layouts/right.yuck")
+(include "layouts.yuck")
+(include "./modules.yuck")
+
 (defwindow bar
     :monitor 0
     :geometry (geometry :x "0%"
                         :y "0%"
                         :width "98%"
-                        :height "2%"
+                        :height "3%"
                         :anchor "top center")
     :exclusive true
     ;; :reserve (struts :distance "40px" :side "top")
     ;; :windowtype "dock"
     :wm-ignore false
-    (centerbox
-     (left)
-     (center)
-     (right))
-    )
+    (bar))

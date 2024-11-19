@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+dev=enp34s0
+TX=/sys/class/net/$dev/statistics/tx_bytes
+RX=/sys/class/net/$dev/statistics/rx_bytes
+
+TP=$(cat $TX)
+RP=$(cat $RX)
+
+while true; do
+TN=$(cat $TX)
+RN=$(cat $RX)
+UP=$((TN - TP))
+DN=$((RN - RP))
+UPSTR=$(numfmt --to=iec --suffix B $UP)
+DNSTR=$(numfmt --to=iec --suffix B $DN)
+echo "{\"dev\": \"$dev\", \"up_str\": \"$UPSTR\", \"down_str\": \"$DNSTR\",\"up\": \"$UP\", \"down\": \"$DN\"}"
+TP=$TN
+RP=$RN
+sleep 1
+done

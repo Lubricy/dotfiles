@@ -1,27 +1,28 @@
-(defpoll clock_time :interval "5m" "date +\%I")
-(defpoll clock_minute :interval "5s" "date +\%M")
-(defpoll clock_date :interval "10h" "date '+%d/%m'")
 (defvar time_rev false)
-(defvar eww "eww")
+(defvar timezone "Asia/Harbin")
 
-(defwidget clock_module []
-  (eventbox :onhover "${eww} update time_rev=true"
-            :onhoverlost "${eww} update time_rev=false"
-            (box :class "module" :space-evenly "false" :orientation "h" :spacing "3"
-                 (label :text clock_time :class "clock_time_class" )
+(defwidget clock []
+  (eventbox :onhover "${EWW_CMD} update time_rev=true"
+            :onhoverlost "${EWW_CMD} update time_rev=false"
+            (box :class "module"
+                 :space-evenly "false"
+                 :orientation "h"
+                 :spacing "3"
+                 (label :text {formattime(EWW_TIME, "%H" , timezone)} :class "clock_time_class" )
                  (label :text ":" :class "clock_time_sep" )
-                 (label :text clock_minute :class "clock_minute_class")
+                 (label :text {formattime(EWW_TIME, "%M" , timezone)} :class "clock_minute_class")
                  (revealer :transition "slideleft"
                            :reveal time_rev
                            :duration "350ms"
                            (button :class "clock_date_class"
-                                   :onclick "actions/popup calendar"
-                                   clock_date)
-                           ))))
+                                   :onclick "${EWW_CMD} open calendar"
+                                   {formattime(EWW_TIME, "%b %d, %Y" , timezone)})))))
 (defwidget cal []
-  (box :class "cal" :orientation "v"
-       (box :class "cal-in"
-            (calendar :class "cal"))))
+  (eventbox :class "cal"
+            :orientation "v"
+            :onhoverlost "${EWW_CMD} close calendar"
+            (box :class "cal-in"
+                 (calendar :class "cal"))))
 
 (defwindow calendar
     :monitor 0

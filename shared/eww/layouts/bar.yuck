@@ -1,0 +1,10 @@
+(defwidget bar  []
+  (centerbox
+   (left)
+   (center)
+   (right
+    ;; (resources)
+    (network)
+    (volume)
+    (clock)
+    (power))))

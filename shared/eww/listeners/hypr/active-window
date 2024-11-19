@@ -1,4 +1,10 @@
 #!/usr/bin/env bash
-hyprctl activewindow -j | jq -r .title
+window () {
+    hyprctl activewindow -j | jq -rc '{class: (.class // ""), title: (.title // "")}'
+}
+window
 nc -U $XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock |\
-    awk -F '>>|,' '/^activewindow>>/{print $3; fflush()}'
+    awk -F '>>|,' '/^activewindow>>/{print $3; fflush()}' |\
+    while read -r line; do
+        window
+    done

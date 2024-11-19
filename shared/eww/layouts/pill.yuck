@@ -1,0 +1,5 @@
+(defwidget pill []
+  (box :orientation "h"
+       :space-evenly false
+       :class "pill"
+       (children)))

@@ -1,19 +1,28 @@
-(include "components/clock.yuck")
-(include "components/volume.yuck")
-(include "components/resources.yuck")
 
+
+;; (defwidget right []
+;;   (box
+;;    :halign "end"
+;;    (pill
+;;     (box
+;;      (resources)
+;;      (volume)
+;;      (clock)
+;;      (power)
+;;      (test1 "abc" "def")))))
 
 (defwidget right []
-  (box :orientation "h"
+  (box :class "pill"
+       :orientation "h"
        :space-evenly false
        :halign "end"
-       :class "pill"
-       (volume)
-       (resources)
-       (box :class "test"
-            "def"
-            (combo-box-text
-             :class "center_modules"
-             :items [])
-            "ghi")
-       "abc"))
+       (children)))
+
+(defwidget test1 []
+  (box
+   "test1"
+   (children)))
+
+(defwidget test2 []
+  (box
+   (test1 (children))))

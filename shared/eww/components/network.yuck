@@ -1,0 +1,36 @@
+(deflisten network "listeners/net")
+;; (defwidget network []
+;;   (box :space-evenly false
+;;        :halign "end"
+;;        (label :text "${network.dev}")
+;;        (label :class "icon" :text "󰇚")
+;;        (label :class "number" :text "${network.down_str}")
+;;        (box :class "graph"
+;;             (overlay
+;;              (graph :value {network.down} :time-range "30s" :dynamic true)
+;;              (graph :value {network.up} :time-range "30s" :dynamic true)))
+;;        (label :class "icon" :text "󰕒")
+;;        (label :halign "end" :class "number" :text "${network.up_str}")))
+
+(defwidget network []
+  (box :space-evenly false
+       :halign "end"
+       (hoverbox :window "network" (label :text "${network.dev}"))))
+
+(defwindow network
+    :monitor 0
+    :geometry (geometry :x "40px"
+                        :y "5%"
+                        :anchor "top right"
+                        :width "100px"
+                        :height "60px")
+    (box :class "card"
+         :orientation "v"
+         (box :space-evenly false
+              :halign "end"
+          (label :class "icon" :text "󰇚")
+          (label :halign "end" :class "number" :text "${network.down_str}"))
+         (box :space-evenly false
+              :halign "end"
+              (label :class "icon" :text "󰕒")
+              (label :halign "end" :class "number" :text "${network.up_str}"))))

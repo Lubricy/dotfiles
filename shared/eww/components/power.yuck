@@ -1,0 +1,23 @@
+(defvar power_rev false)
+
+(defwidget power []
+  (box :class "module"
+       :space-evenly "false"
+       :orientation "h" :spacing "3"
+       (button :class "clock_time_class"
+               :onclick "${EWW_CMD} open powermenu"
+               "󰐥")))
+
+(defwidget powermenu []
+  (eventbox :onhoverlost "${EWW_CMD} close powermenu"
+            (box :class "card"
+                 "abc")))
+
+(defwindow powermenu
+    :monitor 0
+    :geometry (geometry :x "0px"
+                        :y "0px"
+                        :anchor "center center"
+                        :width "50%"
+                        :height "50%")
+    (powermenu))
