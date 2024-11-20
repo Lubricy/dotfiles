@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# nix-depend: jq curl
+
 set -eo pipefail
 
 JQ=jq
@@ -28,7 +30,6 @@ daytime () {
   # sunrise-sunset
   read -r -a timespan < <(
     curl -fsSL \
-      --proxy $HTTP_PROXY \
       "https://api.sunrise-sunset.org/json?lat=$LAT&lng=$LNG&formatted=0" |\
     $JQ -rj '.results | .sunrise," ",.sunset')
 
@@ -51,7 +52,6 @@ get_pexels () {
   TOTAL=$(curl \
     -H "Authorization: $PEXELS_API_KEY" \
     -fsSL -G \
-    --proxy $HTTP_PROXY \
     --data-urlencode "query=$ZOOM_BG_KEYWORDS" \
     --data-urlencode "color=$COLOR_NOW" \
     --data-urlencode "orientation=landscape" \
@@ -59,9 +59,9 @@ get_pexels () {
     $JQ -r '.total_results')
 
   if [ "$TOTAL" -gt "30" ]; then
-    RANDINT=$(jot -r 1 1 30)
+    RANDINT=$((RANDOM % 30))
   else
-    RANDINT=$(jot -r 1 1 "$TOTAL")
+    RANDINT=$((RANDOM % TOTAL))
   fi
 
 
@@ -90,7 +90,6 @@ get_unsplash () {
   : ${ZOOM_BG_KEYWORDS:="${!KW_NOW}"}
   curl \
     -fsSL -G \
-    --proxy $HTTP_PROXY \
     --data-urlencode "$ZOOM_BG_KEYWORDS" \
     -o "$1" \
     'https://source.unsplash.com/1600x900/' 

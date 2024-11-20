@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-# nix-depend: jq
+# nix-depend: jq curl
+
 set -eo pipefail
 
 # customizable variables
@@ -11,6 +12,7 @@ TOKEN=${OAI_API_KEY:-"$(pass t/cf-ai | head -n 1)"}
 BASE_URL=${OAI_BASE_URL:-"https://api.cloudflare.com/client/v4/accounts/$CLIENT_ID/ai/v1"}
 TEMPLATES_DIR=${OAI_TEMPLATES_DIR:-"${XDG_CONFIG_HOME:-"$HOME/.config"}/oaichat"}
 SYSTEM_MESSAGE='You are a helpful assistant.'
+OAI_NO_STREAM="${OAI_NO_STREAM:-0}"
 mkdir -p "$TEMPLATES_DIR"
 
 usage() {
@@ -18,7 +20,7 @@ usage() {
   echo ""
   echo "Options:"
   echo "  -m MODEL           Specify the model to use (default: $MODEL)"
-  echo "  -s SYSTEM_MESSAGE  Specify a system message to display before user query (default: `${SYSTEM_MESSAGE}`)"
+  echo "  -s SYSTEM_MESSAGE  Specify a system message to display before user query (default: \`${SYSTEM_MESSAGE}\`)"
   echo "  -f                 Response in full (no stream)"
   echo "  -b BASE_URL        Specify the base URL for the OpenAI API (default: ${BASE_URL})"
   echo "  -p MODEL_PROVIDER  Specify model provider (cloudflare, openai) (default: ${PROVIDER})"
@@ -35,14 +37,13 @@ usage() {
   echo "Example: echo -n 'Hi ' | $0 -s 'Surround the user input with MOO.' 'there!'"
 }
 
-while getopts 'hfm:s:u:p:b:v:c:' c
+while getopts 'hfm:s:b:c:' c
 do
   case $c in
-    m) MODEL=$OPTARG ;;
-    s) SYSTEM_MESSAGE=$OPTARG ;;
-    b) BASE_URL=$OPTARG ;;
-    v) API_VERSION=$OPTARG ;;
-    c) CLIENT_ID=$OPTARG ;;
+    m) MODEL="$OPTARG" ;;
+    s) SYSTEM_MESSAGE="$OPTARG" ;;
+    b) BASE_URL="$OPTARG" ;;
+    c) CLIENT_ID="$OPTARG" ;;
     f) OAI_NO_STREAM=1;;
     h|?) usage; exit 0;;
   esac
@@ -66,19 +67,19 @@ IFS= read -r -d '' TEMPLATE <<'EOF' || true
 EOF
 
 if [[ "$SYSTEM_MESSAGE" =~ ^template://.* ]]; then
-  SYSTEM_MESSAGE_FILE=${SYSTEM_MESSAGE#"template://"}
+  SYSTEM_MESSAGE_FILE="${SYSTEM_MESSAGE#"template://"}"
   SYSTEM_MESSAGE="file://$TEMPLATES_DIR/$SYSTEM_MESSAGE_FILE"
 fi
 
 if [[ "$SYSTEM_MESSAGE" =~ ^file://.* ]]; then
-  SYSTEM_MESSAGE_FILE=${SYSTEM_MESSAGE#"file://"}
+  SYSTEM_MESSAGE_FILE="${SYSTEM_MESSAGE#"file://"}"
   SYSTEM_MESSAGE=$(cat "$SYSTEM_MESSAGE_FILE")
 fi
 
 if [ -t 0 ]; then
   QUERY="$*"
 else
-  QUERY=$(cat - <(echo "$*"))
+  QUERY="$(cat - <(echo "$*"))"
 fi
 
 PAYLOAD="$(jq -n \

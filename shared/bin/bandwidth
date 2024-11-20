@@ -40,14 +40,14 @@ esac
 }
 
 getInterval() {
-IFACE=$1
-INTERVAL=$3
+IFACE="$1"
+INTERVAL="$3"
 read -r BD BU <<< "$(bw $IFACE)"
 sleep $INTERVAL
 read -r AD AU <<< "$(bw $IFACE)"
 DN=$(($AD - $BD))
 UP=$(($AU - $BU))
-pp $DN $UP $2
+pp "$DN" "$UP" "$2"
 }
 
 main() {
@@ -56,7 +56,7 @@ main() {
     echo BANDWIDTH_IFACE not set!
     return -1
   fi
-  for i in $BANDWIDTH_IFACE
+  for i in "$BANDWIDTH_IFACE"
   do
     a=(${i//:/ })
     getInterval "${a[0]}" "${a[1]}" 1 &

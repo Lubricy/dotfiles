@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+# nix-depend: jq curl
+
+WALLPAPER="${XDG_CACHE_DIR:-$HOME/.cache}/matugen-wallpaper"
+API_KEY="${PEXEL_API_KEY:-$(pass t/pexel)}"
+
+TOTAL=$(curl -H "Authorization: $API_KEY" \
+  -fsSL -G \
+  --data-urlencode "query=background" \
+  --data-urlencode "orientation=landscape" \
+  --data-urlencode "per_page=1" \
+  "https://api.pexels.com/v1/search" \
+  | jq -r '.total_results')
+
+SELECTED=$((RANDOM % TOTAL))
+echo "$SELECTED"
+
+curl -L "$(curl -H "Authorization: $API_KEY" \
+  -fsSL -G \
+  --data-urlencode "query=background" \
+  --data-urlencode "orientation=landscape" \
+  --data-urlencode "per_page=1" \
+  --data-urlencode "page=$SELECTED" \
+  "https://api.pexels.com/v1/search" \
+  | jq -r '.photos[0].src.landscape')" \
+  -o "$WALLPAPER" && matugen image "$WALLPAPER"
