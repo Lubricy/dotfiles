@@ -1,12 +1,25 @@
-{
-  lib,
-  config,
-  pkgs,
-  ...
-}: {
+{pkgs, ...}: {
   fonts = {
     # will be removed after this PR is merged:
     #   https://github.com/LnL7/nix-darwin/pull/754
+    fontconfig = {
+      enable = true;
+      # Fixes pixelation
+      antialias = true;
+
+      # Fixes antialiasing blur
+      hinting = {
+        enable = true;
+        style = "full"; # no difference
+        autohint = true; # no difference
+      };
+
+      subpixel = {
+        # Makes it bolder
+        rgba = "rgb";
+        lcdfilter = "default"; # no difference
+      };
+    };
     fontDir.enable = true;
 
     packages = with pkgs; [

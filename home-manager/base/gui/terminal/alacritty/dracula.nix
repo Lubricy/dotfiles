@@ -1,9 +1,4 @@
 {
-  lib,
-  pkgs,
-  ...
-}:
-{
   programs.alacritty = {
     settings = {
       colors = {

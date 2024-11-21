@@ -9,13 +9,17 @@
       Type = "oneshot";
       ExecStart = "${pkgs.randomize-wallpaper}/bin/randomize-wallpaper";
     };
+    Environment = {};
     Install.WantedBy = ["default.target"];
   };
 
   systemd.user.timers.randomize-wallpaper = {
-    Unit.Description = "timer for randomize-wallpaper service";
+    Unit = {
+      Description = "timer for randomize-wallpaper service";
+      Requires = "randomize-wallpaper.service";
+    };
     Timer = {
-      Unit = "randomize-wallpaper";
+      Unit = "randomize-wallpaper.service";
       OnBootSec = "1m";
       OnUnitActiveSec = "30m";
     };

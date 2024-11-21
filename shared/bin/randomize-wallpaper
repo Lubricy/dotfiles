@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
 
-# nix-depend: jq curl
+# nix-depend: jq curl pass unstable.matugen swww
 
-WALLPAPER="${XDG_CACHE_DIR:-$HOME/.cache}/matugen-wallpaper"
+CACHE="${XDG_CACHE_DIR:-$HOME/.cache}/wallpaper"
+WALLPAPER="${CACHE}/matugen-wallpaper-$(date +%Y%m%d_%H%M%S)"
 API_KEY="${PEXEL_API_KEY:-$(pass t/pexel)}"
+
+mkdir -p "$CACHE"
 
 TOTAL=$(curl -H "Authorization: $API_KEY" \
   -fsSL -G \
@@ -24,4 +27,6 @@ curl -L "$(curl -H "Authorization: $API_KEY" \
   --data-urlencode "page=$SELECTED" \
   "https://api.pexels.com/v1/search" \
   | jq -r '.photos[0].src.landscape')" \
-  -o "$WALLPAPER" && matugen image "$WALLPAPER"
+  -o "$WALLPAPER"
+swww img --transition-type center "$WALLPAPER"
+matugen -d image "$WALLPAPER"
