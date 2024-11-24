@@ -2,6 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 {
+  lib,
   config,
   pkgs,
   ...
@@ -24,6 +25,10 @@
   services.xserver.enable = true;
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
+  # https://nixos.wiki/wiki/Wayland
+  environment.sessionVariables.NIXOS_OZONE_WL = "1";
+
+  programs.hyprland.enable = lib.mkDefault true;
 
   # services.qemuGuest.enable = true;
 
@@ -45,6 +50,8 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     firefox
+    wl-clipboard
+    cliphist
   ];
 
   programs.vim.defaultEditor = true;
