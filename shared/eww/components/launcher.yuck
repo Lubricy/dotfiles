@@ -1,2 +1,4 @@
 (defwidget launch []
-  (image :icon "nix-snowflake-white"))
+  (eventbox :onclick "actions/change-wallpaper &"
+            :timeout "500ms"
+            (image :icon "nix-snowflake-white")))

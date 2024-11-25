@@ -10,8 +10,8 @@
 
 (defwidget powermenu []
   (eventbox :onhoverlost "${EWW_CMD} close powermenu"
-            (box :class "card"
-                 (button :onclick "reboot now" (label :text "󰜉"))
+            (box :class "card powermenu"
+                 (button :onclick "reboot" (label :text "󰜉"))
                  (button :onclick "shutdown now" (label :text "󰐥")))))
 
 (defwindow powermenu

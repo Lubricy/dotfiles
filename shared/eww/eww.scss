@@ -3,6 +3,18 @@
   all: unset;
 }
 
+/** tooltip!! **/
+tooltip.background {
+  background-color: $background;
+  font-size: 18;
+  border-radius: 10px;
+  color: $on_background;
+}
+
+tooltip label {
+  margin: 6px;
+}
+
 .debug {
   border: solid red 1px;
 }
@@ -25,8 +37,8 @@
     color: $on_primary;
   }
   &.empty {
-    background-color: $surface;
-    color: $on_surface;
+    background-color: $inverse_primary;
+    color: $primary;
   }
   &.current {
     border-bottom-width: 100px;
@@ -46,6 +58,9 @@
 
 .card {
   background-color: $background;
+  &.powermenu {
+    font-size: 50px;
+  }
 }
 
 scale trough {

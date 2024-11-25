@@ -2,21 +2,21 @@
 (defvar timezone "Asia/Harbin")
 
 (defwidget clock []
-  (eventbox :onhover "${EWW_CMD} update time_rev=true"
-            :onhoverlost "${EWW_CMD} update time_rev=false"
-            (box :class "module"
-                 :space-evenly "false"
-                 :orientation "h"
-                 :spacing "3"
-                 (label :text {formattime(EWW_TIME, "%H" , timezone)} :class "clock_time_class" )
-                 (label :text ":" :class "clock_time_sep" )
-                 (label :text {formattime(EWW_TIME, "%M" , timezone)} :class "clock_minute_class")
-                 (revealer :transition "slideleft"
-                           :reveal time_rev
-                           :duration "350ms"
-                           (button :class "clock_date_class"
-                                   :onclick "${EWW_CMD} open calendar"
-                                   {formattime(EWW_TIME, "%b %d, %Y" , timezone)})))))
+  (update :var "time_rev" :onhover "true"
+          :onhoverlost "false"
+          (box :class "module"
+               :space-evenly "false"
+               :orientation "h"
+               :spacing "3"
+               (label :text {formattime(EWW_TIME, "%H" , timezone)} :class "clock_time_class" )
+               (label :text ":" :class "clock_time_sep" )
+               (label :text {formattime(EWW_TIME, "%M" , timezone)} :class "clock_minute_class")
+               (revealer :transition "slideleft"
+                         :reveal time_rev
+                         :duration "350ms"
+                         (button :class "clock_date_class"
+                                 :onclick "${EWW_CMD} open calendar"
+                                 {formattime(EWW_TIME, "%b %d, %Y" , timezone)})))))
 (defwidget cal []
   (eventbox :class "cal"
             :orientation "v"

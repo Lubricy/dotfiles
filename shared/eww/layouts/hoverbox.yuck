@@ -5,3 +5,13 @@
                  :space-evenly "false"
                  :orientation "h"
                  (children))))
+
+(defwidget update [var ?onclick ?onhover ?onhoverlost]
+           (eventbox
+            :onclick {onclick != "" ? "${EWW_CMD} update ${var}=\"${onclick}\"" : ""}
+            :onhover {onhover != "" ? "${EWW_CMD} update ${var}=\"${onhover}\"" : ""}
+            :onhoverlost {onhoverlost != "" ? "${EWW_CMD} update ${var}=\"${onhoverlost}\"" : ""}
+            (box :class "wrapper"
+                 :space-evenly "false"
+                 :orientation "h"
+                 (children))))

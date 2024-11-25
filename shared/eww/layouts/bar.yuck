@@ -4,6 +4,7 @@
    (center)
    (right
     ;; (resources)
+    (systray)
     (network)
     (volume)
     (clock)

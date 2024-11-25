@@ -1,4 +1,5 @@
 (deflisten network "listeners/net")
+(defvar network-detail "")
 ;; (defwidget network []
 ;;   (box :space-evenly false
 ;;        :halign "end"
@@ -15,7 +16,28 @@
 (defwidget network []
   (box :space-evenly false
        :halign "end"
-       (hoverbox :window "network" (label :text "${network.dev}"))))
+       (hoverbox
+        :window "network-detail"
+        (update
+         :var "network-detail"
+         :onhover "$(ip addr)"
+         (image :class "icon" :icon "org.gnome.Settings-network-symbolic")))
+       (hoverbox
+        :window "network"
+        (label :text "${network.ip}"))))
+
+(defwindow network-detail
+    :monitor 0
+    :geometry (geometry :x "40px"
+                        :y "5%"
+                        :anchor "top right"
+                        :width "100px"
+                        :height "60px")
+    (box :class "card"
+         :orientation "v"
+         (box :space-evenly false
+              :halign "end"
+              (label :halign "end" :text "${network-detail}"))))
 
 (defwindow network
     :monitor 0
@@ -28,8 +50,8 @@
          :orientation "v"
          (box :space-evenly false
               :halign "end"
-          (label :class "icon" :text "󰇚")
-          (label :halign "end" :class "number" :text "${network.down_str}"))
+              (label :class "icon" :text "󰇚")
+              (label :halign "end" :class "number" :text "${network.down_str}"))
          (box :space-evenly false
               :halign "end"
               (label :class "icon" :text "󰕒")

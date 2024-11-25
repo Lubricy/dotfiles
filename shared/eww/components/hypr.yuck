@@ -1,14 +1,17 @@
 ;; windoew title
 (deflisten window
     "listeners/hypr/active-window" )
+(defvar window-desc "")
 (defwidget window_w []
-  (box :space-evenly false
-       (image :class "icon"
-              :icon "${window.class}")
-       (label :text "${window.title}"
-              :class "title"
-              :show-truncated true
-              :limit-width 80)))
+  (update :var "window-desc" :onhover "$(hyprctl activewindow)"
+          (box :space-evenly false
+               :tooltip window-desc
+               (image :class "icon"
+                      :icon "${window.class}")
+               (label :text "${window.title}"
+                      :class "title"
+                      :show-truncated true
+                      :limit-width 80))))
 
 ;; workspace
 (deflisten workspaces "listeners/hypr/workspaces")
