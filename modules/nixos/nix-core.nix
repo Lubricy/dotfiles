@@ -7,4 +7,6 @@
     dates = "weekly";
     options = "--delete-older-than 90d";
   };
+
+  programs.nix-ld.enable = true;
 }

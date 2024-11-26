@@ -5,6 +5,7 @@
 }: {
   imports = lib.dot.scanPaths ./.;
   wayland.windowManager.hyprland = {
+    systemd.variables = ["--all"];
     # Whether to enable Hyprland wayland compositor
     enable = true;
     # The hyprland package to use
