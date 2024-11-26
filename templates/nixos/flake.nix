@@ -1,7 +1,12 @@
 {
   description = "nix flake for nixos";
-  inputs.nixpkgs.url = flake:nixpkgs;
-  inputs.dotfiles.inputs.nixpkgs.follows = "nixpkgs";
+  inputs.nixpkgs.url = "github:nixos/nixpkgs/24.11";
+  inputs.nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+  inputs.dotfiles = {
+    url = "github:Lubricy/dotfiles";
+    inputs.nixpkgs.follows = "nixpkgs";
+    inputs.nixpkgs-unstable.follows = "nixpkgs-unstable";
+  };
 
   outputs = {dotfiles, ...} @ inputs: let
     hostname = "<change-me>";
