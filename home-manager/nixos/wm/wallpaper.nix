@@ -2,15 +2,32 @@
   home.packages = [pkgs.randomize-wallpaper];
   # This timer runs every 5 minutes to invoke matugen with random image
   systemd.user.services.randomize-wallpaper = {
-    Unit = {
-      Description = "randomize wallpaper service";
-    };
+    Unit.Description = "randomize wallpaper service";
     Service = {
       Type = "oneshot";
       ExecStart = "${pkgs.randomize-wallpaper}/bin/randomize-wallpaper";
     };
-    Environment = {};
-    Install.WantedBy = ["default.target"];
+    Install.WantedBy = ["hyprland-session.target"];
+  };
+  systemd.user.services.swww = {
+    Unit.Description = "swww wallpaper service";
+    Service = {
+      Type = "exec";
+      Restart = "always";
+      ExecStart = "${pkgs.swww}/bin/swww-daemon";
+    };
+    Install.WantedBy = ["hyprland-session.target"];
+  };
+  systemd.user.services.eww = {
+    Unit = {
+      Description = "eww widget service";
+    };
+    Service = {
+      Type = "exec";
+      Restart = "always";
+      ExecStart = "${pkgs.eww}/bin/eww daemon --no-daemonize";
+    };
+    Install.WantedBy = ["hyprland-session.target"];
   };
 
   systemd.user.timers.randomize-wallpaper = {
@@ -20,7 +37,7 @@
     };
     Timer = {
       Unit = "randomize-wallpaper.service";
-      OnBootSec = "1m";
+      OnBootSec = "10m";
       OnUnitActiveSec = "30m";
     };
     Install.WantedBy = ["timers.target"];

@@ -1,5 +1,6 @@
 (defvar vol_reveal false)
 (defpoll vol_percent
+    :initial "0"
     :interval "3s"
     "actions/control vol get")
 (defpoll vol_mute

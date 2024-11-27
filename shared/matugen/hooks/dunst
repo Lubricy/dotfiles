@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+CONFIG_DIR="${XDG_CONFIG_HOME:-"$HOME/.config"}"
+DEST="$CONFIG_DIR/dunst/matugen"
+cat "$CONFIG_DIR/dunst/colors.toml" "$CONFIG_DIR/dunst/dunstrc" > "$DEST" 2>/dev/null || true
+sleep 2
+dunstctl reload "$DEST"
+echo success!

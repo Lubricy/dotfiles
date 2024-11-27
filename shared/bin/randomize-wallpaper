@@ -28,5 +28,5 @@ curl -L "$(curl -H "Authorization: $API_KEY" \
   "https://api.pexels.com/v1/search" \
   | jq -r '.photos[0].src.landscape')" \
   -o "$WALLPAPER"
-swww img --transition-type center "$WALLPAPER"
+
 matugen -d image "$WALLPAPER"

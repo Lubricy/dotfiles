@@ -1,5 +1,6 @@
 ;; windoew title
 (deflisten window
+    :initial "{}"
     "listeners/hypr/active-window" )
 (defvar window-desc "")
 (defwidget window_w []
@@ -14,8 +15,8 @@
                       :limit-width 80))))
 
 ;; workspace
-(deflisten workspaces "listeners/hypr/workspaces")
-(deflisten current_workspace "listeners/hypr/active-workspace")
+(deflisten workspaces  :initial "[]" "listeners/hypr/workspaces")
+(deflisten current_workspace :initial "1" "listeners/hypr/active-workspace")
 (defvar workspace_rev "0")
 (defwidget workspaces_w []
   (eventbox :onscroll "actions/hypr/change-workspace {}"

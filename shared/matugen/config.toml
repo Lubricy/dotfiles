@@ -3,14 +3,24 @@ command = "swww"
 arguments = ["img", "--transition-type", "center"]
 set = true
 
+[config.custom_keywords]
+xdg_home = "$HOME/.config"
+templates = "$HOME/.config/matugen/templates"
+hooks = "$HOME/.config/matugen/hooks"
+
 [templates.eww]
-input_path = '~/.config/matugen/templates/eww-colors.scss.tpl'
+input_path = 'templates/eww-colors.scss.tpl'
 output_path = '~/.config/eww/colors.scss'
 
 [templates.alacritty]
-input_path = '~/.config/matugen/templates/alacritty.toml.tpl'
+input_path = 'templates/alacritty.toml.tpl'
 output_path = '~/.config/alacritty/colors.toml'
 
 [templates.hyprland]
-input_path = '~/.config/matugen/templates/hyprland-colors.conf.tpl'
+input_path = 'templates/hyprland-colors.conf.tpl'
 output_path = '~/.config/hypr/colors.conf'
+
+[templates.dunst]
+input_path = 'templates/dunst-colors.toml.tpl'
+output_path = '~/.config/dunst/colors.toml'
+post_hook = "~/.config/matugen/hooks/dunst &"

@@ -32,7 +32,7 @@
     };
     emacs = {
       window.class = "^emacs$";
-      window.title = "^(?!org-capture)$";
+      window.title = "^(?!org-capture$).*$";
       actions = [
         "workspace name:Editor"
       ];

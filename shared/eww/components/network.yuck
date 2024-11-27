@@ -1,4 +1,4 @@
-(deflisten network "listeners/net")
+(deflisten network :initial "{}" "listeners/net")
 (defvar network-detail "")
 ;; (defwidget network []
 ;;   (box :space-evenly false
