@@ -1,6 +1,6 @@
 [config.wallpaper]
 command = "swww"
-arguments = ["img", "--transition-type", "center"]
+arguments = ["img", "--transition-type", "grow", "--transition-pos", "top-left"]
 set = true
 
 [config.custom_keywords]
@@ -20,7 +20,7 @@ output_path = '~/.config/alacritty/colors.toml'
 input_path = 'templates/hyprland-colors.conf.tpl'
 output_path = '~/.config/hypr/colors.conf'
 
-[templates.dunst]
-input_path = 'templates/dunst-colors.toml.tpl'
-output_path = '~/.config/dunst/colors.toml'
-post_hook = "~/.config/matugen/hooks/dunst &"
+[templates.mako]
+input_path = 'templates/mako-colors.toml.tpl'
+output_path = '~/.config/mako/config'
+post_hook = "makoctl reload"

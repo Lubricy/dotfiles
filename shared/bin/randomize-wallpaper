@@ -1,32 +1,32 @@
 #!/usr/bin/env bash
 
-# nix-depend: jq curl pass unstable.matugen swww
+# nix-depend: findutils unstable.matugen swww download-image
+NEW_IMAGE=""
+CACHE="${XDG_CACHE_DIR:-"${HOME}/.cache"}"
+BASE_DIR="${WALLPAPER_DIR:-"$CACHE/wallpapers"}"
+CURRENT="$CACHE/current-wallpaper"
+touch "$CURRENT"
+for opt in "$@"; do
+  case "$opt" in
+    -n|--new)
+      NEW_IMAGE="true"
+      shift
+      ;;
+    *)
+      exit 1
+      ;;
+  esac
+done
 
-CACHE="${XDG_CACHE_DIR:-$HOME/.cache}/wallpaper"
-WALLPAPER="${CACHE}/matugen-wallpaper-$(date +%Y%m%d_%H%M%S)"
-API_KEY="${PEXEL_API_KEY:-$(pass t/pexel)}"
+if [ -n "$NEW_IMAGE" ]; then
+  WALLPAPER="$(download-image "$@")"
+else
+  WALLPAPER="$(find "$BASE_DIR" -type f | { grep -v "^$(cat "$CURRENT")$" || test $? = 1; } | shuf -n1)"
+fi
 
-mkdir -p "$CACHE"
-
-TOTAL=$(curl -H "Authorization: $API_KEY" \
-  -fsSL -G \
-  --data-urlencode "query=background" \
-  --data-urlencode "orientation=landscape" \
-  --data-urlencode "per_page=1" \
-  "https://api.pexels.com/v1/search" \
-  | jq -r '.total_results')
-
-SELECTED=$((RANDOM % TOTAL))
-echo "$SELECTED"
-
-curl -L "$(curl -H "Authorization: $API_KEY" \
-  -fsSL -G \
-  --data-urlencode "query=background" \
-  --data-urlencode "orientation=landscape" \
-  --data-urlencode "per_page=1" \
-  --data-urlencode "page=$SELECTED" \
-  "https://api.pexels.com/v1/search" \
-  | jq -r '.photos[0].src.landscape')" \
-  -o "$WALLPAPER"
-
-matugen -d image "$WALLPAPER"
+if [ -z "$WALLPAPER" ]; then
+  matugen -d color rgb "rgb($((RANDOM % 255)),$((RANDOM%255)),$((RANDOM%255)))"
+else
+  echo "$WALLPAPER" > "$CURRENT"
+  matugen image "$WALLPAPER"
+fi

@@ -1,0 +1,154 @@
+#!/usr/bin/env bash
+
+# nix-depend: jq curl pass unstable.matugen swww
+
+BACKEND=${WALLPAPER_BACKEND:-flux}
+BASE_DIR="${WALLPAPER_DIR:-"${XDG_CACHE_DIR:-"${HOME}/.cache"}/wallpapers"}"
+IMAGE_FILENAME="image-$(date +%Y%m%d_%H%M%S)"
+QUIET=""
+
+for opt in "$@"; do
+  case "$opt" in
+    -q|--quiet)
+      QUIET="true"
+      shift
+      ;;
+    -b|--backend)
+      BACKEND="$2"
+      shift 2
+      ;;
+    -h|--help)
+      exit 0
+      ;;
+    *)
+      echo "Unknown argument '$1'"
+      usage
+      exit 1
+    ;;
+  esac
+done
+
+
+notify() {
+  if [ -z "$QUIET" ] && command -v notify-send >/dev/null 2>&1; then
+    notify-send -u low "$@"
+  fi
+}
+
+pexel() {
+  API_KEY="${PEXEL_API_KEY:-$(pass t/pexel)}"
+
+  notify "scanning image!" "$(date)"
+
+  TOTAL=$(curl -H "Authorization: $API_KEY" \
+    -fsSL -G \
+    --data-urlencode "query=background" \
+    --data-urlencode "orientation=landscape" \
+    --data-urlencode "per_page=1" \
+    "https://api.pexels.com/v1/search" \
+    | jq -r '.total_results')
+
+  SELECTED=$((RANDOM % TOTAL))
+  echo "$SELECTED"
+
+  notify "downloading image:" "image-id: $SELECTED"
+
+  curl -L "$(curl -H "Authorization: $API_KEY" \
+    -fsSL -G \
+    --data-urlencode "query=background" \
+    --data-urlencode "orientation=landscape" \
+    --data-urlencode "per_page=1" \
+    --data-urlencode "page=$SELECTED" \
+    "https://api.pexels.com/v1/search" \
+    | jq -r '.photos[0].src.landscape')" \
+    -o "$1"
+}
+# Coordinates for Dalian
+LAT=38.9140
+LNG=121.6147
+
+_date() {
+  input_date=$1
+  if date --version >/dev/null 2>&1; then
+    # GNU syntax
+    date -u -d "$input_date" +%s
+  else
+    # BSD syntax
+    date -j -u -f "%Y-%m-%dT%H:%M:%S%z" "$input_date" +%s
+  fi
+}
+
+colorscheme () {
+  # sunrise-sunset
+  read -r -a timespan < <(
+    curl -fsSL \
+      "https://api.sunrise-sunset.org/json?lat=$LAT&lng=$LNG&formatted=0" |\
+    jq -rj '.results | .sunrise," ",.sunset')
+
+  SUNRISE=$(_date "${timespan[0]}" 2> /dev/null)
+  SUNSET=$(_date "${timespan[1]}" 2> /dev/null)
+  NOW="$(date +%s)"
+  if [ "$SUNSET" -ge "$NOW" ] && [ "$NOW" -ge "$SUNRISE" ]; then
+    echo light
+  else
+    echo dark
+  fi
+}
+
+prompt() {
+  notify "generating prompt!" "$(date)"
+
+  curl -fsSLN -XPOST \
+    -H "Authorization: Bearer $(pass t/cf-ai | head -n 1)" \
+    -H 'Content-type: application/json' \
+    -d '{
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are a helpful assistant."
+            },
+            {
+              "role": "user",
+              "content": "describe an image with a '"$(colorscheme)"' color scheme that can be set as a background."
+            }
+          ],
+          "model": "@cf/meta/llama-3.2-1b-instruct",
+          "stream": false
+        }' \
+    "https://api.cloudflare.com/client/v4/accounts/$(pass t/cf-ai | awk '/id/{print $2}')/ai/v1/chat/completions" \
+    | jq -c '.choices[0].message.content'
+    }
+
+flux() {
+  PROMPT="$(prompt)"
+  notify "generating image..." "prompt: $PROMPT"
+  curl \
+    -X POST  \
+    -H "Authorization: Bearer $(pass t/cf-ai | head -n 1)"  \
+    -d "{ \"prompt\": $PROMPT }" \
+    "https://api.cloudflare.com/client/v4/accounts/$(pass t/cf-ai | awk '/id/{print $2}')/ai/run/@cf/black-forest-labs/flux-1-schnell" \
+    | jq -rc '.result.image' | base64 -d > "$1"
+}
+
+case "$BACKEND" in
+  flux|gene?r?a?t?e?)
+    IMAGE_DIR="$BASE_DIR/flux"
+    ENGINE=flux
+    ;;
+  pexel|do?w?nl?o?a?d?)
+    IMAGE_DIR="$BASE_DIR/pexel"
+    ENGINE=pexel
+    ;;
+  *)
+    usage
+    exit 1
+    ;;
+esac
+
+mkdir -p "$IMAGE_DIR"
+OUTPUT="$IMAGE_DIR/$IMAGE_FILENAME"
+"$ENGINE" "$OUTPUT"
+
+notify "image \"$OUTPUT\" downloaded!"
+
+echo "$OUTPUT"

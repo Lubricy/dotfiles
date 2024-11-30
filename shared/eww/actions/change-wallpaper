@@ -1,3 +1,2 @@
 #!/usr/bin/env bash
-hyprctl notify 1 5000 0 "fetching new wallpaper..."
-$(randomize-wallpaper)
+randomize-wallpaper

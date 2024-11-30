@@ -1,6 +1,7 @@
 {pkgs, ...}: {
   services.lvm.enable = true;
   boot = {
+    tmp.useTmpfs = true;
     initrd.services.lvm.enable = true;
     plymouth = {
       enable = true;

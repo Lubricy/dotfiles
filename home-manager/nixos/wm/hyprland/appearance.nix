@@ -13,7 +13,7 @@
     general = {
       border_size = 2;
       "col.active_border" = "$primary";
-      "col.inactive_border" = "$on_primary";
+      "col.inactive_border" = "$primary_container";
       resize_on_border = true;
     };
 

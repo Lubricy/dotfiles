@@ -1,4 +1,3 @@
 (defwidget launch []
-  (eventbox :onclick "actions/change-wallpaper &"
-            :timeout "500ms"
-            (image :icon "nix-snowflake-white")))
+  (button :onclick "randomize-wallpaper &"
+          (image :icon "nix-snowflake-white")))

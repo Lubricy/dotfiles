@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+set -x
+CONFIG_DIR="${XDG_CONFIG_HOME:-"$HOME/.config"}"
+DEST="$CONFIG_DIR/mako/config"
+notify-send -u critical "about to change mako before..." "$(date)"
+cat "$DEST.before" "$CONFIG_DIR/mako/colors.toml" "$DEST.after" > "$DEST" 2>/dev/null || true
+
+makoctl reload
