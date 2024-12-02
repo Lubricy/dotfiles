@@ -17,7 +17,7 @@ in
     modules =
       [
         ../modules/nixos
-        ./overlays.nix
+        ../overlays
         nixos-generators.nixosModules.all-formats
         nix-index-database.nixosModules.nix-index
         {

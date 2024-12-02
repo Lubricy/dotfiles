@@ -26,7 +26,9 @@ in {
   darwinConfigurations = {};
 
   nixosModules = {
-    base = import (self.lib.dot.relativeToRoot "modules/base.nix");
+    base = import (self.lib.dot.relativeToRoot "modules/common");
+    default = import (self.lib.dot.relativeToRoot "modules/nixos");
+    overlays = import (self.lib.dot.relativeToRoot "overlays");
   };
   darwinModules.default = import (self.lib.dot.relativeToRoot "modules/darwin");
   hmModules = rec {
@@ -106,7 +108,6 @@ in {
       config.allowUnfree = true;
     };
   });
-  overlays.default = import ../lib/overlays.nix ({lib = self.lib;} // inputs);
   # Add attribute sets into outputs, for debugging
   # debugAttrs = {inherit nixosSystems darwinSystems allSystems allSystemNames;};
 }

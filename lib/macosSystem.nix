@@ -16,7 +16,7 @@ in
     modules =
       [
         ../modules/darwin
-        ./overlays.nix
+        ../overlays
         nix-index-database.darwinModules.nix-index
         {
           inherit vars;

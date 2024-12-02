@@ -1,1 +1,3 @@
-{emacs-overlay, ...}: emacs-overlay.overlays.emacs
+{emacs-overlay, ...}: {
+  nixpkgs.overlays = [emacs-overlay.overlays.emacs];
+}
