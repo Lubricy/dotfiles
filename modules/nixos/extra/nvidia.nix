@@ -15,6 +15,9 @@
       # Nvidia framebuffer.
       "nvidia-drm.fbdev=1"
     ];
+    kernelModules = [
+      "nvidia_uvm" # necessary for nvidia-open
+    ];
   };
 
   hardware = {
