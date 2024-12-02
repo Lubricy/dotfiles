@@ -17,6 +17,7 @@ let
     "verible"
     "gdb"
     "ncdu"
+    "fcitx5"
   ];
 in {
   nixpkgs.overlays = [

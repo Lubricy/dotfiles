@@ -25,9 +25,9 @@
   services.xserver.enable = true;
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
+  services.xserver.desktopManager.runXdgAutostartIfNone = true;
   # https://nixos.wiki/wiki/Wayland
   environment.sessionVariables.NIXOS_OZONE_WL = "1";
-
   programs.hyprland.enable = lib.mkDefault true;
 
   # services.qemuGuest.enable = true;
