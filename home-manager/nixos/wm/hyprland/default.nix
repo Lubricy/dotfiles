@@ -8,7 +8,7 @@
   wayland.windowManager.hyprland = {
     # Optional
     # Whether to enable hyprland-session.target on hyprland startup
-    systemd.enable = true;
+    systemd.enable = false;
     systemd.extraCommands =
       [
         "bash -l -c 'dbus-update-activation-environment --systemd --all'"

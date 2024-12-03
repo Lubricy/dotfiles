@@ -16,8 +16,8 @@
 
 (doom! :input
        ;;bidi              ; (tfel ot) thgir etirw uoy gnipleh
-       ;;chinese
-       ;;japanese
+       chinese
+       japanese
        ;;layout            ; auie,ctsrnm is the superior home row
 
        :completion
@@ -238,9 +238,8 @@
        ;; provides a Spacemacs-inspired keybinding scheme and a smartparens
        ;; config. Use it as a reference for your own modules.
        (default +bindings +smartparens)
-
        :tweaks
-       ;;chinese
+       ;; chinese
        ;; (company +tabnine)
        conf
        hydra

@@ -4,7 +4,7 @@
   inputs = {
     # Specify the source of Home Manager and dotfiles.
     home-manager = {
-      url = "github:nix-community/home-manager/release-24.05";
+      url = "github:nix-community/home-manager/release-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     dotfiles = {
@@ -30,7 +30,7 @@
       # Specify your home configuration modules here, for example,
       # the path to your home.nix.
       modules = [
-        dotfiles.overlays.default
+        dotfiles.nixosModules.overlays
         dotfiles.hmModules.nixos
         {vars.username = username;}
         ./home.nix

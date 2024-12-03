@@ -3,7 +3,6 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 {
   lib,
-  config,
   pkgs,
   ...
 }: {
@@ -28,7 +27,10 @@
   services.xserver.desktopManager.runXdgAutostartIfNone = true;
   # https://nixos.wiki/wiki/Wayland
   environment.sessionVariables.NIXOS_OZONE_WL = "1";
-  programs.hyprland.enable = lib.mkDefault true;
+  programs.hyprland = {
+    enable = lib.mkDefault true;
+    withUWSM = true;
+  };
 
   # services.qemuGuest.enable = true;
 
@@ -40,6 +42,8 @@
   # services.printing.enable = true;
 
   # Enable sound.
+  # sound.enable = true;
+  hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
@@ -60,7 +64,10 @@
     cliphist
   ];
 
-  programs.vim.defaultEditor = true;
+  programs.vim = {
+    enable = true;
+    defaultEditor = true;
+  };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

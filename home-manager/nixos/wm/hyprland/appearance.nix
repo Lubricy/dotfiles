@@ -2,8 +2,10 @@
   wayland.windowManager.hyprland.settings = {
     source = "${config.xdg.configHome}/hypr/colors.conf";
     decoration = {
-      shadow_offset = "5 5";
-      "col.shadow" = "rgba(00000040)";
+      shadow = {
+        offset = "5 5";
+        color = "rgba(00000040)";
+      };
       rounding = 10;
       inactive_opacity = 0.9;
       dim_inactive = true;
