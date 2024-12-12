@@ -7,8 +7,9 @@ set -eo pipefail
 # customizable variables
 PROVIDER=${OAI_MODEL_PROVIDER:-'cloudflare'}
 MODEL=${OAI_MODEL:-'@cf/meta/llama-3.2-11b-vision-instruct'}
-CLIENT_ID=${OAI_CLIENT_ID:-"$(pass t/cf-ai | awk '/^client_id:/{print $2}')"}
-TOKEN=${OAI_API_KEY:-"$(pass t/cf-ai | head -n 1)"}
+API_ENTRY=${OAI_PASS_ENTRY:-"t/cf-ai"}
+CLIENT_ID=${OAI_CLIENT_ID:-"$(pass "$API_ENTRY" | awk '/^client_id:/{print $2}')"}
+TOKEN=${OAI_API_KEY:-"$(pass "$API_ENTRY" | head -n 1)"}
 BASE_URL=${OAI_BASE_URL:-"https://api.cloudflare.com/client/v4/accounts/$CLIENT_ID/ai/v1"}
 TEMPLATES_DIR=${OAI_TEMPLATES_DIR:-"${XDG_CONFIG_HOME:-"$HOME/.config"}/oaichat"}
 SYSTEM_MESSAGE='You are a helpful assistant.'
@@ -89,7 +90,7 @@ PAYLOAD="$(jq -n \
 
 ENDPOINT="$BASE_URL/chat/completions"
 
-if [ -n "$OAI_NO_STREAM" ]; then
+if [ "$OAI_NO_STREAM" = "1" ]; then
   curl -fsSL -XPOST \
       -H "Authorization: Bearer $TOKEN" \
       -H 'Content-type: application/json' \
@@ -101,5 +102,5 @@ else
       -H 'Content-type: application/json' \
       -d "$(echo "$PAYLOAD" | jq '.stream=true')" "$ENDPOINT" |\
       sed -nu '/^data: \[DONE\]$/q; s/^data: //g;p' |\
-      jq --unbuffered -jc '.choices[0].delta.content'
+      jq --unbuffered -jc '.choices[0].delta.content // "\n"'
 fi
