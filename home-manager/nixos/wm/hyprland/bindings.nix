@@ -4,9 +4,9 @@
       "$mod,P,exec,alacritty"
       "$mod,Q,exec,eww open powermenu"
       "$mod,W,exec,eww open overview"
-      "$mod,N,exec,~/.config/emacs/bin/org-capture"
+      "$mod,N,exec,org-capture"
       "$mod,X,killactive"
-      "$mod SHIFT,Q,exit"
+      "$mod SHIFT,Q,exec,uwsm stop"
     ];
     bindm = [
       # mouse movements

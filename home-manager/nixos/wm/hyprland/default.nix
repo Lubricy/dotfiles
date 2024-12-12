@@ -1,7 +1,6 @@
 {
   lib,
   pkgs,
-  options,
   ...
 }: {
   imports = lib.dot.scanPaths ./.;
@@ -9,12 +8,12 @@
     # Optional
     # Whether to enable hyprland-session.target on hyprland startup
     systemd.enable = false;
-    systemd.extraCommands =
-      [
-        "bash -l -c 'dbus-update-activation-environment --systemd --all'"
-        "systemctl --user start eww"
-      ]
-      ++ options.wayland.windowManager.hyprland.systemd.extraCommands.default;
+    # systemd.extraCommands =
+    #   [
+    #     "bash -l -c 'dbus-update-activation-environment --systemd --all'"
+    #     "systemctl --user start eww"
+    #   ]
+    #   ++ options.wayland.windowManager.hyprland.systemd.extraCommands.default;
     # Whether to enable Hyprland wayland compositor
     enable = true;
     # The hyprland package to use
@@ -30,7 +29,8 @@
       #   "Unknown-1,disable"
       # ];
       exec-once = [
-        "while ! eww ping; do sleep 0.1; done; eww open bar"
+        "swww-daemon"
+        "eww open bar"
       ];
       "debug:disable_logs" = false;
     };

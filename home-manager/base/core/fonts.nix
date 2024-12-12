@@ -1,5 +1,21 @@
 {pkgs, ...}: {
   fonts.fontconfig.enable = true;
+  fonts.fontconfig.defaultFonts = {
+    monospace = [
+      "AnonymicePro Nerd Font Propo"
+      "Source Han Sans HW SC"
+    ];
+    serif = [
+      "DejaVu Serif"
+      "Source Serif 4 Display"
+      "Source Han Serif SC"
+    ];
+    sansSerif = [
+      "DejaVu Sans"
+      "Source Sans 3"
+      "Source Han Sans HW SC"
+    ];
+  };
   home.packages = with pkgs; [
     # icon fonts
     material-design-icons

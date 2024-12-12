@@ -123,7 +123,8 @@ flux() {
   PROMPT="$(prompt)"
   notify "generating image..." "prompt: $PROMPT"
   curl \
-    -X POST  \
+    -fSsL \
+    -X POST \
     -H "Authorization: Bearer $(pass t/cf-ai | head -n 1)"  \
     -d "{ \"prompt\": $PROMPT }" \
     "https://api.cloudflare.com/client/v4/accounts/$(pass t/cf-ai | awk '/id/{print $2}')/ai/run/@cf/black-forest-labs/flux-1-schnell" \

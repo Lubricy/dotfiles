@@ -28,5 +28,9 @@ if [ -z "$WALLPAPER" ]; then
   matugen -d color rgb "rgb($((RANDOM % 255)),$((RANDOM%255)),$((RANDOM%255)))"
 else
   echo "$WALLPAPER" > "$CURRENT"
-  matugen image "$WALLPAPER"
+  matugen -d image "$WALLPAPER"
 fi
+# weirdly swww won't have a chance to send out anything in systemd service if we
+# don't wait for it...
+sleep 0.1
+echo success
