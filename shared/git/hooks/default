@@ -76,11 +76,15 @@ maybe_execute() {
 }
 
 HOOK_NAME=$(basename "$0")
-LOCAL_HOOKS=$(git config --local \
-    --default "$(git rev-parse --git-dir)/hooks" \
-    --get core.hooksPath)
-HOOK=$LOCAL_HOOKS/$HOOK_NAME
+if git rev-parse --git-dir >/dev/null 2>&1; then
+    LOCAL_HOOKS=$(git config --local \
+        --default "$(git rev-parse --git-dir)/hooks" \
+        --get core.hooksPath)
+    HOOK=$LOCAL_HOOKS/$HOOK_NAME
 
-echo -n "$STDIN" | maybe_execute "$0.before"
-echo -n "$STDIN" | maybe_execute "$HOOK"
-echo -n "$STDIN" | maybe_execute "$0.after"
+    echo -n "$STDIN" | maybe_execute "$0.before"
+    echo -n "$STDIN" | maybe_execute "$HOOK"
+    echo -n "$STDIN" | maybe_execute "$0.after"
+else
+    hint "Git repo does not exist (yet). Skipping '$HOOK_NAME'..."
+fi
