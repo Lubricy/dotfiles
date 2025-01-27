@@ -1,5 +1,5 @@
 # TODO: refactor this
-{lib, ...}: {
+lib: {
   repo,
   mappings ? {},
   extraMappings ? {},

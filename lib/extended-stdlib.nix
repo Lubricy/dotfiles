@@ -1,10 +1,4 @@
-{
-  lib,
-  inputs,
-}:
+{lib, ...} @ args:
 lib.extend (self: super: {
-  dot = import ./. {
-    inherit inputs;
-    lib = self;
-  };
+  dot = import ./. args;
 })

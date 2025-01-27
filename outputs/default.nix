@@ -12,7 +12,7 @@
     "x86_64-darwin"
     "aarch64-darwin"
   ];
-
+  root = path: import (self.lib.dot.relativeToRoot path);
   # Helper function to generate a set of attributes for each system
   forAllSystems = func: (lib.genAttrs allSystemNames func);
 in {
@@ -26,15 +26,15 @@ in {
   darwinConfigurations = {};
 
   nixosModules = {
-    base = import (self.lib.dot.relativeToRoot "modules/common");
-    default = import (self.lib.dot.relativeToRoot "modules/nixos");
-    overlays = import (self.lib.dot.relativeToRoot "overlays");
+    base = root "modules/common";
+    default = root "modules/nixos";
+    overlays = root "overlays";
   };
-  darwinModules.default = import (self.lib.dot.relativeToRoot "modules/darwin");
+  darwinModules.default = root "modules/darwin";
   hmModules = rec {
-    base = import (self.lib.dot.relativeToRoot "home-manager/base");
-    nixos = import (self.lib.dot.relativeToRoot "home-manager/nixos");
-    darwin = import (self.lib.dot.relativeToRoot "home-manager/darwin");
+    base = root "home-manager/base";
+    nixos = root "home-manager/nixos";
+    darwin = root "home-manager/darwin";
     default = base;
   };
 
