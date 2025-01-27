@@ -1,8 +1,4 @@
-{
-  lib,
-  config,
-  ...
-}: let
+{lib, ...}: let
   inherit (lib) mapAttrsToList flatten concatStringsSep;
   attrs = mapAttrsToList (k: v: "${k}:${v}");
   line = window: action: concatStringsSep ", " ([action] ++ attrs window);
