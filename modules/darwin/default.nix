@@ -4,4 +4,5 @@
     ++ [
       ../common
     ];
+  dot.defaultUser.enable = true;
 }

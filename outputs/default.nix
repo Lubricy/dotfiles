@@ -20,7 +20,7 @@ in {
   lib = import ../lib/extended-stdlib.nix {inherit lib inputs;};
 
   # NixOS Hosts
-  nixosConfigurations = {};
+  nixosConfigurations = import ../hosts {inherit lib;};
 
   # macOS Hosts
   darwinConfigurations = {};

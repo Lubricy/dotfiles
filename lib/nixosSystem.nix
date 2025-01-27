@@ -34,7 +34,17 @@ in
             home-manager.useUserPackages = true;
             home-manager.backupFileExtension = "bak";
             home-manager.extraSpecialArgs = inputs // specialArgs;
-            home-manager.users."${config.vars.username}".imports = home-modules ++ [{inherit vars;}];
+          })
+          ({
+            lib,
+            config,
+            ...
+          }: let
+            cfg = config.dot.defaultUser;
+          in {
+            config = lib.mkIf cfg.enable {
+              home-manager.users."${cfg.username}".imports = home-modules ++ [{inherit (config) dot;}];
+            };
           })
         ]
       );

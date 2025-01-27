@@ -1,5 +1,5 @@
 {config, ...}: let
-  homeDir = config.users.users."${config.vars.username}".home;
+  homeDir = config.users.users."${config.dot.defaultUser.username}".home;
 in {
   # https://github.com/LnL7/nix-darwin/blob/master/modules/programs/gnupg.nix
   # try `pkill gpg-agent` if you have issues(such as `no pinentry`)
