@@ -20,7 +20,7 @@
     pkgs ? nixpkgs,
   }: {
     inputs,
-    pkgs ? pkgs.legacyPackages."${builtins.currentSystem}",
+    pkgs,
     modules ? [],
     home-modules ? [],
     specialArgs ? {},
@@ -35,11 +35,11 @@
           ../overlays
           nix-index-database.${"${name}Modules"}.nix-index
           {
-            nixpkgs.pkgs = lib.mkDefault pkgs;
+            nixpkgs.config.pkgs = lib.mkDefault pkgs;
             system.configurationRevision =
-              self.shortRev
-              or self.dirtyShortRev
-              or self.lastModified
+              self.rev
+              or self.dirtyRev
+              or self.lastModifiedDate
               or "unknown";
           }
         ]
