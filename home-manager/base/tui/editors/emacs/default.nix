@@ -35,6 +35,7 @@ with lib; let
   myEmacsPackagesFor = emacs: ((pkgs.emacsPackagesFor emacs).emacsWithPackages (epkgs:
     with epkgs; [
       vterm
+      tree-sitter
       treesit-grammars.with-all-grammars
     ]));
 in {
