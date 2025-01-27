@@ -1,3 +1,9 @@
-{config, ...}: {
-  users.users.${config.vars.username}.extraGroups = ["dialout" "input"];
+{
+  lib,
+  config,
+  ...
+}: {
+  config = lib.mkIf config.dot.defaultUser.enable {
+    users.users.${config.dot.defaultUser.username}.extraGroups = ["dialout" "input"];
+  };
 }

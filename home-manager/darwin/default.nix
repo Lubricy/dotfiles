@@ -3,7 +3,7 @@
   config,
   ...
 }: {
-  home.homeDirectory = "/Users/${config.vars.username}";
+  home.homeDirectory = "/Users/${config.home.username}";
 
   # modules.tools.open-interpreter.enable = true;
   imports =

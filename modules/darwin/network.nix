@@ -3,7 +3,7 @@
   pkgs,
   ...
 }: let
-  hostname = config.vars.hostname;
+  hostname = config.dot.hostname;
 in {
   networking.hostName = hostname;
   networking.computerName = hostname;

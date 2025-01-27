@@ -6,6 +6,7 @@
     automatic = true;
     dates = "weekly";
     options = "--delete-older-than 90d";
+    randomizedDelaySec = "10m";
   };
 
   programs.nix-ld.enable = true;

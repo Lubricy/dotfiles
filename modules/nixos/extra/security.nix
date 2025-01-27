@@ -10,5 +10,5 @@
     # required by pam
     allow-preset-passphrase = "";
   };
-  security.pam.services.${config.vars.username}.gnupg.enable = lib.mkDefault true;
+  security.pam.services.${config.dot.defaultUser.username}.gnupg.enable = lib.mkDefault true;
 }

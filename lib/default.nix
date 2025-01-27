@@ -1,7 +1,7 @@
 {lib, ...} @ args:
 {
   relativeToRoot = lib.path.append ../.;
-  linkRepo = import ./linkRepo lib;
+  linkRepo = import ./linkRepo.nix lib;
   linkShared = config: names:
     lib.genAttrs names (dir: {
       source = config.lib.file.mkOutOfStoreSymlink "${config.xdg.configHome}/repos/dotfiles/shared/${dir}";

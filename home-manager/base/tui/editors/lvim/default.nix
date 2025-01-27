@@ -55,11 +55,11 @@ in {
       })
     ];
     home.activation.fetchDotfilesForLvim = lib.hm.dag.entryAfter ["configBoundary"] ''
-      __dotfileRepoPath="${config.vars.dotfilesLocalPath}"
+      __dotfileRepoPath="${config.dotfiles.localPath}"
       if [ -d "$__dotfileRepoPath" ]; then
         echo "$__dotfileRepoPath exists. Skipping..."
       else
-        git clone "${config.vars.dotfilesUrl}" "$__dotfileRepoPath"
+        git clone "${config.dotfiles.url}" "$__dotfileRepoPath"
       fi
     '';
     xdg.configFile = lib.dot.linkShared config ["lvim"];

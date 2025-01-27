@@ -47,12 +47,24 @@
         ++ optionals ((length home-modules) > 0)
         [
           home-manager.${"${name}Modules"}.home-manager
-          ({config, ...}: {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.backupFileExtension = "bak";
-            home-manager.extraSpecialArgs = inputs // specialArgs;
-            home-manager.users."${config.vars.username}".imports = home-modules;
+          ({
+            lib,
+            config,
+            ...
+          }: {
+            config = lib.mkIf config.dot.defaultUser.enable {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.backupFileExtension = "bak";
+              home-manager.extraSpecialArgs = inputs // specialArgs;
+              home-manager.users."${config.dot.defaultUser.username}".imports =
+                home-modules
+                ++ [
+                  (args: {
+                    home.username = args."${name}Config".dot.defaultUser.username;
+                  })
+                ];
+            };
           })
         ];
     };

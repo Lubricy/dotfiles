@@ -4,8 +4,6 @@
   pkgs,
   ...
 }: {
-  imports = [./hyprland];
-
   home.packages = with pkgs; [
     eww
     swww

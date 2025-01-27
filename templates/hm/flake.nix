@@ -32,7 +32,7 @@
       modules = [
         dotfiles.nixosModules.overlays
         dotfiles.hmModules.nixos
-        {vars.username = username;}
+        {home.username = username;}
         ./home.nix
       ];
       # Optionally use extraSpecialArgs

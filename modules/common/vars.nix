@@ -1,17 +1,16 @@
 {lib, ...}: {
-  options.vars = {
+  options.dot = {
     hostname = lib.mkOption {
       type = lib.types.str;
       description = "current hostname";
     };
-    username = lib.mkOption {
-      type = lib.types.str;
-      description = "username";
-      default = "lubricy";
-    };
-    system = lib.mkOption {
-      type = lib.types.enum lib.systems.flakeExposed;
-      description = "current system";
+    defaultUser = {
+      enable = lib.mkEnableOption "Default User";
+      username = lib.mkOption {
+        type = lib.types.str;
+        description = "username";
+        default = "lubricy";
+      };
     };
   };
 }
