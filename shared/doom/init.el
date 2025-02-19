@@ -231,6 +231,7 @@
        sops
        ;;codegpt
        gptel
+       age
        sops
 
        :config
