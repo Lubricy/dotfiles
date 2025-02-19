@@ -228,7 +228,6 @@
        misc
        ;;vlf
        mongo
-       sops
        ;;codegpt
        gptel
        age
