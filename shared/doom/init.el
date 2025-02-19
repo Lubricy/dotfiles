@@ -245,7 +245,6 @@
        ;; (company +tabnine)
        conf
        hydra
-       mac
        dashboard
        languages
        (org
@@ -257,4 +256,7 @@
        roam
        tramp
        treemacs
-       vterm)
+       vterm
+       ;; platform specific
+       mac
+       windows)

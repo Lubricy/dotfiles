@@ -1,2 +1,2 @@
-(when IS-MAC
+(when (featurep :system 'macos)
   (package! org-mac-link))

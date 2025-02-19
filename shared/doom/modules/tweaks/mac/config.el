@@ -1,4 +1,4 @@
-(when IS-MAC
+(when (featurep :system 'macos)
   (after! epa
     ;; uses pinentry-osx
     (setq epg-pinentry-mode 'ask))
