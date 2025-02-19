@@ -34,6 +34,7 @@
         # symbols icon only
         "NerdFontsSymbolsOnly"
         # Characters
+        "CascadiaMono" # my choice for Emacs main font
         "FiraCode"
         "JetBrainsMono"
         "Iosevka"
