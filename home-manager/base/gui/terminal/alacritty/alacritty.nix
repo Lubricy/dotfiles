@@ -4,7 +4,7 @@
     settings = {
       font = {
         size = lib.mkDefault 16;
-        normal.family = "AnonymicePro Nerd Font Mono";
+        normal.family = "Caskaydia Mono NF";
       };
       window = {
         padding = {

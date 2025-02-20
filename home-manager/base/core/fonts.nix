@@ -2,6 +2,7 @@
   fonts.fontconfig.enable = true;
   fonts.fontconfig.defaultFonts = {
     monospace = [
+      "Caskaydia Mono NF"
       "AnonymicePro Nerd Font Propo"
       "Source Han Sans HW SC"
     ];

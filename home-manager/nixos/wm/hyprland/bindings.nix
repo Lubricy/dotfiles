@@ -6,6 +6,7 @@
       "$mod,W,exec,eww open overview"
       "$mod,N,exec,org-capture"
       "$mod,X,killactive"
+      "$mod,F,togglefloating"
       "$mod SHIFT,Q,exec,uwsm stop"
     ];
     bindm = [

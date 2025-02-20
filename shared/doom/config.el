@@ -8,6 +8,8 @@
 (setq doom-theme 'doom-dracula
       doom-themes-padded-modeline t)
 
+(setq doom-font
+      (font-spec :family "Caskaydia Mono NF" :size 11.0))
 ;; I've swapped these keys on my keyboard
 (setq x-super-keysym        'meta
       x-alt-keysym          'alt
