@@ -1,10 +1,14 @@
-{pkgs, ...}: {
-  services.lvm.enable = true;
+{
+  lib,
+  pkgs,
+  ...
+}: {
+  services.lvm.enable = lib.mkDefault true;
   boot = {
-    tmp.useTmpfs = true;
-    initrd.services.lvm.enable = true;
+    tmp.useTmpfs = lib.mkDefault true;
+    initrd.services.lvm.enable = lib.mkDefault true;
     plymouth = {
-      enable = true;
+      enable = lib.mkDefault true;
       theme = "lone";
       themePackages = with pkgs; [
         # By default we would install all themes
@@ -31,20 +35,20 @@
     # It will just not appear on screen unless a key is pressed
     loader.timeout = 0;
     # Use the systemd-boot EFI boot loader.
-    # boot.loader.systemd-boot.enable = true;
-    # boot.loader.efi.canTouchEfiVariables = true;
+    # boot.loader.systemd-boot.enable = lib.mkDefault true;
+    # boot.loader.efi.canTouchEfiVariables = lib.mkDefault true;
 
     # Use the grub EFI boot loader.
     loader.grub = {
-      enable = true;
+      enable = lib.mkDefault true;
       device = "nodev";
-      efiSupport = true;
-      useOSProber = true;
+      efiSupport = lib.mkDefault true;
+      useOSProber = lib.mkDefault true;
       extraGrubInstallArgs = ["--modules=part_gpt part_msdos lvm ext2"];
     };
     loader.efi = {
       efiSysMountPoint = "/boot/efi";
-      canTouchEfiVariables = true;
+      canTouchEfiVariables = lib.mkDefault true;
     };
   };
 }
