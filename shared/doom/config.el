@@ -30,6 +30,7 @@
 ;;      (mapc (lambda (file) (load! file)) (directory-files-recursively path "\\.el$"))))
 
 (load-directory! "bindings")
+(load-directory! "tweaks")
 (load-directory! "private")
 (provide 'config)
 ;;; config.el ends here
