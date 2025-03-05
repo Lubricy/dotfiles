@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
+set -eo pipefail
 if command -v typos > /dev/null; then
-  git diff --cached --name-only --diff-filter=ACM |\
-    xargs --no-run-if-empty typos --write-changes --force-exclude --config "$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")/typos.default.toml"
+  staged=$(git diff --cached --name-only --diff-filter=ACM)
+  typos --write-changes --force-exclude --config "$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")/typos.default.toml" $staged
+  git add $staged
 else
     echo "warning: typos not installed."
     exit 0
