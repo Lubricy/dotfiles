@@ -1,9 +1,17 @@
 #!/usr/bin/env bash
 set -eo pipefail
 if command -v typos > /dev/null; then
-  staged=$(git diff --cached --name-only --diff-filter=ACM)
-  typos --write-changes --force-exclude --config "$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")/typos.default.toml" $staged
-  git add $staged
+  # Use array to properly handle filenames with spaces
+  mapfile -t staged < <(git diff --cached --name-only --diff-filter=ACM)
+
+  # Check if there are any staged files
+  if [ ${#staged[@]} -gt 0 ]; then
+    # Pass array elements properly quoted to typos
+    typos --write-changes --force-exclude --config "$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")/typos.default.toml" "${staged[@]}"
+
+    # Pass array elements properly quoted to git add
+    git add "${staged[@]}"
+  fi
 else
     echo "warning: typos not installed."
     exit 0
