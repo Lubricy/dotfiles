@@ -84,12 +84,12 @@ in {
 
     "org/gnome/settings-daemon/plugins/media-keys" = {
       help = [];
-      logout = ["<Shift><Super>q"];
+      logout = []; # NOTE: this means shutdown in Gnome.
       magnifier = [];
       magnifier-zoom-in = ["<Super>equal"];
       magnifier-zoom-out = ["<Super>minus"];
       screenreader = [];
-      screensaver = ["<Super>q"];
+      screensaver = ["<Super>q"]; # NOTE: this means lock screen in Gnome
     };
 
     "org/gnome/shell/keybindings" =

@@ -24,6 +24,11 @@
       binding = "<Super>b";
       command = "firefox";
     };
+    capture = {
+      name = "Take Note (Org-Capture)";
+      binding = "<Super>n";
+      command = "org-capture";
+    };
   };
 in {
   dconf.settings =
