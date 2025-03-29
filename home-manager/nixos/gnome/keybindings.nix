@@ -19,7 +19,7 @@
   arrow-directions = {
     left = ["Left" "KP_Left"];
     right = ["Right" "KP_Right"];
-    up = ["Up" "KP_Up" "k"];
+    up = ["Up" "KP_Up"];
     down = ["Down" "KP_Down"];
   };
   vim-directions = {
