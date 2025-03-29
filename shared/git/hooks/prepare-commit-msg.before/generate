@@ -1,21 +1,80 @@
 #!/usr/bin/env bash
 
+# Git hook: prepare-commit-message
+# Save this as .git/hooks/prepare-commit-message and make it executable (chmod +x)
 set -eo pipefail
+
+# Parameters passed by Git:
+# $1 - commit message file path
+# $2 - commit source (message, template, merge, squash, commit)
+# $3 - SHA1 hash (for certain commit types)
+
+COMMIT_MSG_FILE=$1
+COMMIT_SOURCE=$2
+SHA1=$3
 
 PROG=${CHAT_COMPLETION_PROGRAM:-oaichat}
 TEMPLATE=${CHAT_COMPLETION_TEMPLATE:-'template://verbose_commit_message.txt'}
 
-if command -v "$PROG" > /dev/null 2>&1; then
-  DIFF=$(git diff --cached -- . ':(exclude)*lock*')
+# Exit early if this is an amend commit or has a predefined message
+case "$COMMIT_SOURCE" in
+    message|template|merge|squash|commit)
+        # Skip generation when message is provided via -m, -t, or for merge/squash/amend
+        exit 0
+        ;;
+    "")
+        # Normal commit (no source specified), proceed with generation
+        ;;
+    *)
+        # Unknown source, exit silently to avoid interfering
+        exit 0
+        ;;
+esac
 
-  if [ -z "$DIFF" ]; then
-    exit 0
-  elif [[ "${#DIFF}" -gt 32768 ]]; then
-    echo "warning: git diff is too long (${#DIFF}). skipping generate."
-    exit 0
-  else
-    mv "$1" "$1.bak"
-    echo "$DIFF" | "$PROG" -s "$TEMPLATE" | cat - "$1.bak" > "$1"
-    rm "$1.bak"
-  fi
+# Check if this is the initial commit
+if git rev-parse --verify HEAD >/dev/null 2>&1; then
+    # Not initial commit, get diff from HEAD
+    DIFF=$(git diff HEAD -- . ':(exclude)*lock*' 2>/dev/null)
+else
+    # Initial commit, get diff of staged changes
+    DIFF=$(git diff --cached -- . ':(exclude)*lock*' 2>/dev/null)
 fi
+
+# Exit if there's no diff (nothing staged or no changes)
+if [ -z "$DIFF" ]; then
+    echo "No changes detected, please stage your changes first" >&2
+    exit 0
+fi
+
+if [[ "${#DIFF}" -gt 32768 ]]; then
+  echo "warning: git diff is too long (${#DIFF}). commit message generation. " >&2
+  exit 0
+fi
+
+# Check if oaichat script exists and is executable
+if ! command -v oaichat >/dev/null 2>&1; then
+    echo "Warning: oaichat script not found. skipping commit message generation. " >&2
+    exit 0
+fi
+
+# Generate commit message using oaichat
+GENERATED_MSG=$(echo "$DIFF" | "$PROG" -s "$TEMPLATE" 2>/dev/null)
+
+# Check if generation succeeded
+if [ $? -ne 0 ] || [ -z "$GENERATED_MSG" ]; then
+    echo "Error: Failed to generate commit message" >&2
+    exit 1
+fi
+
+# Write the generated message to the commit message file
+# Preserve any existing comments (lines starting with #)
+{
+    echo "$GENERATED_MSG"
+    echo ""
+    grep '^#' "$COMMIT_MSG_FILE" 2>/dev/null || true
+} > "$COMMIT_MSG_FILE.tmp"
+
+# Replace the original file atomically
+mv "$COMMIT_MSG_FILE.tmp" "$COMMIT_MSG_FILE"
+
+exit 0
