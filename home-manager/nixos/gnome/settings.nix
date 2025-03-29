@@ -10,6 +10,10 @@
 in {
   home.packages = extensions;
   dconf.settings = {
+    "org/gnome/desktop/wm/preferences" = {
+      focus-mode = "sloppy";
+      auto-raise = true;
+    };
     "org/gnome/shell/extensions/pop-shell" = {
       active-hint = false;
       mouse-cursor-focus-location = mkUint32 4;
