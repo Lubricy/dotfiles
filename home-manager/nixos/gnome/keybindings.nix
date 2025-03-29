@@ -54,8 +54,6 @@ in {
         close = ["<Super>x" "<Alt>F4"];
         maximize = [];
         minimize = [];
-        move-to-monitor-left = [];
-        move-to-monitor-right = [];
         panel-run-dialog = [];
         toggle-maximized = [];
         unmaximize = [];
@@ -67,6 +65,7 @@ in {
         }))
       // (key-bindings directions
         (n: v: {
+          "move-to-monitor-${n}" = [];
           "move-to-workspace-${n}" = [];
         }))
       // (key-bindings arrow-directions
@@ -104,9 +103,9 @@ in {
         toggle-overview = [];
         toggle-quick-settings = ["<Shift><Super>c"];
       }
-      // (key-bindings (attrCount 4)
+      // (key-bindings workspaces
         (n: _: {
-          "switch-to-application-${n}" = [];
+          "switch-to-application-${n}" = []; # conflicts with switch-to-workspace-${n}
         }));
 
     "org/gnome/shell/extensions/pop-shell" =
@@ -117,7 +116,8 @@ in {
         # (un)float a window
         toggle-floating = ["<Super>f"];
         # (un)float all windows
-        toggle-tiling = ["<Shift><Super>f"];
+        # FIXME: following key binding hangs gnome
+        # toggle-tiling = ["<Shift><Super>f"];
       }
       // (key-bindings directions
         (d: v: {
