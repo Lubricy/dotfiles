@@ -41,13 +41,13 @@
       foldAttrs reducer empty vs');
   key-bindings = flip (key-bindings' fold-list []);
 in {
-  dconf.settings = {
-    "org/gnome/desktop/wm/preferences" = {
-      inherit num-workspaces;
-    };
+  dconf.settings = lib.mkMerge [
+    {
+      "org/gnome/desktop/wm/preferences" = {
+        inherit num-workspaces;
+      };
 
-    "org/gnome/desktop/wm/keybindings" =
-      {
+      "org/gnome/desktop/wm/keybindings" = {
         activate-window-menu = ["<Super>c"];
         begin-move = [];
         begin-resize = [];
@@ -57,43 +57,28 @@ in {
         panel-run-dialog = [];
         toggle-maximized = [];
         unmaximize = [];
-      }
-      // (key-bindings workspaces
-        (n: v: {
-          "move-to-workspace-${n}" = ["<Shift><Super>${v}"];
-          "switch-to-workspace-${n}" = ["<Super>${v}"];
-        }))
-      // (key-bindings directions
-        (n: v: {
-          "move-to-monitor-${n}" = [];
-          "move-to-workspace-${n}" = [];
-        }))
-      // (key-bindings arrow-directions
-        (n: v: {
-          "switch-to-workspace-${n}" = ["<Control>${v}"];
-        }));
+      };
 
-    "org/gnome/mutter/keybindings" = {
-      toggle-tiled-left = [];
-      toggle-tiled-right = [];
-    };
+      "org/gnome/mutter/keybindings" = {
+        toggle-tiled-left = [];
+        toggle-tiled-right = [];
+      };
 
-    "org/gnome/mutter/wayland/keybindings" = {
-      restore-shortcuts = [];
-    };
+      "org/gnome/mutter/wayland/keybindings" = {
+        restore-shortcuts = [];
+      };
 
-    "org/gnome/settings-daemon/plugins/media-keys" = {
-      help = [];
-      logout = []; # NOTE: this means shutdown in Gnome.
-      magnifier = [];
-      magnifier-zoom-in = ["<Super>equal"];
-      magnifier-zoom-out = ["<Super>minus"];
-      screenreader = [];
-      screensaver = ["<Super>q"]; # NOTE: this means lock screen in Gnome
-    };
+      "org/gnome/settings-daemon/plugins/media-keys" = {
+        help = [];
+        logout = []; # NOTE: this means shutdown in Gnome.
+        magnifier = [];
+        magnifier-zoom-in = ["<Super>equal"];
+        magnifier-zoom-out = ["<Super>minus"];
+        screenreader = [];
+        screensaver = ["<Super>q"]; # NOTE: this means lock screen in Gnome
+      };
 
-    "org/gnome/shell/keybindings" =
-      {
+      "org/gnome/shell/keybindings" = {
         focus-active-notification = [];
         screenshot = ["<Shift><Alt>4"];
         show-screen-recording-ui = [];
@@ -102,14 +87,9 @@ in {
         toggle-message-tray = ["<Shift><Super>n"];
         toggle-overview = [];
         toggle-quick-settings = ["<Shift><Super>c"];
-      }
-      // (key-bindings workspaces
-        (n: _: {
-          "switch-to-application-${n}" = []; # conflicts with switch-to-workspace-${n}
-        }));
+      };
 
-    "org/gnome/shell/extensions/pop-shell" =
-      {
+      "org/gnome/shell/extensions/pop-shell" = {
         tile-orientation = ["<Super>r"];
         tile-enter = ["<Super>w"];
         management-orientation = ["r"];
@@ -118,8 +98,40 @@ in {
         # (un)float all windows
         # FIXME: following key binding hangs gnome
         # toggle-tiling = ["<Shift><Super>f"];
-      }
-      // (key-bindings directions
+
+        # Move window to the monitor at left, right
+        pop-monitor-left = ["<Super>a"];
+        pop-monitor-right = ["<Super>d"];
+      };
+    }
+    # workspaces
+    {
+      "org/gnome/desktop/wm/keybindings" =
+        key-bindings workspaces
+        (n: v: {
+          "move-to-workspace-${n}" = ["<Shift><Super>${v}"];
+          "switch-to-workspace-${n}" = ["<Super>${v}"];
+        });
+      "org/gnome/shell/keybindings" =
+        key-bindings workspaces
+        (n: _: {
+          "switch-to-application-${n}" = []; # conflicts with switch-to-workspace-${n}
+        });
+    }
+    # directions
+    {
+      "org/gnome/desktop/wm/keybindings" =
+        (key-bindings directions
+          (n: v: {
+            "move-to-monitor-${n}" = [];
+            "move-to-workspace-${n}" = [];
+          }))
+        // (key-bindings arrow-directions
+          (n: v: {
+            "switch-to-workspace-${n}" = ["<Control>${v}"];
+          }));
+      "org/gnome/shell/extensions/pop-shell" =
+        key-bindings directions
         (d: v: {
           # Focus window {direction}
           "focus-${d}" = ["<Super>${v}"];
@@ -136,6 +148,7 @@ in {
           "tile-resize-${d}" = ["<Control>${v}"];
           # Swap window {direction}
           "tile-swap-${d}" = ["<Shift>${v}"];
-        }));
-  };
+        });
+    }
+  ];
 }
