@@ -100,8 +100,8 @@ in {
         # toggle-tiling = ["<Shift><Super>f"];
 
         # Move window to the monitor at left, right
-        pop-monitor-left = ["<Super>a"];
-        pop-monitor-right = ["<Super>d"];
+        pop-monitor-left = ["<Shift><Super>a"];
+        pop-monitor-right = ["<Shift><Super>d"];
       };
     }
     # workspaces
