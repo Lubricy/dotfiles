@@ -50,6 +50,7 @@
 (load! "+pretty")
 (load! "+timestamp")
 (load! "+latex")
+(load! "+jupyter")
 
 (dolist (flag (doom-module :tweaks 'org :flags))
   (load! (symbol-name flag)))
