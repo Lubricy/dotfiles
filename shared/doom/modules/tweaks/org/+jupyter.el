@@ -32,10 +32,11 @@
     (nreverse lines)))
 
 ;; Function to abbreviate a string
-(defun my-abbreviate-string (str max-lines max-line-length)
+(defun my-abbreviate-string (max-lines max-line-length str)
   "Abbreviate STR by wrapping long lines and limiting the number of lines."
   (let ((lines (split-string str "\n"))
         (wrapped-lines '()))
+    ;; (pp lines)
     (dolist (line lines)
       (if (> (length line) max-line-length)
           (setq wrapped-lines (append wrapped-lines (my-wrap-line line max-line-length)))
@@ -56,35 +57,21 @@
                                ))))
     (mapconcat 'identity wrapped-lines "\n")))
 
-(defun modify-nested-plist (plist fn)
-  "Recursively traverse a nested PLIST, applying FN to values associated with the key :value.
-PLIST is a property list that may contain nested plists. FN is a function that takes a single
-argument (the value associated with :value) and returns a modified value. Returns a new plist
-with the modifications applied."
-  (let ((result '())
-        (current plist))
-    (while current
-      (let ((key (car current))
-            (value (cadr current)))
-        (if (plistp value)
-            (setq result (append (list key (modify-nested-plist value fn)) result))
-          (if (eq key :value)
-              (setq result (append (list key (funcall fn value)) result))
-            (setq result (append (list key value) result)))))
-      ;; Move to the next key-value pair
-      (setq current (cddr current)))
-    result))
-
-(defun my-filter-org-babel-insert-result (args)
+(defun filter-jupyter-org-results (result)
   "Filter function to abbreviate long results before insertion."
-  (cl-destructuring-bind (req context result) args
-    (list req context
-          (if (stringp result)
-              (my-abbreviate-string result org-babel-max-lines org-babel-max-line-length)
-            (modify-nested-plist
-             result
-             (lambda (value)
-               (my-abbreviate-string value org-babel-max-lines org-babel-max-line-length)))))))
+  (pp result)
+  (let* ((abbrev (apply-partially #'my-abbreviate-string org-babel-max-lines org-babel-max-line-length))
+         (data (car result))
+         (metadata (cdr result))
+         (res
+          (if (stringp data)
+              (funcall abbrev data)
+            (cl-loop for (k v) on data
+                     by #'cddr nconc
+                     (if (eq k :text/plain)
+                         (list k (funcall abbrev v))
+                       (list k v))))))
+    `(,res . ,metadata)))
 
 ;; Minor mode definition
 (define-minor-mode org-babel-abbreviate-mode
@@ -93,9 +80,13 @@ When enabled, long lines are wrapped, and outputs with many lines or list elemen
   :global t
   :lighter " OrgAbbr"
   (if org-babel-abbreviate-mode
-      (advice-add 'jupyter-org--insert-result :filter-args #'my-filter-org-babel-insert-result)
-    (advice-remove 'jupyter-org--insert-result #'my-filter-org-babel-insert-result)))
+      (progn
+        (advice-add 'jupyter-org-processed-result :filter-args #'filter-jupyter-org-results))
+    (advice-remove 'jupyter-org-processed-result #'filter-jupyter-org-results))
 
+  )
+
+;; (advice-remove 'jupyter-org-inserted-result #'filter-jupyter-org-results)
 (after! ob-jupyter
   (org-babel-abbreviate-mode t)
   (setq org-babel-default-header-args:jupyter-python
