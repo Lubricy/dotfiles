@@ -48,3 +48,8 @@
 ;(unpin! pinned-package another-pinned-package)
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;(unpin! t)
+
+;; HACK: until https://github.com/emacs-jupyter/jupyter/pull/582 is merged
+(package! jupyter
+  :recipe (:repo "jamieforth/emacs-jupyter")
+  :pin "d51c0aad420b7977a49663d8f9f4e883ef07a06e")

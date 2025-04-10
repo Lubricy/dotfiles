@@ -1,4 +1,5 @@
 (use-package! age
+  :defer t
   :config
   (age-file-enable)
   :custom

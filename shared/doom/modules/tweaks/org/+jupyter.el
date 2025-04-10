@@ -59,7 +59,7 @@
 
 (defun filter-jupyter-org-results (result)
   "Filter function to abbreviate long results before insertion."
-  (pp result)
+  ;; (pp result)
   (let* ((abbrev (apply-partially #'my-abbreviate-string org-babel-max-lines org-babel-max-line-length))
          (data (car result))
          (metadata (cdr result))
@@ -73,7 +73,12 @@
                        (list k v))))))
     `(,res . ,metadata)))
 
-;; Minor mode definition
+(defun filter-jupyter-org-results (result)
+  "Filter function to abbreviate long results before insertion."
+  ;; (pp result)
+  (pp result)
+  result)
+
 (define-minor-mode org-babel-abbreviate-mode
   "Toggle abbreviation of long Org code block results.
 When enabled, long lines are wrapped, and outputs with many lines or list elements are abbreviated."
@@ -81,13 +86,12 @@ When enabled, long lines are wrapped, and outputs with many lines or list elemen
   :lighter " OrgAbbr"
   (if org-babel-abbreviate-mode
       (progn
-        (advice-add 'jupyter-org-processed-result :filter-args #'filter-jupyter-org-results))
-    (advice-remove 'jupyter-org-processed-result #'filter-jupyter-org-results))
-
+        (advice-add 'jupyter-org-inserted-result :filter-return #'filter-jupyter-org-results))
+    (advice-remove 'jupyter-org-inserted-result #'filter-jupyter-org-results))
   )
-
-;; (advice-remove 'jupyter-org-inserted-result #'filter-jupyter-org-results)
-(after! ob-jupyter
+(advice-add 'jupyter-org-get-result :filter-return #'filter-jupyter-org-results)
+(advice-remove 'jupyter-org-get-result #'filter-jupyter-org-results)
+(after! jupyter
   (org-babel-abbreviate-mode t)
   (setq org-babel-default-header-args:jupyter-python
         '((:pandoc . t))))
