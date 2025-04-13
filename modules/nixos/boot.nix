@@ -30,10 +30,10 @@
       "rd.udev.log_level=3"
       "udev.log_priority=3"
     ];
-    # Hide the OS choice for bootloaders.
-    # It's still possible to open the bootloader list by pressing any key
-    # It will just not appear on screen unless a key is pressed
-    loader.timeout = 0;
+    # Set timeout to 0 hide the OS choice for bootloaders.
+    # It's *not* possible to open the bootloader list in GRUB
+    # so set to 1 instead
+    loader.timeout = 1;
     # Use the systemd-boot EFI boot loader.
     # boot.loader.systemd-boot.enable = lib.mkDefault true;
     # boot.loader.efi.canTouchEfiVariables = lib.mkDefault true;
