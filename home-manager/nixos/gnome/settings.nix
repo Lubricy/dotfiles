@@ -5,6 +5,7 @@
 }: let
   extensions = with pkgs.gnomeExtensions; [
     pop-shell
+    kimpanel
   ];
   inherit (lib.hm.gvariant) mkUint32;
 in {
