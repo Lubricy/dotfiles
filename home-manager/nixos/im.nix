@@ -1,4 +1,8 @@
-{pkgs, ...}: {
+{
+  lib,
+  pkgs,
+  ...
+}: {
   # enable fcitx5
   i18n.inputMethod = {
     # enable = true;
@@ -15,4 +19,5 @@
       fcitx5-gtk
     ];
   };
+  xdg.configFile."fcitx5".source = lib.dot.fromShared "fcitx5";
 }
