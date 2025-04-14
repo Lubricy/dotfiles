@@ -1,8 +1,4 @@
-{
-  lib,
-  pkgs,
-  ...
-}: {
+{lib, ...}: {
   services.lvm.enable = lib.mkDefault true;
   boot = {
     tmp.useTmpfs = lib.mkDefault true;
@@ -26,6 +22,7 @@
       efiSupport = lib.mkDefault true;
       useOSProber = lib.mkDefault true;
       extraGrubInstallArgs = ["--modules=part_gpt part_msdos lvm ext2"];
+      configurationLimit = lib.mkDefault 10;
     };
     loader.efi = {
       efiSysMountPoint = "/boot/efi";

@@ -1,13 +1,19 @@
 {
   lib,
   config,
+  pkgs,
   ...
 }: let
-  inherit (lib) mkEnableOption mkIf mkMerge;
+  inherit (lib) mkOption mkEnableOption mkIf mkMerge;
   cfg = config.dot.features.container;
 in {
   options.dot.features.container = {
     enable = mkEnableOption "enable podman";
+    dockerComposePkg = mkOption {
+      type = lib.types.package;
+      default = pkgs.docker-compose;
+      description = "the package used for docker compose";
+    };
   };
   config = mkIf cfg.enable (mkMerge [
     {
@@ -17,6 +23,9 @@ in {
         dockerCompat = true;
         defaultNetwork.settings.dns_enabled = true;
       };
+      environment.systemPackages = [
+        cfg.dockerComposePkg
+      ];
     }
     (mkIf config.dot.features.nvidia.enable {
       hardware.nvidia-container-toolkit.enable = true;
