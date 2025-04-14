@@ -56,6 +56,11 @@
     };
     ########################  Some non-flake repositories  #########################################
 
+    # github public ssh keys
+    github-keys = {
+      url = "https://github.com/Lubricy.keys";
+      flake = false;
+    };
     # doom-emacs is a configuration framework for GNU Emacs.
     doomemacs = {
       url = "github:doomemacs/doomemacs";

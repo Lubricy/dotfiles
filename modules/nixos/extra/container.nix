@@ -3,16 +3,11 @@
   config,
   ...
 }: let
-  inherit (lib) types mkOption mkEnableOption mkIf mkMerge;
-  cfg = config.features.visualization;
+  inherit (lib) mkEnableOption mkIf mkMerge;
+  cfg = config.dot.features.container;
 in {
-  options.features.visualization = {
-    enable = mkEnableOption "enable visualization";
-    engine = mkOption {
-      type = types.enum ["docker" "podman"];
-      default = "podman";
-    };
-    emulatedSystems = config.options.boot.binfmt.emulatedSystems;
+  options.dot.features.container = {
+    enable = mkEnableOption "enable podman";
   };
   config = mkIf cfg.enable (mkMerge [
     {

@@ -34,8 +34,12 @@
     },
     "emacs-overlay": {
       "inputs": {
-        "nixpkgs": ["nixpkgs-unstable"],
-        "nixpkgs-stable": ["nixpkgs"]
+        "nixpkgs": [
+          "nixpkgs-unstable"
+        ],
+        "nixpkgs-stable": [
+          "nixpkgs"
+        ]
       },
       "locked": {
         "lastModified": 1744218590,
@@ -87,7 +91,9 @@
       "inputs": {
         "flake-compat": "flake-compat",
         "gitignore": "gitignore",
-        "nixpkgs": ["nixpkgs"]
+        "nixpkgs": [
+          "nixpkgs"
+        ]
       },
       "locked": {
         "lastModified": 1742649964,
@@ -103,9 +109,24 @@
         "type": "github"
       }
     },
+    "github-keys": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-vAtNiEjn1HPP4ezufdzQiKsp/yxUvlM7tNFqdT4oqdo=",
+        "type": "file",
+        "url": "https://github.com/Lubricy.keys"
+      },
+      "original": {
+        "type": "file",
+        "url": "https://github.com/Lubricy.keys"
+      }
+    },
     "gitignore": {
       "inputs": {
-        "nixpkgs": ["git-hooks", "nixpkgs"]
+        "nixpkgs": [
+          "git-hooks",
+          "nixpkgs"
+        ]
       },
       "locked": {
         "lastModified": 1709087332,
@@ -123,7 +144,9 @@
     },
     "home-manager": {
       "inputs": {
-        "nixpkgs": ["nixpkgs"]
+        "nixpkgs": [
+          "nixpkgs"
+        ]
       },
       "locked": {
         "lastModified": 1744117652,
@@ -158,7 +181,9 @@
     },
     "nix-darwin": {
       "inputs": {
-        "nixpkgs": ["nixpkgs-darwin"]
+        "nixpkgs": [
+          "nixpkgs-darwin"
+        ]
       },
       "locked": {
         "lastModified": 1744224272,
@@ -176,7 +201,9 @@
     },
     "nix-index-database": {
       "inputs": {
-        "nixpkgs": ["nixpkgs"]
+        "nixpkgs": [
+          "nixpkgs"
+        ]
       },
       "locked": {
         "lastModified": 1743911143,
@@ -210,7 +237,9 @@
     "nixos-generators": {
       "inputs": {
         "nixlib": "nixlib",
-        "nixpkgs": ["nixpkgs"]
+        "nixpkgs": [
+          "nixpkgs"
+        ]
       },
       "locked": {
         "lastModified": 1742568034,
@@ -297,6 +326,7 @@
         "emacs-overlay": "emacs-overlay",
         "fzf-tab": "fzf-tab",
         "git-hooks": "git-hooks",
+        "github-keys": "github-keys",
         "home-manager": "home-manager",
         "kickstart": "kickstart",
         "nix-darwin": "nix-darwin",
