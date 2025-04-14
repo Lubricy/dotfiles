@@ -1,9 +1,18 @@
 {
   lib,
   config,
+  pkgs,
   ...
-}: {
-  config = lib.mkIf config.dot.defaultUser.enable {
-    users.users.${config.dot.defaultUser.username}.extraGroups = ["dialout" "input"];
+}: let
+  cfg = config.dot.defaultUser;
+in {
+  config = lib.mkIf cfg.enable {
+    users.mutableUsers = lib.mkDefault true;
+    users.users.${cfg.username} = {
+      isNormalUser = true;
+      extraGroups = ["wheel" "networkmanager" "dialout" "input"]; # Enable ‘sudo’ for the user.
+      home = "/home/${cfg.username}";
+      shell = pkgs.zsh;
+    };
   };
 }

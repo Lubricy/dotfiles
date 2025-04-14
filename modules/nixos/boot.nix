@@ -7,33 +7,14 @@
   boot = {
     tmp.useTmpfs = lib.mkDefault true;
     initrd.services.lvm.enable = lib.mkDefault true;
-    plymouth = {
-      enable = lib.mkDefault true;
-      theme = "lone";
-      themePackages = with pkgs; [
-        # By default we would install all themes
-        (adi1090x-plymouth-themes.override {
-          selected_themes = ["lone"];
-        })
-      ];
-    };
 
-    # Enable "Silent Boot"
-    consoleLogLevel = 0;
-    initrd.verbose = false;
     kernelParams = [
-      "quiet"
-      "splash"
       "boot.shell_on_fail"
       "loglevel=3"
       "rd.systemd.show_status=false"
       "rd.udev.log_level=3"
       "udev.log_priority=3"
     ];
-    # Set timeout to 0 hide the OS choice for bootloaders.
-    # It's *not* possible to open the bootloader list in GRUB
-    # so set to 1 instead
-    loader.timeout = 1;
     # Use the systemd-boot EFI boot loader.
     # boot.loader.systemd-boot.enable = lib.mkDefault true;
     # boot.loader.efi.canTouchEfiVariables = lib.mkDefault true;

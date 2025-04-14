@@ -1,6 +1,3 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
 {
   lib,
   pkgs,
@@ -11,8 +8,32 @@
   config = lib.mkMerge [
     {programs.dconf.enable = true;}
     (lib.mkIf config.dot.features.gui.enable {
+      # boot options
+      boot = {
+        kernelParams = [
+          "quiet"
+          "splash"
+        ];
+        plymouth = {
+          enable = lib.mkDefault true;
+          theme = "lone";
+          themePackages = with pkgs; [
+            # By default we would install all themes
+            (adi1090x-plymouth-themes.override {
+              selected_themes = ["lone"];
+            })
+          ];
+        };
+        # Enable "Silent Boot"
+        consoleLogLevel = lib.mkDefault 0;
+        initrd.verbose = lib.mkDefault false;
+        # Set timeout to 0 hide the OS choice for bootloaders.
+        # It's *not* possible to open the bootloader list in GRUB
+        # so set to 1 instead
+        loader.timeout = 1;
+      };
       # TODO refactor this
-      dot.features.nvidia.enable = true;
+      dot.features.nvidia.enable = lib.mkDefault true;
       # Select internationalisation properties.
       # i18n.defaultLocale = "en_US.UTF-8";
       # console = {
@@ -63,19 +84,6 @@
         wl-clipboard
         cliphist
       ];
-      # enable fcitx5
-      # i18n.inputMethod = {
-      #   enable = true;
-      #   type = "fcitx5";
-      #   fcitx5.waylandFrontend = true;
-      #   fcitx5.addons = with pkgs; [
-      #     fcitx5-material-color
-      #     fcitx5-chinese-addons
-      #     fcitx5-pinyin-zhwiki
-      #     fcitx5-mozc
-      #     fcitx5-gtk
-      #   ];
-      # };
     })
   ];
 }
