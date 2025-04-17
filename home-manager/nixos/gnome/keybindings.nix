@@ -54,7 +54,7 @@ in {
         close = ["<Super>x" "<Alt>F4"];
         maximize = [];
         minimize = [];
-        panel-run-dialog = [];
+        panel-run-dialog = ["<Super>semicolon" "<Alt>F2"];
         toggle-maximized = [];
         unmaximize = [];
       };

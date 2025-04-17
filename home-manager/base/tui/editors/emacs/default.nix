@@ -15,6 +15,7 @@
 }:
 with lib; let
   cfg = config.modules.editors.emacs;
+  urlscheme = "org-protocol";
   shellExtra = ''
     function e() {
         if [ -z "$INSIDE_EMACS" ]; then
@@ -137,6 +138,17 @@ in {
         # pgtk (pure gtk) build add native support for wayland.
         # https://www.gnu.org/savannah-checkouts/gnu/emacs/emacs.html#Releases
         emacsPkg = myEmacsPackagesFor pkgs.emacs30-pgtk;
+        mimeType = "x-scheme-handler/${urlscheme}";
+
+        desktopItem = pkgs.makeDesktopItem {
+          name = "emacs-org-protocol";
+          exec = "emacsclient %u";
+          icon = "emacs";
+          desktopName = "Send to Org Mode";
+          mimeTypes = [mimeType];
+          noDisplay = true;
+          terminal = false;
+        };
       in {
         modules.editors.emacs.package = emacsPkg;
         services.emacs = {
@@ -148,6 +160,16 @@ in {
           };
           startWithUserSession = true;
         };
+        xdg.mimeApps = {
+          enable = true;
+          associations.added = {
+            "${mimeType}" = [desktopItem.name];
+          };
+          defaultApplications = {
+            "${mimeType}" = [desktopItem.name];
+          };
+        };
+        home.packages = [desktopItem];
       }
     ))
 

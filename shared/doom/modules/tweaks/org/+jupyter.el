@@ -76,7 +76,6 @@
 (defun filter-jupyter-org-results (result)
   "Filter function to abbreviate long results before insertion."
   ;; (pp result)
-  (pp result)
   result)
 
 (define-minor-mode org-babel-abbreviate-mode
@@ -92,6 +91,6 @@ When enabled, long lines are wrapped, and outputs with many lines or list elemen
 (advice-add 'jupyter-org-get-result :filter-return #'filter-jupyter-org-results)
 (advice-remove 'jupyter-org-get-result #'filter-jupyter-org-results)
 (after! jupyter
-  (org-babel-abbreviate-mode t)
+  ;; (org-babel-abbreviate-mode t)
   (setq org-babel-default-header-args:jupyter-python
         '((:pandoc . t))))

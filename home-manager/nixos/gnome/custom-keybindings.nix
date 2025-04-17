@@ -19,6 +19,11 @@
       binding = "<Super>e";
       command = "emacsclient -c";
     };
+    restartEditor = {
+      name = "Restart Emacs";
+      binding = "<Shift><Super>e";
+      command = "systemctl restart --user emacs && emacsclient -c";
+    };
     browser = {
       name = "Firefox";
       binding = "<Super>b";
