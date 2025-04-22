@@ -91,7 +91,7 @@
        ;;ansible
        ;;biblio            ; Writes a PhD for you (citation needed)
        (debugger +lsp)       ; FIXME stepping through code, to help you add bugs
-       direnv
+       (:unless (featurep :system 'windows) direnv)
                                         ;docker
        editorconfig      ; let someone else argue about tabs vs spaces
        ;;ein               ; tame Jupyter notebooks with emacs
@@ -114,7 +114,7 @@
        ;;upload            ; map local to remote projects via ssh/ftp
 
        :os
-       (:if IS-MAC macos)               ; improve compatibility with macOS
+       (:if (featurep :system 'macos) macos)               ; improve compatibility with macOS
        ;;tty               ; improve the terminal Emacs experience
 
        :lang
