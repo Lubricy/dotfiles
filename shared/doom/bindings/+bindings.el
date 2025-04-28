@@ -167,3 +167,11 @@
      :n "M-<right>"      #'org-demote-subtree
      :n "j"              #'org-next-block
      :n "k"              #'org-previous-block)))
+
+(map! ;; Extend smart tab for specific modes. This way, we process the entire
+      ;; smart tab logic and only fall back to these commands at the end.
+      (:when (modulep! :lang org)
+       (:after org :map org-mode-map
+        [remap indent-for-tab-command]
+        `(menu-item "Indent heading" org-demote-subtree
+          :filter ,(lambda (cmd) (when (org-at-heading-p) cmd))))))

@@ -31,14 +31,7 @@ case "$COMMIT_SOURCE" in
         ;;
 esac
 
-# Check if this is the initial commit
-if git rev-parse --verify HEAD >/dev/null 2>&1; then
-    # Not initial commit, get diff from HEAD
-    DIFF=$(git diff HEAD -- . ':(exclude)*lock*' 2>/dev/null)
-else
-    # Initial commit, get diff of staged changes
-    DIFF=$(git diff --cached -- . ':(exclude)*lock*' 2>/dev/null)
-fi
+DIFF=$(git diff --cached -- . ':(exclude)*lock*' 2>/dev/null)
 
 # Exit if there's no diff (nothing staged or no changes)
 if [ -z "$DIFF" ]; then

@@ -50,8 +50,9 @@ See https://github.com/ollama/ollama/blob/main/docs/api.md#parameters."
   :group 'starhugger
   :type 'alist)
 
-(cl-defun starhugger-ollama-auth-completion-api (prompt
-                                                 callback &rest args &key model force-new max-new-tokens &allow-other-keys)
+(cl-defun starhugger-ollama-auth-completion-api
+    (prompt
+     callback &rest args &key model force-new max-new-tokens &allow-other-keys)
   (-let* ((model (or model starhugger-model-id))
           (sending-data
            (starhugger--json-serialize
@@ -115,3 +116,17 @@ See https://github.com/ollama/ollama/blob/main/docs/api.md#parameters."
        :request-response request-obj))))
 
 (load! "+forge.el")
+
+(use-package! mcp-hub
+  :after gptel
+  :config
+  (setq! mcp-hub-servers '(("fetch" . (:command "uvx" :args ("mcp-server-fetch"))))))
+
+;;;###autoload
+(defun gptel-mcp-register-tool ()
+  (interactive)
+  (let ((tools (mcp-hub-get-all-tool :asyncp t :categoryp t)))
+    (mapcar #'(lambda (tool)
+                (apply #'gptel-make-tool
+                       tool))
+            tools)))

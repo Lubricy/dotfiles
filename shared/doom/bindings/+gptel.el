@@ -24,3 +24,9 @@
    :desc "menu" "m" #'gptel-menu
    :desc "add context" "c" #'gptel-context-add
    :desc "examine context" "C" #'gptel--suffix-context-buffer)))
+
+;; HACK: RET conflict with org-mode
+(after! gptel
+  (require 'transient)
+  (transient-suffix-put 'gptel-menu (kbd "RET") :key "<return>")
+  (transient-suffix-put 'gptel-tools (kbd "RET") :key "<return>"))
