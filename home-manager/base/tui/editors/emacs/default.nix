@@ -158,7 +158,8 @@ in {
             enable = true;
             arguments = [" --create-frame"];
           };
-          startWithUserSession = true;
+          socketActivation.enable = true;
+          # startWithUserSession = true;
         };
         xdg.mimeApps = {
           enable = true;
