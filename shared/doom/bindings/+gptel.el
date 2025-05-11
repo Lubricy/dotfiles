@@ -22,11 +22,11 @@
    :desc "send prompt" "e" #'gptel-send
    :desc "generative complete" "r" #'starhugger-trigger-suggestion
    :desc "menu" "m" #'gptel-menu
+   :desc "tools" "t" #'gptel-tools
    :desc "add context" "c" #'gptel-context-add
    :desc "examine context" "C" #'gptel--suffix-context-buffer)))
 
 ;; HACK: RET conflict with org-mode
-(after! gptel
-  (require 'transient)
-  (transient-suffix-put 'gptel-menu (kbd "RET") :key "<return>")
-  (transient-suffix-put 'gptel-tools (kbd "RET") :key "<return>"))
+(after! gptel-transient
+  (transient-suffix-put #'gptel-menu (kbd "RET") :key "<return>")
+  (transient-suffix-put #'gptel-tools (kbd "RET") :key "<return>"))

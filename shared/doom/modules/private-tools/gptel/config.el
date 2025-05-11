@@ -11,7 +11,9 @@
            (chat . "You are a large language model and a conversation partner. Respond concisely. I'm looking for best result possible. Before you give me the answer, ask me everything you need to know to give me the best result possible. Be sure to ask questions one at a time since this is an interactive session.")))
 
   (require 'gptel-context)
-  (evil-set-initial-state 'gptel-context-buffer-mode 'emacs))
+  (evil-set-initial-state 'gptel-context-buffer-mode 'emacs)
+  (require 'gptel-integrations)
+  )
 
 ;;;###autoload
 (defun +gptel-openai-get-api-key ()
