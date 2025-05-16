@@ -1,19 +1,20 @@
 ;; -*- lexical-binding: t; -*-
 
 (use-package! gptel
-  :config
-  (setq! gptel-default-mode 'org-mode)
-  (setq! gptel-org-branching-context 't)
-  (setq! gptel-directives
-         '((default . "You are a large language model living in Emacs and a helpful assistant. Respond concisely. I'm looking for best result possible. Before you give me the answer, ask me everything you need to know to give me the best result possible. Be sure to ask questions one at a time since this is an interactive session.")
-           (programming . "You are a large language model and a careful programmer. Provide code and only code as output without any additional text, prompt or note.")
-           (writing . "You are a large language model and a writing assistant. Respond concisely.")
-           (chat . "You are a large language model and a conversation partner. Respond concisely. I'm looking for best result possible. Before you give me the answer, ask me everything you need to know to give me the best result possible. Be sure to ask questions one at a time since this is an interactive session.")))
-
-  (require 'gptel-context)
-  (evil-set-initial-state 'gptel-context-buffer-mode 'emacs)
+  :init
+  ;; Ensure the integration is loaded before the package loads
   (require 'gptel-integrations)
-  )
+  :custom
+  (gptel-default-mode 'markdown-mode)
+  (gptel-org-branching-context t)
+  (gptel-directives
+   '((default . "You are a large language model living in Emacs and a helpful assistant. Respond concisely. I'm looking for the best result possible. Before you give me the answer, ask me everything you need to know to give me the best result possible. Be sure to ask questions one at a time since this is an interactive session.")
+     (programming . "You are a large language model and a careful programmer. Provide code and only code as output without any additional text, prompt or note.")
+     (writing . "You are a large language model and a writing assistant. Respond concisely.")
+     (chat . "You are a large language model and a conversation partner. Respond concisely. I'm looking for the best result possible. Before you give me the answer, ask me everything you need to know to give me the best result possible. Be sure to ask questions one at a time since this is an interactive session.")))
+  :config
+  (require 'gptel-context)
+  (evil-set-initial-state 'gptel-context-buffer-mode 'emacs))
 
 ;;;###autoload
 (defun +gptel-openai-get-api-key ()
@@ -120,9 +121,7 @@ See https://github.com/ollama/ollama/blob/main/docs/api.md#parameters."
 (load! "+forge.el")
 
 (use-package! mcp-hub
-  :after gptel
-  :config
-  (setq! mcp-hub-servers '(("fetch" . (:command "uvx" :args ("mcp-server-fetch"))))))
+  :after gptel)
 
 ;;;###autoload
 (defun gptel-mcp-register-tool ()
@@ -132,3 +131,15 @@ See https://github.com/ollama/ollama/blob/main/docs/api.md#parameters."
                 (apply #'gptel-make-tool
                        tool))
             tools)))
+
+(use-package! elysium
+  :after gptel
+  :custom
+  (elysium-window-size 0.33)        ; The elysium buffer will be 1/3 your screen
+  (elysium-window-style 'horizontal)    ; Can be customized to vertical
+  :config
+  (defun my-enable-smerge-after-elysium-query (&rest _args)
+    "Enable smerge-mode in the current buffer after elysium-query is called."
+    (smerge-mode 1))
+
+  (advice-add 'elysium-query :after #'my-enable-smerge-after-elysium-query))

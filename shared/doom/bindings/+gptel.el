@@ -24,7 +24,17 @@
    :desc "menu" "m" #'gptel-menu
    :desc "tools" "t" #'gptel-tools
    :desc "add context" "c" #'gptel-context-add
-   :desc "examine context" "C" #'gptel--suffix-context-buffer)))
+   :desc "examine context" "C" #'gptel--suffix-context-buffer
+   :desc "generate code" "q" #'elysium-query
+   :desc "keep all changes" "a" #'elysium-keep-all-suggested-changes
+   :desc "discard all changes" "d" #'elysium-discard-all-suggested-changes
+   :desc "clear buffer" "x" #'elysium-clear-buffer
+   :desc "add context" "b" #'elysium-add-context
+   :desc "toggle window" "w" #'elysium-toggle-window)))
+
+(map!
+ (:leader
+  (:prefix ("a" . "elysium"))))
 
 ;; HACK: RET conflict with org-mode
 (after! gptel-transient
