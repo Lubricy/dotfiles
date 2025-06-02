@@ -26,7 +26,7 @@
     jq # A lightweight and flexible command-line JSON processor
 
     # networking tools
-    # mtr # A network diagnostic tool
+    mtr # A network diagnostic tool
     # iperf3
     dnsutils # `dig` + `nslookup`
     # ldns # replacement of `dig`, it provide the command `drill`
@@ -44,6 +44,9 @@
     tree
     gnutar
     rsync
+
+    # nix utils
+    nvd
   ];
 
   programs.zsh.enable = true;
