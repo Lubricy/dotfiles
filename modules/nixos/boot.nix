@@ -18,7 +18,7 @@
     # Use the grub EFI boot loader.
     loader.grub = {
       enable = lib.mkDefault true;
-      device = "nodev";
+      device = lib.mkDefault "nodev";
       efiSupport = lib.mkDefault true;
       useOSProber = lib.mkDefault true;
       extraGrubInstallArgs = ["--modules=part_gpt part_msdos lvm ext2"];
