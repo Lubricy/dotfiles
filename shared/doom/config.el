@@ -9,9 +9,9 @@
       doom-themes-padded-modeline t)
 
 (setq doom-font
-      (font-spec :family "Caskaydia Mono NF" :size 11.0))
+      (font-spec :family "CaskaydiaCove NFM" :size 11.0))
 (setq doom-symbol-font
-      (font-spec :family "DejaVu Math TeX Gyre"))
+      (font-spec :family "Symbols Nerd Font"))
 ;; I've swapped these keys on my keyboard
 (setq x-super-keysym        'meta
       x-alt-keysym          'alt
