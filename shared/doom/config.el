@@ -10,8 +10,8 @@
 
 (setq doom-font
       (font-spec :family "CaskaydiaCove NFM" :size 11.0))
-(setq doom-symbol-font
-      (font-spec :family "Symbols Nerd Font"))
+;; (setq doom-symbol-font
+;;       (font-spec :family "Symbols Nerd Font"))
 ;; I've swapped these keys on my keyboard
 (setq x-super-keysym        'meta
       x-alt-keysym          'alt
