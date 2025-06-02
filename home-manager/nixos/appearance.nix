@@ -24,7 +24,8 @@
     };
 
     iconTheme = {
-      package = pkgs.la-capitaine-icon-theme;
+      # HACK: la-capitaine-icon-theme build failed as of Jun 2, 2025
+      package = pkgs.whitesur-icon-theme;
       name = "Adwaita";
     };
 

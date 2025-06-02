@@ -6,6 +6,7 @@
   extensions = with pkgs.gnomeExtensions; [
     pop-shell
     kimpanel
+    system-monitor
   ];
   inherit (lib.hm.gvariant) mkUint32;
 in {
@@ -28,10 +29,7 @@ in {
     "org/gnome/shell" = {
       disable-user-extensions = false;
       enabled-extensions =
-        map (p: p.extensionUuid) extensions
-        ++ [
-          "system-monitor@gnome-shell-extensions.gcampax.github.com"
-        ];
+        map (p: p.extensionUuid) extensions;
     };
 
     "org/gnome/settings-daemon/plugins/power" = {
