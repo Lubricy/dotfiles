@@ -86,7 +86,7 @@ in {
       ];
 
       programs.bash.bashrcExtra = shellExtra;
-      programs.zsh.initExtra = shellExtra;
+      programs.zsh.initContent = shellExtra;
       #programs.nushell.shellAliases = shellAliases;
     }
     ## Doom Configurations

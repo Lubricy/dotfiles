@@ -21,8 +21,10 @@ in {
     initExtra = cd_ls;
   };
   programs.zsh = {
-    initExtraFirst = builtins.readFile (lib.dot.fromShared "zshrc.d/my.zshtheme");
-    initExtra = cd_ls;
+    initContent = lib.mkMerge [
+      (lib.mkBefore (builtins.readFile (lib.dot.fromShared "zshrc.d/my.zshtheme")))
+      cd_ls
+    ];
   };
 
   home.sessionPath = [

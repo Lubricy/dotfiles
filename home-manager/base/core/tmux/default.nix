@@ -10,7 +10,7 @@ in {
     initExtra = launchTmux;
   };
   programs.zsh = {
-    initExtra = launchTmux;
+    initContent = launchTmux;
   };
   programs.tmux = {
     enable = true;

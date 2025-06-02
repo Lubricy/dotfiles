@@ -2,8 +2,7 @@
   fzf-tab,
   zsh-vi-mode,
   ...
-}:
-let
+}: let
   shellAliases = {
     k = "kubectl";
     cat = "bat";
@@ -12,7 +11,6 @@ let
     urlencode = "python3 -c 'import sys, urllib.parse as ul; print(ul.quote_plus(sys.stdin.read()))'";
   };
   shellExtra = builtins.readFile ./extra.sh;
-
 in {
   # only works in bash/zsh, not nushell
   home.shellAliases = shellAliases;
@@ -25,7 +23,7 @@ in {
   programs.zsh = {
     enable = true;
     syntaxHighlighting.enable = true;
-    initExtra = shellExtra;
+    initContent = shellExtra;
     plugins = [
       {
         name = "fzf-tab";
@@ -40,7 +38,7 @@ in {
     ];
     oh-my-zsh = {
       enable = true;
-      plugins = [ "git" "kubectl" ];
+      plugins = ["git" "kubectl"];
     };
   };
 }

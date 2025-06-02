@@ -114,7 +114,7 @@
     };
   };
   # disable atuin ui, replace it with fzf
-  programs.zsh.initExtra = lib.mkAfter ''
+  programs.zsh.initContent = lib.mkAfter ''
     _atuin_search() {
       local selected
       selected=$(atuin history list --cmd-only --session --print0 \
