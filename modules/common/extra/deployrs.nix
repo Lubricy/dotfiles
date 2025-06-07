@@ -9,6 +9,8 @@
       isSystemUser = true;
       useDefaultShell = true;
       group = "deployrs";
+      openssh.authorizedKeys.keyFiles = config.dot.defaultUser.authorizedKeyFiles;
+      openssh.authorizedKeys.keys = config.dot.defaultUser.authorizedKeys;
     };
     users.groups.deployrs = {};
     security.sudo.configFile = "deployrs ALL=(ALL) NOPASSWD:ALL";
