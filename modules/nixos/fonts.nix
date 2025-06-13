@@ -4,7 +4,8 @@
   config,
   ...
 }: {
-  config = lib.mkIf config.dot.features.gui.enable {
+  options.dot.features.fonts.enable = lib.mkEnableOption "Extra Fonts";
+  config = lib.mkIf config.dot.features.fonts.enable {
     fonts = {
       fontconfig = {
         enable = true;

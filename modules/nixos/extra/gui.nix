@@ -6,6 +6,7 @@
 }: {
   options.dot.features.gui.enable = lib.mkEnableOption "GUI";
   config = lib.mkMerge [
+    {dot.features.fonts.enable = true;}
     {programs.dconf.enable = true;}
     (lib.mkIf config.dot.features.gui.enable {
       # boot options
