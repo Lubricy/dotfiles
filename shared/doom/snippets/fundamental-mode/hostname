@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: hostname
+# key: host
+# --
+`(string-trim (shell-command-to-string "hostname"))`$0
