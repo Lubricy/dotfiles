@@ -7,6 +7,7 @@ set -eo pipefail
 # customizable variables
 PROVIDER=${OAI_MODEL_PROVIDER:-'cloudflare'}
 MODEL=${OAI_MODEL:-'@cf/meta/llama-3.2-11b-vision-instruct'}
+API_VERSION=${OAI_API_VERSION:-'2025-03-01-preview'}
 API_ENTRY=${OAI_PASS_ENTRY:-"t/cf-ai"}
 CLIENT_ID=${OAI_CLIENT_ID:-"$(pass "$API_ENTRY" | awk '/^client_id:/{print $2}')"}
 TOKEN=${OAI_API_KEY:-"$(pass "$API_ENTRY" | head -n 1)"}
@@ -88,8 +89,11 @@ PAYLOAD="$(jq -n \
     --arg query "$QUERY" \
     "$TEMPLATE" | jq ".model=\"$MODEL\"")"
 
-ENDPOINT="$BASE_URL/chat/completions"
-
+if [ "$PROVIDER" == "azure" ]; then
+  ENDPOINT="$BASE_URL/openai/deployments/${OAI_AZURE_DEPLOYMENT:-"$MODEL"}/chat/completions?api-version=$API_VERSION"
+else
+  ENDPOINT="$BASE_URL/chat/completions"
+fi
 if [ "$OAI_NO_STREAM" = "1" ]; then
   curl -fsSL -XPOST \
       -H "Authorization: Bearer $TOKEN" \

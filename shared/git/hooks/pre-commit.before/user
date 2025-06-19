@@ -3,6 +3,13 @@
 set -eo pipefail
 
 EXIT_CODE=0
+
+USER="${USER:-$(id -unr)}"
+
+if [ -z "$USER" ]; then
+    exit "$EXIT_CODE"
+fi
+
 if git diff --staged --name-only --diff-filter=ACM | xargs -d '\n' rg "$USER"; then
     echo "Username '$USER' found in staged file!"
     EXIT_CODE=1
