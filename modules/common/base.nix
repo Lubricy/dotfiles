@@ -47,6 +47,7 @@
 
     # nix utils
     nvd
+    nixos-spec
   ];
 
   programs.zsh.enable = true;

@@ -1,0 +1,179 @@
+#!/usr/bin/env bash
+
+# nixos-spec: A helper script to manage NixOS specialisations.
+# Version 5: Ergonomic overhaul with new default actions and aliases.
+
+set -euo pipefail
+
+# --- Configuration ---
+BASE_SYSTEM_PROFILE="/nix/var/nix/profiles/system"
+RUNNING_SYSTEM="/run/current-system"
+
+# --- Helper Functions ---
+
+# Prints usage instructions and exits.
+usage() {
+    echo "Usage: $0 [command]"
+    echo
+    echo "A helper to manage NixOS specialisations on a running system."
+    echo
+    echo "COMMANDS:"
+    echo "  <spec_name>          Alias to activate a named specialisation."
+    echo "  (no command)         Show current status and list all available specialisations."
+    echo "  list, l              Show current status and list all available specialisations."
+    echo "  activate, a <name>   Activate a named specialisation."
+    echo "  status, s            Show the currently active specialisation, if any."
+    echo "  reset, r             Reset to the base system configuration."
+    echo "  -h, --help           Show this help message."
+    exit 0
+}
+
+# Determines the active configuration and echoes its name.
+get_active_spec_name() {
+    local running_path
+    running_path=$(readlink -f "${RUNNING_SYSTEM}")
+    local base_path
+    base_path=$(readlink -f "${BASE_SYSTEM_PROFILE}")
+
+    if [ "${running_path}" == "${base_path}" ]; then
+        echo "base"
+        return
+    fi
+
+    local specialisations_dir="${base_path}/specialisation"
+    if [ -d "${specialisations_dir}" ]; then
+        for spec_path in "${specialisations_dir}"/*; do
+            # Ensure we are only checking directories
+            if [ -d "${spec_path}" ]; then
+                local current_spec_real_path
+                current_spec_real_path=$(readlink -f "${spec_path}")
+
+                # If the running path matches the real path of this specialisation, we found it.
+                if [ "${running_path}" == "${current_spec_real_path}" ]; then
+                    basename "${spec_path}"
+                    return
+                fi
+            fi
+        done
+    fi
+    echo "unknown"
+}
+
+# --- Subcommands ---
+
+# Shows the current status.
+show_status() {
+    local active_spec
+    active_spec=$(get_active_spec_name)
+
+    if [ "${active_spec}" == "base" ]; then
+        echo "Base configuration is active."
+    elif [ "${active_spec}" == "unknown" ]; then
+        echo "Error: Running configuration is in an unknown state."
+    else
+        echo "Currently active specialisation is '${active_spec}'."
+    fi
+}
+
+# Lists available specialisations, highlighting the active one.
+list_specs() {
+    show_status
+    echo
+    echo "Available specialisations:"
+
+    local specialisations_dir="${BASE_SYSTEM_PROFILE}/specialisation"
+    if [ ! -d "${specialisations_dir}" ] || [ -z "$(ls -A "${specialisations_dir}")" ]; then
+        echo "  No specialisations are defined in your configuration."
+        return
+    fi
+
+    local active_spec
+    active_spec=$(get_active_spec_name)
+
+    for spec in "${specialisations_dir}"/*; do
+        if [ -d "${spec}" ]; then
+            local spec_name
+            spec_name=$(basename "${spec}")
+            if [ "${spec_name}" == "${active_spec}" ]; then
+                echo "  * ${spec_name} (active)"
+            else
+                echo "  - ${spec_name}"
+            fi
+        fi
+    done
+}
+
+# Activates a given specialisation.
+activate_spec() {
+    local spec_name="$1"
+    if [ -z "${spec_name}" ]; then
+        echo "Error: Specialisation name not provided." >&2
+        exit 1
+    fi
+
+    local spec_path="${BASE_SYSTEM_PROFILE}/specialisation/${spec_name}"
+    local switch_script="${spec_path}/bin/switch-to-configuration"
+
+    if [ ! -d "${spec_path}" ] || [ ! -f "${switch_script}" ]; then
+        echo "Error: Specialisation '${spec_name}' not found." >&2
+        echo "Run '$0 list' to see available specialisations." >&2
+        exit 1
+    fi
+
+    echo "Activating specialisation '${spec_name}'..."
+    sudo "${switch_script}" test
+    echo "Successfully switched to specialisation '${spec_name}'."
+}
+
+# Resets to the base configuration.
+reset_to_base() {
+    local base_switch_script="${BASE_SYSTEM_PROFILE}/bin/switch-to-configuration"
+
+    if [ ! -f "${base_switch_script}" ]; then
+        echo "Error: Could not find the base system's switch-to-configuration script." >&2
+        exit 1
+    fi
+
+    echo "Resetting to the base system configuration..."
+    sudo "${base_switch_script}" test
+    echo "Successfully reset to the base configuration."
+}
+
+# --- Main Logic ---
+
+if [ ! -L "${BASE_SYSTEM_PROFILE}" ]; then
+    echo "Error: Base system profile not found at '${BASE_SYSTEM_PROFILE}'. Is this a NixOS system?" >&2
+    exit 1
+fi
+
+if [ "$#" -eq 0 ]; then
+    list_specs
+    exit 0
+fi
+
+case "$1" in
+    list|l)
+        list_specs
+        ;;
+    status|s)
+        show_status
+        ;;
+    activate|a)
+        shift
+        activate_spec "$1"
+        ;;
+    reset|r)
+        reset_to_base
+        ;;
+    -h|--help)
+        usage
+        ;;
+    *)
+        if [ "$#" -eq 1 ]; then
+            activate_spec "$1"
+        else
+            echo "Error: Unknown command or invalid number of arguments for '$1'." >&2
+            usage
+        fi
+        ;;
+esac
