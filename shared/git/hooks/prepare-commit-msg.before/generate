@@ -13,14 +13,22 @@ COMMIT_MSG_FILE=$1
 COMMIT_SOURCE=$2
 SHA1=$3
 
-PROG=${CHAT_COMPLETION_PROGRAM:-oaichat}
-TEMPLATE=${CHAT_COMPLETION_TEMPLATE:-'template://verbose_commit_message.txt'}
+PROG=${CHAT_COMPLETION_PROGRAM:-aichat}
+TEMPLATE=${CHAT_COMPLETION_TEMPLATE:-'-r commit_message'}
+
+# Check if oaichat script exists and is executable
+if ! command -v "$PROG" >/dev/null 2>&1; then
+    echo "Warning: \"$PROG\" not found. skipping commit message generation. " >&2
+    exit 0
+fi
 
 # Exit early if this is an amend commit or has a predefined message
 case "$COMMIT_SOURCE" in
     message|template|merge|squash|commit)
         # Skip generation when message is provided via -m, -t, or for merge/squash/amend
-        exit 0
+        if [ -z "$FORCE_GENERATE" ]; then
+            exit 0
+        fi
         ;;
     "")
         # Normal commit (no source specified), proceed with generation
@@ -44,14 +52,9 @@ if [[ "${#DIFF}" -gt 32768 ]]; then
   exit 0
 fi
 
-# Check if oaichat script exists and is executable
-if ! command -v oaichat >/dev/null 2>&1; then
-    echo "Warning: oaichat script not found. skipping commit message generation. " >&2
-    exit 0
-fi
 
 # Generate commit message using oaichat
-GENERATED_MSG=$(echo "$DIFF" | "$PROG" -s "$TEMPLATE" 2>/dev/null)
+GENERATED_MSG=$(echo "$DIFF" | "$PROG" $TEMPLATE)
 
 # Check if generation succeeded
 if [ $? -ne 0 ] || [ -z "$GENERATED_MSG" ]; then
