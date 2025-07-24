@@ -153,13 +153,13 @@ window_rules:
         window_class: { regex: 'HwndWrapper' }
   - commands: ['move --workspace 1']
     match:
-      - window_process: { equals: 'wezterm-gui' }
+      - window_class: { regex: "Chrome_WidgetWin_1|MozillaDialogClass" } # browsers
   - commands: ['move --workspace 2']
     match:
-      - window_class: { regex: "Chrome_WidgetWin_1|MozillaDialogClass" } # browsers
+      - window_process: { equals: 'emacs' }
   - commands: ['move --workspace 3']
     match:
-      - window_process: { equals: 'emacs' }
+      - window_process: { equals: 'wezterm-gui' }
   - commands: ['move --workspace 5']
     match:
       - window_process: { equals: 'OUTLOOK' }
