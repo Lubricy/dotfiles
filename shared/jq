@@ -1,2 +1,64 @@
-def jmes: [paths(scalars)] | map(map(. as $name | try (tonumber | "[]") catch $name) | join(".")) | unique;
-def leaves: if type == "array" or type == "object" then .[] | leaves else . end;
+def trim: gsub("^\\s+|\\s+$";"");
+
+def jmes:
+  [paths(scalars)]
+  | map(
+      map(. as $name
+          | try (tonumber | "[]")
+            catch $name)
+      | join("."))
+  | unique;
+
+def leaves:
+  if
+    type == "array"
+    or type == "object"
+  then
+    .[] | leaves
+  else
+    .
+  end;
+
+def sse:
+  foreach inputs as $line
+    ({};  # Initialize the accumulator
+     if $line | startswith("event:") then
+       { complete: null, part: $line | sub("event:"; "") | {"event": trim}}
+     elif $line | startswith("data:") then
+       .complete |= null | .part |= {event: (.event // "message"), data: ($line | sub("data:"; ""))}
+     elif $line | startswith(":") then
+       .
+     elif $line == "" then
+       {complete: .part}
+     else
+       .part.data += $line
+     end)
+  | select(.complete)
+  | .complete
+  | . as $i
+  | if .data
+    then .data |= (
+      . as $str
+      | try fromjson
+        catch {json: $str, error:.})
+    end;
+
+def openai:
+  foreach inputs as $i
+  (
+    {};
+    ( if
+        ($i.reasoning | not)
+        and .last.reasoning
+      then "\n"
+      else ""
+      end
+    ) as $sep
+    | ( if $i.reasoning
+        then "\u001b[1;34m\($i.reasoning)\u001b[m"
+        else $i.content
+        end
+      ) as $c
+    | { text: "\($sep)\($c)", last: $i }
+  )
+  | .text;
