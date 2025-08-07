@@ -47,18 +47,35 @@ def openai:
   foreach inputs as $i
   (
     {};
-    ( if
-        ($i.reasoning | not)
-        and .last.reasoning
+    (
+      if $i.tool_calls and ($i.tool_calls | length) then
+        if $i.tool_calls[].function.name then
+          "tool_name"
+        else
+          "tool_arg"
+        end
+      elif ($i.reasoning | not) then
+        "response"
+      else
+        "think"
+        end
+    ) as $state
+    | (
+      if $state != .last
       then "\n"
       else ""
       end
     ) as $sep
-    | ( if $i.reasoning
-        then "\u001b[1;34m\($i.reasoning)\u001b[m"
-        else $i.content
+    | ( if $state == "think" then
+          "\u001b[1;34m\($i.reasoning)\u001b[m"
+        elif $state == "tool_name" then
+          "\u001b[1;33mcalling \u001b[1;35m\($i.tool_calls[].function.name):\u001b[m"
+        elif $state == "tool_arg" then
+          "\u001b[1;36m\($i.tool_calls[].function.arguments)\u001b[m"
+        else
+          $i.content
         end
       ) as $c
-    | { text: "\($sep)\($c)", last: $i }
+    | { text: "\($sep)\($c)", last: $state }
   )
   | .text;
