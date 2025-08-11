@@ -69,7 +69,7 @@ def openai:
     | ( if $state == "think" then
           "\u001b[1;34m\($i.reasoning)\u001b[m"
         elif $state == "tool_name" then
-          "\u001b[1;33mcalling \u001b[1;35m\($i.tool_calls[].function.name):\u001b[m"
+          "\u001b[1;33mcalling \u001b[1;35m\($i.tool_calls[].function.name)\u001b[1;33m(\($i.tool_calls[].id))\u001b[m:\n\u001b[1;36m\($i.tool_calls[].function.arguments)\u001b[m"
         elif $state == "tool_arg" then
           "\u001b[1;36m\($i.tool_calls[].function.arguments)\u001b[m"
         else
