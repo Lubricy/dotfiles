@@ -132,14 +132,17 @@ See https://github.com/ollama/ollama/blob/main/docs/api.md#parameters."
                        tool))
             tools)))
 
-(use-package! elysium
-  :after gptel
-  :custom
-  (elysium-window-size 0.33)        ; The elysium buffer will be 1/3 your screen
-  (elysium-window-style 'horizontal)    ; Can be customized to vertical
-  :config
-  (defun my-enable-smerge-after-elysium-query (&rest _args)
-    "Enable smerge-mode in the current buffer after elysium-query is called."
-    (smerge-mode 1))
+;; (use-package! elysium
+;;   :after gptel
+;;   :custom
+;;   (elysium-window-size 0.33)        ; The elysium buffer will be 1/3 your screen
+;;   (elysium-window-style 'horizontal)    ; Can be customized to vertical
+;;   :config
+;;   (defun my-enable-smerge-after-elysium-query (&rest _args)
+;;     "Enable smerge-mode in the current buffer after elysium-query is called."
+;;     (smerge-mode 1))
 
-  (advice-add 'elysium-query :after #'my-enable-smerge-after-elysium-query))
+;;   (advice-add 'elysium-query :after #'my-enable-smerge-after-elysium-query))
+
+(use-package! relysium
+  :after gptel)
