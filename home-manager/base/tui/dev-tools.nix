@@ -19,18 +19,17 @@
     sqlite
 
     # ai related
-    pkgs.unstable.python312Packages.huggingface-hub # huggingface-cli
-    nodejs
+    unstable.gemini-cli
+    unstable.aichat
+    argc
 
     # misc
+    nodejs
     watch
     entr
 
-    jq
     age
   ];
-
-  home.file.".jq".source = lib.dot.fromShared "jq";
 
   programs = {
     direnv = {
