@@ -3,18 +3,7 @@
   pkgs,
   dracula-sublime,
   ...
-}: let
-  # Define a new package named 'jq-from-faq'
-  jq-from-faq =
-    pkgs.runCommand "jq-from-faq" {
-      # This package needs the original 'faq' package to be available
-      # during its build phase.
-      nativeBuildInputs = [pkgs.faq];
-    } ''
-      mkdir -p $out/bin
-      ln -s "${pkgs.faq}/bin/faq" $out/bin/jq
-    '';
-in {
+}: {
   nixpkgs.config.allowUnfree = true;
   home.packages = with pkgs; [
     # Misc
@@ -39,7 +28,7 @@ in {
 
     # https://github.com/jzelinskie/faq : drop in replacement of jq
     faq
-    jq-from-faq
+    jq
 
     # scripts
     realise-symlink
