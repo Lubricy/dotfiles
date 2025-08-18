@@ -25,12 +25,12 @@
    :desc "tools" "t" #'gptel-tools
    :desc "add context" "c" #'gptel-context-add
    :desc "examine context" "C" #'gptel--suffix-context-buffer
-   :desc "generate code" "q" #'elysium-query
-   :desc "keep all changes" "a" #'elysium-keep-all-suggested-changes
-   :desc "discard all changes" "d" #'elysium-discard-all-suggested-changes
-   :desc "clear buffer" "x" #'elysium-clear-buffer
-   :desc "add context" "b" #'elysium-add-context
-   :desc "toggle window" "w" #'elysium-toggle-window)))
+   :desc "generate code" "q" #'relysium-edit-dwim
+   :desc "keep all changes" "a" #'relysium-keep-all-changes
+   :desc "discard all changes" "d" #'relysium-discard-all-changes
+   :desc "clear buffer" "x" #'relysium-buffer-add-context
+   :desc "add context" "b" #'relysium-buffer-add-context
+   :desc "toggle window" "w" #'relysium-buffer-toggle-window)))
 
 (map!
  (:leader
