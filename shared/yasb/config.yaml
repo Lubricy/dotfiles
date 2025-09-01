@@ -48,6 +48,7 @@ bars:
         "notifications",
         "clock",
         "cpu",
+        "gpu",
         "memory",
       ]
       right: [
@@ -56,6 +57,7 @@ bars:
         "traffic",
         "volume",
         "microphone",
+        "battery",
         "power_menu",
         ]
 widgets:
@@ -308,15 +310,15 @@ widgets:
       label_alt: "<span>\uf437</span> {info[histograms][cpu_percent]}"
       update_interval: 1000
       histogram_icons:
-        - '\u2581' # 0%
-        - '\u2581' # 10%
-        - '\u2582' # 20%
-        - '\u2583' # 30%
-        - '\u2584' # 40%
-        - '\u2585' # 50%
-        - '\u2586' # 60%
-        - '\u2587' # 70%
-        - '\u2588' # 80%+
+        - ' ' # 0%
+        - '▁' # 12.5%
+        - '▂' # 25%
+        - '▃' # 37.5%
+        - '▄' # 50%
+        - '▅' # 62.5%
+        - '▆' # 75%
+        - '▇' # 87.5%
+        - '█' # 100%
       histogram_num_columns: 8
       callbacks:
         on_right: "exec cmd /c Taskmgr"
@@ -325,6 +327,29 @@ widgets:
         color: "black"
         radius: 3
         offset: [ 1, 1 ]
+  gpu:
+    type: "yasb.gpu.GpuWidget"
+    options:
+      label: "<span>\udb83\udfb2</span> {info[utilization]}%"
+      label_alt: "<span>\udb82\udcae</span> {info[temp]}°C | {info[mem_used]} / {info[mem_total]}"
+      update_interval: 2000
+      gpu_thresholds:
+        low: 25
+        medium: 50
+        high: 90
+      histogram_icons:
+        - ' ' # 0%
+        - '▁' # 12.5%
+        - '▂' # 25%
+        - '▃' # 37.5%
+        - '▄' # 50%
+        - '▅' # 62.5%
+        - '▆' # 75%
+        - '▇' # 87.5%
+        - '█' # 100%
+      histogram_num_columns: 8
+      callbacks:
+        on_left: "toggle_label"
   memory:
     type: "yasb.memory.MemoryWidget"
     options:
@@ -344,3 +369,33 @@ widgets:
         color: "black"
         radius: 3
         offset: [ 1, 1 ]
+  battery:
+    type: "yasb.battery.BatteryWidget"
+    options:
+      label: "<span>{icon}</span> {percent}%"
+      label_alt: "<span>{icon}</span> {percent}% | time: {time_remaining}"
+      update_interval: 5000
+      time_remaining_natural: False
+      hide_unsupported: True
+      charging_options:
+        icon_format: "{charging_icon}"
+        blink_charging_icon: true
+        blink_interval: 500
+      status_thresholds:
+        critical: 10
+        low: 25
+        medium: 75
+        high: 95
+        full: 100
+      status_icons:
+        icon_charging: "\udb80\udc84"
+        icon_critical: "\udb80\udc83"
+        icon_low: "\udb80\udc7b"
+        icon_medium: "\udb80\udc7f"
+        icon_high: "\udb80\udc82"
+        icon_full: "\udb80\udc79"
+      label_shadow:
+        enabled: true
+        color: "black"
+        radius: 3
+        offset: [ 1, 1 ] 

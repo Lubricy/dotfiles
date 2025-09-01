@@ -2,11 +2,11 @@ general:
   # Commands to run when the WM has started. This is useful for running a
   # script or launching another application.
   # Example: The below command launches Zebar.
-  startup_commands: ['shell-exec yasb']
+  # startup_commands: ['shell-exec yasb']
 
   # Commands to run just before the WM is shutdown.
   # Example: The below command kills Zebar.
-  shutdown_commands: ['shell-exec taskkill /IM yasb.exe /F']
+  # shutdown_commands: ['shell-exec taskkill /IM yasb.exe /F']
 
   # Commands to run after the WM config is reloaded.
   # config_reload_commands: ['shell-exec zebar']
@@ -288,9 +288,9 @@ keybindings:
   # Focus the next/previous active workspace defined in `workspaces` config.
   # Custom touchpad shortcut: Settings > Bluetooth and devices > Touchpad > Advanced gestures
   - commands: ['focus --next-active-workspace-on-monitor']
-    bindings: ['lwin+ctrl+s']
+    bindings: ['lwin+,']
   - commands: ['focus --prev-active-workspace-on-monitor']
-    bindings: ['lwin+ctrl+a']
+    bindings: ['lwin+.']
 
   # Focus the workspace that last had focus.
   - commands: ['focus --recent-workspace']

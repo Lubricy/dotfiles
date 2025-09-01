@@ -4,8 +4,11 @@
 local wezterm = require 'wezterm'
 local act = wezterm.action
 
+
 -- This table will hold the configuration.
 local config = {}
+
+config.front_end = "WebGpu"
 
 -- In newer versions of WezTerm, use the config_builder
 if wezterm.config_builder then

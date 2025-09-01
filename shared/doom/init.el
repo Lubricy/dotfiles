@@ -80,9 +80,9 @@
        eshell            ; the elisp shell that works everywhere
        ;;shell             ; simple shell REPL for Emacs
        ;;term              ; basic terminal emulator for Emacs
-       vterm                            ; the best terminal emulation in Emacs
+       (:unless (featurep :system 'windows) vterm); the best terminal emulation in Emacs
 
-       :checkers
+       ;; :checkers
        syntax                        ; tasing you for every semicolon you forget
        (spell +flyspell)             ; tasing you for misspelling mispelling
        grammar                       ; tasing grammar mistake every you make
@@ -235,6 +235,8 @@
        gptel
        age
        sops
+       eat
+
 
        :config
        ;;literate
@@ -259,7 +261,7 @@
        roam
        tramp
        treemacs
-       vterm
+       (:unless (featurep :system 'windows) vterm)
        modeline
        ;; platform specific
        mac
