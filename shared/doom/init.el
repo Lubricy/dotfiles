@@ -82,7 +82,7 @@
        ;;term              ; basic terminal emulator for Emacs
        (:unless (featurep :system 'windows) vterm); the best terminal emulation in Emacs
 
-       ;; :checkers
+       :checkers
        syntax                        ; tasing you for every semicolon you forget
        (spell +flyspell)             ; tasing you for misspelling mispelling
        grammar                       ; tasing grammar mistake every you make

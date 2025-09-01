@@ -2,6 +2,6 @@
 
 date +%s > .git/lucky_commit.lock
 if command -v lucky_commit &> /dev/null; then
-  lucky_commit ${LUCKY_COMMIT_HASH:-4c5600} # ASCII: LF\0
+  lucky_commit ${LUCKY_COMMIT_HASH:-1F________________________________B1A5ED} # LF biased
 fi
 rm .git/lucky_commit.lock
