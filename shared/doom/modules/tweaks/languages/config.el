@@ -2,5 +2,6 @@
 
 (after! lsp-mode
   (dolist (dir '("[/\\\\]\\.venv\\'"
-                 "[/\\\\]\\..*_cache\\'"))
+                 "[/\\\\]\\..*_cache\\'"
+                 "[/\\\\]\\.lean\\'"))
     (add-to-list 'lsp-file-watch-ignored-directories dir)))
