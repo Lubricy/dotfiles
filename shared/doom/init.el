@@ -260,6 +260,7 @@
        tramp
        treemacs
        vterm
+       modeline
        ;; platform specific
        mac
        windows)
