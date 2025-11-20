@@ -125,12 +125,13 @@ workspaces:
   - name: '2'
     bind_to_monitor: 0
   - name: '3'
-    bind_to_monitor: 0
+    bind_to_monitor: 1
   - name: '4'
+    bind_to_monitor: 1
   - name: '5'
-    bind_to_monitor: 1
+    bind_to_monitor: 2
   - name: '6'
-    bind_to_monitor: 1
+    bind_to_monitor: 2
   - name: '7'
   - name: '8'
   - name: '9'
@@ -288,9 +289,9 @@ keybindings:
   # Focus the next/previous active workspace defined in `workspaces` config.
   # Custom touchpad shortcut: Settings > Bluetooth and devices > Touchpad > Advanced gestures
   - commands: ['focus --next-active-workspace-on-monitor']
-    bindings: ['lwin+,']
-  - commands: ['focus --prev-active-workspace-on-monitor']
     bindings: ['lwin+.']
+  - commands: ['focus --prev-active-workspace-on-monitor']
+    bindings: ['lwin+,']
 
   # Focus the workspace that last had focus.
   - commands: ['focus --recent-workspace']

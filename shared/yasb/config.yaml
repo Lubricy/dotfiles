@@ -38,28 +38,26 @@ bars:
       bottom: 0
       right: 6
     widgets:
-      left: [
-        "home",
-        "glazewm_tiling_direction",
-        "glazewm_workspaces",
-        "active_window",
-      ]
-      center: [
-        "notifications",
-        "clock",
-        "cpu",
-        "gpu",
-        "memory",
-      ]
-      right: [
-        "media",
-        "wifi",
-        "traffic",
-        "volume",
-        "microphone",
-        "battery",
-        "power_menu",
-        ]
+      left:
+        - home
+        #- custom_widgets.workspaces
+        - glazewm_tiling_direction
+        - glazewm_workspaces
+        - active_window
+      center:
+        - "notifications"
+        - "clock"
+        - "cpu"
+        - "gpu"
+        - "memory"
+      right:
+        - "media"
+        - "wifi"
+        - "traffic"
+        - "volume"
+        - "microphone"
+        - "battery"
+        - "power_menu"
 widgets:
   home:
     type: "yasb.home.HomeWidget"
@@ -399,3 +397,22 @@ widgets:
         color: "black"
         radius: 3
         offset: [ 1, 1 ] 
+  workspaces:
+    label: "{data}"
+    exec: 'type %USERPROFILE%\.config\jwno\test.json' # Command to read the JSON file
+    # On Linux/WSL, you might use: 'cat ~/.jwno-state.json'
+    interval: 1s # How often to check for updates
+    # This Jinja2 template formats the JSON output into a clickable bar.
+    template: >
+      {% set active_id = data.active_workspace_id %}
+      {% for ws in data.workspaces %}
+        <span
+          class="workspace {{ 'active' if ws.id == active_id }} {{ 'occupied' if ws.windows > 0 }}"
+          onclick="???"
+          >
+          {% if ws.windows > 0 %}{% else %}{% endif %}
+        </span>
+      {% endfor %}
+    # Note on 'onclick': Yasb can execute a command on click. To switch workspaces,
+    # you'd need a small script/program that sends the desired hotkey (e.g., Alt+1)
+    # to the system. For example: onclick="C:\path\to\send-hotkey.exe 1"
