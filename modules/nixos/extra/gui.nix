@@ -43,9 +43,9 @@
       # };
 
       # Enable the X11 windowing system.
-      services.xserver.enable = true;
-      services.xserver.displayManager.gdm.enable = true;
-      services.xserver.desktopManager.gnome.enable = true;
+      # services.xserver.enable = true;
+      services.displayManager.gdm.enable = true;
+      services.desktopManager.gnome.enable = true;
       services.xserver.desktopManager.runXdgAutostartIfNone = true;
       # https://nixos.wiki/wiki/Wayland
       environment.sessionVariables.NIXOS_OZONE_WL = "1";
