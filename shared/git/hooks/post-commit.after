@@ -3,6 +3,7 @@ GIT_DIR="$(git rev-parse --git-dir)"
 LOCK_FILE="$GIT_DIR/lucky_commit.lock"
 date +%s > "$LOCK_FILE"
 if command -v lucky_commit &> /dev/null; then
-  lucky_commit ${LUCKY_COMMIT_HASH:-1F________________________________B1A5ED} # LF biased
+  HASH=${LUCKY_COMMIT_HASH:-"$(git config get lucky-commit.hash)"}
+  lucky_commit ${HASH:-1F________________________________B1A5ED} # LF biased
 fi
 rm "$LOCK_FILE"
