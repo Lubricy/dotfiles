@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
 
-if [ -f .git/lucky_commit.lock ]; then
+GIT_DIR="$(git rev-parse --git-dir)"
+LOCK_FILE="$GIT_DIR/lucky_commit.lock"
+
+if [ -f "$LOCK_FILE" ]; then
     echo ERROR: it seems like lucky_commit is still running.
-    echo if you think this is not true please remove '".git/lucky_commit.lock"' manually.
+    echo if you think this is not true please remove "\"$LOCK_FILE\"" manually.
     exit 1
 else
     exit 0

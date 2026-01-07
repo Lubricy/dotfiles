@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
-
-date +%s > .git/lucky_commit.lock
+GIT_DIR="$(git rev-parse --git-dir)"
+LOCK_FILE="$GIT_DIR/lucky_commit.lock"
+date +%s > "$LOCK_FILE"
 if command -v lucky_commit &> /dev/null; then
   lucky_commit ${LUCKY_COMMIT_HASH:-1F________________________________B1A5ED} # LF biased
 fi
-rm .git/lucky_commit.lock
+rm "$LOCK_FILE"
