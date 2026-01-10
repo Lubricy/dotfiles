@@ -31,16 +31,15 @@
     enable = true;
     lfs.enable = true;
 
-    userName = "Lubricy Fibber";
-    userEmail = "lubricy@gmail.com";
-
     ignores = lib.splitString "\n" (lib.fileContents (lib.dot.fromShared "git/global-gitignore"));
 
     includes = [
       {path = "${config.xdg.configHome}/git/local/config";}
     ];
 
-    extraConfig = {
+    settings = {
+      user.name = "Lubricy Fibber";
+      user.email = "lubricy@gmail.com";
       core.hooksPath = "${config.xdg.configHome}/git/hooks";
       credential.helper = "pass";
       init.defaultBranch = "main";
