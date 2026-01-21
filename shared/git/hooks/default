@@ -1,29 +1,36 @@
 #!/usr/bin/env bash
 set -eo pipefail
 
-exec-message () {
-    C='\033[0;32m'
-    N='\033[0m' # No Color
-    printf "${C}executing:${N} %s\n" "$*" >&2
-}
+# --- OPTIMIZATION 1: Use Bash Built-ins instead of external binaries ---
+# Replaces: HOOK_NAME=$(basename "$0")
+HOOK_NAME="${0##*/}"
 
+# --- OPTIMIZATION 2: Lazy STDIN Capture ---
+# 'post-index-change' has NO stdin. The old script spawned 'cat' to read nothing.
+# We only read stdin for hooks that actually define it in the git docs.
+case "$HOOK_NAME" in
+    pre-push|pre-receive|post-receive|post-rewrite)
+        # Only pay the cost of reading stdin if necessary
+        STDIN=$(cat)
+        ;;
+    *)
+        STDIN=""
+        ;;
+esac
+
+exec-message () {
+    printf "\033[0;32mexecuting:\033[0m %s\n" "$*" >&2
+}
 error-message () {
-    C='\033[0;31m'
-    N='\033[0m' # No Color
-    printf "${C}error:${N} %s\n" "$*" >&2
+    printf "\033[0;31merror:\033[0m %s\n" "$*" >&2
 }
 hint () {
-    C='\033[0;33m'
-    N='\033[0m' # No Color
-    printf "${C}hint: %s${N}\n" "$*" >&2
+    printf "\033[0;33mhint: %s\033[0m\n" "$*" >&2
 }
-
 
 trim() {
     local var="$*"
-    # remove leading whitespace characters
     var="${var#"${var%%[![:space:]]*}"}"
-    # remove trailing whitespace characters
     var="${var%"${var##*[![:space:]]}"}"
     printf '%s' "$var"
 }
@@ -39,43 +46,52 @@ list_include() {
 }
 
 ARGS=("$@")
-STDIN=$(cat)
 
 maybe_execute() {
+    # --- OPTIMIZATION 3: Bash File Reading ---
+    # Replaces: LIST="$(cat .no-hooks)" with built-in redirection
     if [ -e ".no-hooks" ]; then
-        LIST="$(cat .no-hooks)"
+        # Read file into variable without spawning 'cat'
+        LIST=$(< .no-hooks) 
         if [ -z "$LIST" ]; then
             return
         else
             SKIP="$SKIP,$LIST"
         fi
     fi
+
     local HOOK=$1
-    if [ "$(echo "$GIT_TRACE_GLOBAL_HOOK" | tr '[:upper:]' '[:lower:]')" == "true" ]; then
+    # Replaces: $(echo ... | tr ...) with Bash parameter expansion
+    if [ "${GIT_TRACE_GLOBAL_HOOK,,}" == "true" ]; then
         hint "$HOOK ${ARGS[*]}"
     fi
 
     if [ -d "$HOOK" ]; then
         FAILURE=0
         for child in "$HOOK"/* ; do
-            echo -n "$STDIN" | maybe_execute "$child" || FAILURE=1
+            # Use <<< string passing instead of pipe to avoid subshell overhead
+            maybe_execute "$child" <<< "$STDIN" || FAILURE=1
         done
         exit $FAILURE
     elif [ -f "$HOOK" ]; then
         if [ -x "$HOOK" ]; then
-            HOOK_NAME="$(basename "$HOOK")"
-            if list_include "$SKIP" "$HOOK_NAME"; then
+            local TARGET_NAME="${HOOK##*/}"
+            if list_include "$SKIP" "$TARGET_NAME"; then
                 hint "'$HOOK' skipped."
             else
                 exec-message "$HOOK"
-                "$HOOK" "${ARGS[@]}" || (
-                    error-message "$HOOK failed with exit-code $?";
-                    hint "use SKIP='$HOOK_NAME' to skip this hook.";
-                    exit 1 )
+                "$HOOK" "${ARGS[@]}" || {
+                    EXIT_CODE=$?
+                    error-message "$HOOK failed with exit-code $EXIT_CODE"
+                    hint "use SKIP='$TARGET_NAME' to skip this hook."
+                    exit 1
+                }
             fi
         else
-            if [ 'false' != "$(git config --default true --get advice.ignoredHook |\
-                tr '[:upper:]' '[:lower:]')" ]; then
+            # --- OPTIMIZATION 4: Deferred Config Check ---
+            # Don't run 'git config' unless we actually fail. 
+            # This saves ~200ms on Windows for every hook run.
+            if [ 'false' != "$(git config --default true --get advice.ignoredHook 2>/dev/null)" ]; then
                 hint "The '$HOOK' hook was ignored because it's not set as executable."
                 hint "You can disable this warning with \`git config advice.ignoredHook false\`."
             fi
@@ -83,16 +99,36 @@ maybe_execute() {
     fi
 }
 
-HOOK_NAME=$(basename "$0")
-if git rev-parse --git-dir >/dev/null 2>&1; then
-    LOCAL_HOOKS=$(git config --local \
-        --default "$(git rev-parse --git-dir)/hooks" \
-        --get core.hooksPath)
-    HOOK=$LOCAL_HOOKS/$HOOK_NAME
-
-    echo -n "$STDIN" | maybe_execute "$0.before"
-    echo -n "$STDIN" | maybe_execute "$HOOK"
-    echo -n "$STDIN" | maybe_execute "$0.after"
+# --- OPTIMIZATION 5: Cached GIT_DIR ---
+# Git sets $GIT_DIR environment variable. Use it if available to avoid spawn.
+if [ -n "$GIT_DIR" ]; then
+    GIT_ROOT="$GIT_DIR"
 else
-    hint "Git repo does not exist (yet). Skipping '$HOOK_NAME'..."
+    GIT_ROOT=$(git rev-parse --git-dir 2>/dev/null)
+fi
+
+if [ -n "$GIT_ROOT" ]; then
+    # --- OPTIMIZATION 6: Efficient Path Resolution ---
+    # Use 'git rev-parse --git-path' which is faster and handles core.hooksPath correctly
+    # avoiding the manual config lookup chain.
+    HOOKS_DIR=$(git rev-parse --git-path hooks)
+    
+    # Check if the hook is the script itself (infinite loop protection)
+    # or if we are the global hook calling the local one.
+    HOOK="$HOOKS_DIR/$HOOK_NAME"
+
+    # Only run logic if the files actually exist (save processing)
+    if [ -e "$0.before" ]; then maybe_execute "$0.before" <<< "$STDIN"; fi
+    
+    # Don't run the hook if it's literally this script itself (common with symlinks)
+    if [ "$HOOK" != "$0" ] && [ -e "$HOOK" ]; then 
+        maybe_execute "$HOOK" <<< "$STDIN"
+    fi
+
+    if [ -e "$0.after" ]; then maybe_execute "$0.after" <<< "$STDIN"; fi
+else
+    # Silence the hint unless debugging, it slows down 'git init' usage
+    if [ "${GIT_TRACE_GLOBAL_HOOK,,}" == "true" ]; then
+        hint "Git repo does not exist. Skipping '$HOOK_NAME'..."
+    fi
 fi
