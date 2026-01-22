@@ -179,6 +179,9 @@ window_rules:
       - window_class: { regex: "Chrome_WidgetWin_1|MozillaDialogClass" } # browsers
   - commands: ['move --workspace 2']
     match:
+      - window_process: { equals: "msedge" } # edge
+  - commands: ['move --workspace 4']
+    match:
       - window_process: { equals: 'emacs' }
   - commands: ['move --workspace 3']
     match:

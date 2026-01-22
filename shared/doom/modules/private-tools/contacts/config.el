@@ -87,7 +87,7 @@
                                'face 'marginalia-documentation))))))
 
   (add-to-list 'marginalia-prompt-categories '("\\<contact\\>" . contact))
-  (add-to-list 'marginalia-annotator-registry
+  (add-to-list 'marginalia-annotators
                '(contact contact--annotator builtin none)))
 
 (after! embark

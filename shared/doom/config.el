@@ -8,8 +8,6 @@
 (setq doom-theme 'doom-dracula
       doom-themes-padded-modeline t)
 
-(setq doom-font
-      (font-spec :family "CaskaydiaCove NFM" :size 11.0))
 ;; (setq doom-symbol-font
 ;;       (font-spec :family "Symbols Nerd Font"))
 ;; I've swapped these keys on my keyboard
@@ -34,5 +32,6 @@
 (load-directory! "bindings")
 (load-directory! "tweaks")
 (load-directory! "private")
+
 (provide 'config)
 ;;; config.el ends here
