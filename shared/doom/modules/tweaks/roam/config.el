@@ -19,11 +19,12 @@
         org-roam-ui-open-on-start t)
   ;; FIXME workaround since fd/rg follows .gitignore
   (setq org-roam-list-files-commands 'nil)
-  (setq org-roam-dailies-capture-templates
-        `(("d" "default" entry
-           (file "templates/chat.org")
-           :target (file+head "%<%Y-%m-%d>.org"
-                              "#+title: %<%Y-%m-%d>\n")))))
+  ;; (setq org-roam-dailies-capture-templates
+  ;;       `(("d" "default" entry
+  ;;          (file "templates/chat.org")
+  ;;          :target (file+head "%<%Y-%m-%d>.org"
+  ;;                             "#+title: %<%Y-%m-%d>\n"))))
+  )
 
 ;; (use-package! delve
 ;;   :after org-roam

@@ -170,3 +170,6 @@
                        link       "[[gh:%u][%c <%m>]]"
                        --display  "%u\t%c\t%m"
                        --homepage "https://github.com/%u")))
+
+(when (featurep :system 'windows)
+  (load! "+windows"))
