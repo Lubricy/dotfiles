@@ -43,7 +43,8 @@
      :desc "open inbox"                      "I" #'lubricy/goto-gtd-inbox-file
      :desc "punch in"                        "i" #'lubricy/punch-in
      :desc "punch out"                       "o" #'lubricy/punch-out
-     :desc "finish editing"                  "d" #'org-gtd-organize))
+     :desc "finish editing"                  "d" #'org-gtd-organize
+     :desc "delegate current item"           "D" #'org-gtd-delegate-item-at-point))
   (:prefix ("t" . "toggle")
    :desc "Adjust text size"      "t"   #'text-scale-adjust
    :desc "Auto format on save"   "a"   #'apheleia-mode
@@ -169,9 +170,9 @@
      :n "k"              #'org-previous-block)))
 
 (map! ;; Extend smart tab for specific modes. This way, we process the entire
-      ;; smart tab logic and only fall back to these commands at the end.
-      (:when (modulep! :lang org)
-       (:after org :map org-mode-map
-        [remap indent-for-tab-command]
-        `(menu-item "Indent heading" org-demote-subtree
-          :filter ,(lambda (cmd) (when (org-at-heading-p) cmd))))))
+ ;; smart tab logic and only fall back to these commands at the end.
+ (:when (modulep! :lang org)
+   (:after org :map org-mode-map
+           [remap indent-for-tab-command]
+           `(menu-item "Indent heading" org-demote-subtree
+             :filter ,(lambda (cmd) (when (org-at-heading-p) cmd))))))
