@@ -32,8 +32,9 @@ as the default task."
     (save-restriction
       (widen)
       (if (org-before-first-heading-p)
-          (org-clock-in)
-        (lubricy/clock-in-idle))))
+          (lubricy/clock-in-idle)
+        (org-clock-in)
+        )))
    (t (lubricy/clock-in-idle))))
 
 ;;;###autoload
@@ -45,6 +46,8 @@ as the default task."
   (appt-activate 0)
   (org-agenda-remove-restriction-lock))
 
+(defvar org-gtd-idle-id 'default-idle-task
+  "clock to log when idle")
 ;;;###autoload
 (defun lubricy/clock-in-idle ()
   (org-with-point-at
