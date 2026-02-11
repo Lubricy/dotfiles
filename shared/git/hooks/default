@@ -108,10 +108,9 @@ else
 fi
 
 if [ -n "$GIT_ROOT" ]; then
-    # --- OPTIMIZATION 6: Efficient Path Resolution ---
-    # Use 'git rev-parse --git-path' which is faster and handles core.hooksPath correctly
-    # avoiding the manual config lookup chain.
-    HOOKS_DIR=$(git rev-parse --git-path hooks)
+    # --- Path Resolution ---
+    # Hardcoded project local hook path
+    HOOKS_DIR="$GIT_ROOT/hooks"
     
     # Check if the hook is the script itself (infinite loop protection)
     # or if we are the global hook calling the local one.
