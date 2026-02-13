@@ -4,3 +4,4 @@
 *flycheck*
 .DS_Store
 .direnv
+.worktree[s]
