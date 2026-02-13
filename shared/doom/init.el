@@ -154,7 +154,7 @@
        latex          ; writing papers in Emacs has never been so fun
        (lean +lean4)  ; for folks with too much to prove
        ;;ledger            ; be audit you can be
-       ;;lua               ; one-based indices? one-based indices
+       lua               ; one-based indices? one-based indices
        markdown            ; writing docs for people to ignore
        ;;nim               ; python + lisp at the speed of c
        nix                              ; I hereby declare "nix geht mehr!"
@@ -236,7 +236,7 @@
        gptel
        age
        sops
-       eat
+       (:when (featurep :system 'windows) eat)
 
 
        :config

@@ -65,12 +65,28 @@
                 "::datetree/"))
 
   (setq org-gtd-refile-to-any-target t)
-  (setq org-gtd-update-ack "3.0.0")
+  (setq org-gtd-update-ack "4.0.0")
+  :custom
+  (org-gtd-keyword-mapping '((todo . "TODO")
+                             (next . "NEXT")
+                             (wait . "WAIT")
+                             (done . "DONE")
+                             (canceled . "CNCL")))
+
   :config
-  (setq org-gtd-delegate-read-func (cmd! (thread-last
-                                           (contact/find)
-                                           (contact-which)
-                                           (contact/format 'link))))
+  (defun +org-gtd-delegate-read (&rest _)
+    (interactive)
+    (thread-last
+      (contact/find)
+      (contact-which)
+      (contact/format 'link)))
+
+  (setq org-gtd-user-types
+        '((delegated
+           :properties
+           ((:who :org-property "DELEGATED_TO" :type text :required t
+             :prompt "Delegate to"
+             :input-fn +org-gtd-delegate-read)))))
   (setq org-gtd-archive-file-format "archive/%s/gtd_archive.org")
   (setq org-edna-use-inheritance 1)
   (org-edna-mode 1)
@@ -102,9 +118,9 @@
           +org-set-roam-tags-command))
   (map! :map org-gtd-clarify-map
         :g "C-c C-c"  'org-gtd-organize
-        :g "C-c C-k"  'kill-current-buffer
+        :g "C-c C-k"  'org-gtd-clarify-stop
         :n "Z Z"  'org-gtd-organize
-        :n "Z Q"  'kill-current-buffer
+        :n "Z Q"  'org-gtd-clarify-stop
         :n [S-return] 'org-gtd-organize)
 
   (defun lubricy/org-gtd-knowledge--apply ()

@@ -1,38 +1,93 @@
 (use-package! eat
+  :hook (eshell-load . eat-eshell-mode)
   :config
-  ;; Set PowerShell as the default shell for eat on Windows.
-  ;; Use "pwsh.exe" for PowerShell 7+ or "powershell.exe" for Windows PowerShell 5.1.
-  (when (featurep :system 'windows)
-    (setq eat-shell "pwsh.exe"))
+  ;; --- Settings ---
+  (setq eat-kill-buffer-on-exit t)
+  (setq eat-shell "pwsh.exe")
+  (setq eat-enable-blinking-text nil)
+  ;; (setq eat-term-name "xterm-256color")
 
+  ;; --- Evil Integration ---
+  (after! evil
+    (set-evil-initial-state! 'eat-mode 'emacs))
 
-  ;; ;; --- Keybindings ---
-  ;; ;; Bind "C-c t" to open a new eat terminal in the current project's root directory.
-  ;; ;; This is a convenient and easy-to-remember keybinding.
-  ;; (map! :leader
-  ;;       :desc "Open eat terminal" "t" #'eat)
+  (defun +eat/launch (program arg display-buffer-fn)
+    "Start a new Eat terminal emulator in a buffer.
 
-  ;; You can also create a keybinding to open eat in a popup window,
-  ;; similar to how Doom handles vterm.
-  (defun +my/eat-popup ()
-    "Open eat in a popup window."
-    (interactive)
-    (let ((display-buffer-alist
-           '(("\\*eat\\*"
-              (display-buffer-in-side-window)
-              (side . bottom)
-              (window-height . 0.3)))))
-      (eat)))
+PROGRAM and ARG is same as in `eat' and `eat-other-window'.
+DISPLAY-BUFFER-FN is the function to display the buffer."
+    (let* ((program (or program (or explicit-shell-file-name
+                                    (getenv "ESHELL")
+                                    shell-file-name)))
+           (args
+            (cond
+             ((eq system-type 'windows-nt)
+              `("pwsh.exe" nil ("-NoExit")))
+             (t
+              `("/usr/bin/env" nil (list "sh" "-c" ,program)))))
+           (buffer
+            (cond
+             ((numberp arg)
+              (get-buffer-create (format "%s<%d>" eat-buffer-name arg)))
+             (arg
+              (generate-new-buffer eat-buffer-name))
+             (t
+              (get-buffer-create eat-buffer-name)))))
+      (with-current-buffer buffer
+        (unless (eq major-mode #'eat-mode)
+          (eat-mode))
+        (funcall display-buffer-fn buffer)
+        (unless (and eat-terminal
+                     (eat-term-parameter eat-terminal 'eat--process))
+          (apply #'eat-exec buffer (buffer-name) args))
+        buffer)))
 
-                                        ; (map! :leader
-                                        ;       :desc "Open eat popup" "o t" #'+my/eat-popup)
+  (defun +eat/project (&optional arg)
+    "Start Eat in the current project's root directory.
 
-  ;; --- Behavior ---
-  ;; Advise Eshell to use `eat` for visual commands like htop or vim.
-  ;; This is one of eat's best features.
-  ;; (add-hook! 'eshell-mode-hook #'eat-eshell-mode)
-  (setq eshell-visual-commands
-        '("htop" "vim" "nvim" "nano" "less" "git rebase -i" "python -i"))
+Start a new Eat session, or switch to an already active session.
+Return the buffer selected (or created).
 
-  ;; When an eat buffer is killed, also kill the underlying shell process.
-  (add-hook 'eat-final-hook #'kill-process))
+With a non-numeric prefix ARG, create a new session.
+
+With a numeric prefix ARG (like
+\\[universal-argument] 42 \\[eat-project]), switch to the session with
+that number, or create it if it doesn't already exist."
+    (interactive "P")
+    (require 'project)
+    (let* ((default-directory (project-root (project-current t)))
+           (eat-buffer-name (project-prefixed-buffer-name "eat-full")))
+      (+eat/launch nil arg #'pop-to-buffer-same-window)
+      ))
+
+  (defun +eat/project-popup (&optional arg)
+    "Start Eat in the current project root directory in another window.
+
+Start a new Eat session, or switch to an already active session.
+Return the buffer selected (or created).
+
+With a non-numeric prefix ARG, create a new session.
+
+With a numeric prefix ARG (like
+\\[universal-argument] 42 \\[eat-project]), switch to the session with
+that number, or create it if it doesn't already exist."
+    (interactive "P")
+    (require 'project)
+    (let* ((default-directory (project-root (project-current t)))
+           (eat-buffer-name (project-prefixed-buffer-name "eat")))
+      (+eat/launch nil arg #'pop-to-buffer)))
+  
+  ;; --- Keybindings ---
+  (map! :leader
+        (:prefix ("o" . "open")
+         :desc "Terminal popup"      "t" #'+eat/project-popup
+         :desc "Terminal fullscreen" "T" #'+eat/project))
+
+  ;; --- Popup Rules ---
+  (set-popup-rule! "^.*-eat\\*"
+    :side 'bottom
+    :size 0.35
+    :select t
+    :quit t
+    :ttl nil)
+  )
