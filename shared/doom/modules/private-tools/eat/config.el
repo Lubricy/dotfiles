@@ -1,21 +1,29 @@
+(map! :leader
+      (:when (modulep! :private-tools eat)
+        (:prefix-map ("o" . "open")
+         :desc "Terminal popup"      "t" #'+eat/project-popup
+         :desc "Terminal fullscreen" "T" #'+eat/project)))
+
 (use-package! eat
-  :hook (eshell-load . eat-eshell-mode)
+  ;; 1. Tell use-package these commands exist so it creates autoload stubs.
+  ;;    When these are called, the package loads.
+  :commands (+eat/project +eat/project-popup)
+
+  ;; 2. Bind keys in :init. This runs immediately on startup.
+  ;;    Since we used :commands above, these keys bind to the autoload stubs.
   :config
   ;; --- Settings ---
   (setq eat-kill-buffer-on-exit t)
   (setq eat-shell "pwsh.exe")
   (setq eat-enable-blinking-text nil)
-  ;; (setq eat-term-name "xterm-256color")
 
   ;; --- Evil Integration ---
   (after! evil
-    (set-evil-initial-state! 'eat-mode 'emacs))
+    (set-evil-initial-state! 'eat-mode 'insert))
 
+  ;; --- Custom Functions ---
   (defun +eat/launch (program arg display-buffer-fn)
-    "Start a new Eat terminal emulator in a buffer.
-
-PROGRAM and ARG is same as in `eat' and `eat-other-window'.
-DISPLAY-BUFFER-FN is the function to display the buffer."
+    "Start a new Eat terminal emulator in a buffer."
     (let* ((program (or program (or explicit-shell-file-name
                                     (getenv "ESHELL")
                                     shell-file-name)))
@@ -43,45 +51,20 @@ DISPLAY-BUFFER-FN is the function to display the buffer."
         buffer)))
 
   (defun +eat/project (&optional arg)
-    "Start Eat in the current project's root directory.
-
-Start a new Eat session, or switch to an already active session.
-Return the buffer selected (or created).
-
-With a non-numeric prefix ARG, create a new session.
-
-With a numeric prefix ARG (like
-\\[universal-argument] 42 \\[eat-project]), switch to the session with
-that number, or create it if it doesn't already exist."
+    "Start Eat in the current project's root directory."
     (interactive "P")
     (require 'project)
     (let* ((default-directory (project-root (project-current t)))
            (eat-buffer-name (project-prefixed-buffer-name "eat-full")))
-      (+eat/launch nil arg #'pop-to-buffer-same-window)
-      ))
+      (+eat/launch nil arg #'pop-to-buffer-same-window)))
 
   (defun +eat/project-popup (&optional arg)
-    "Start Eat in the current project root directory in another window.
-
-Start a new Eat session, or switch to an already active session.
-Return the buffer selected (or created).
-
-With a non-numeric prefix ARG, create a new session.
-
-With a numeric prefix ARG (like
-\\[universal-argument] 42 \\[eat-project]), switch to the session with
-that number, or create it if it doesn't already exist."
+    "Start Eat in the current project root directory in another window."
     (interactive "P")
     (require 'project)
     (let* ((default-directory (project-root (project-current t)))
            (eat-buffer-name (project-prefixed-buffer-name "eat")))
       (+eat/launch nil arg #'pop-to-buffer)))
-  
-  ;; --- Keybindings ---
-  (map! :leader
-        (:prefix ("o" . "open")
-         :desc "Terminal popup"      "t" #'+eat/project-popup
-         :desc "Terminal fullscreen" "T" #'+eat/project))
 
   ;; --- Popup Rules ---
   (set-popup-rule! "^.*-eat\\*"
