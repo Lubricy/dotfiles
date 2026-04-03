@@ -145,6 +145,16 @@ config.keys = {
       end),
     },
   },
+  {
+    key = 'c',
+    mods = 'LEADER|SHIFT',
+    action = wezterm.action.ShowLauncher,
+  },
+  {
+    key = 'w',
+    mods = 'LEADER',
+    action = wezterm.action.ShowLauncherArgs { flags = 'FUZZY|WORKSPACES' },
+  },
 }
 
 -- Set vi-like keybindings for copy mode

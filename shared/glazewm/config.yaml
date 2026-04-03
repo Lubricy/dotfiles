@@ -177,6 +177,7 @@ window_rules:
       - window_process: { equals: 'Microsoft.CmdPal.UI' }
       - window_process: { equals: 'Lively' }
         window_class: { regex: 'HwndWrapper' }
+      - window_class: { equals: "CopilotKeyPressFocusFrame" }
   - commands: ['move --workspace 1']
     match:
       - window_class: { regex: "Chrome_WidgetWin_1|MozillaDialogClass" } # browsers
