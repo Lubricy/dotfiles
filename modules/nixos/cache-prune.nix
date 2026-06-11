@@ -22,48 +22,7 @@
     lib.attrByPath ["virtualisation" "podman" "enable"] false config
     || packageInstalledByPrefixes config.environment.systemPackages ["podman"];
 
-  mkContainerScript = name: job:
-    pkgs.writeShellApplication {
-      name = "cache-prune-${name}";
-      runtimeInputs = [job.package];
-      text = ''
-        set -euo pipefail
-
-        if ! ${lib.getExe job.package} info >/dev/null 2>&1; then
-          echo "${name}: runtime unavailable, skipping"
-          exit 0
-        fi
-
-        exec ${lib.getExe job.package} system prune \
-          --force \
-          --filter "until=${job.retention}" \
-          ${lib.escapeShellArgs job.extraArgs}
-      '';
-    };
-
-  mkService = name: job: let
-    script = mkContainerScript name job;
-  in {
-    description = "Prune ${name} cache and unused container artifacts";
-    after = job.after;
-    wants = job.wants;
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = lib.getExe script;
-      Nice = 19;
-      IOSchedulingClass = "idle";
-      CPUSchedulingPolicy = "idle";
-    };
-  };
-
-  mkTimer = job: {
-    wantedBy = ["timers.target"];
-    timerConfig = {
-      OnCalendar = job.schedule;
-      RandomizedDelaySec = job.randomizedDelaySec;
-      Persistent = job.persistent;
-    };
-  };
+  retentionFlags = job: ["--filter" "until=${job.retention}"] ++ job.extraArgs;
 in {
   options.dot.optimize = {
     enable = mkEnableOption "automatic cache pruning";
@@ -106,16 +65,6 @@ in {
         default = true;
         description = "Whether missed Docker prune runs should execute on next boot.";
       };
-      after = mkOption {
-        type = types.listOf types.str;
-        default = ["docker.service"];
-        description = "Additional `After=` dependencies for the Docker prune service.";
-      };
-      wants = mkOption {
-        type = types.listOf types.str;
-        default = ["docker.service"];
-        description = "Additional `Wants=` dependencies for the Docker prune service.";
-      };
     };
 
     podman = {
@@ -146,37 +95,25 @@ in {
         default = "monthly";
         description = "Timer `OnCalendar` value for Podman pruning.";
       };
-      randomizedDelaySec = mkOption {
-        type = types.str;
-        default = "1d";
-        description = "Timer jitter for Podman pruning.";
-      };
-      persistent = mkOption {
-        type = types.bool;
-        default = true;
-        description = "Whether missed Podman prune runs should execute on next boot.";
-      };
-      after = mkOption {
-        type = types.listOf types.str;
-        default = [];
-        description = "Additional `After=` dependencies for the Podman prune service.";
-      };
-      wants = mkOption {
-        type = types.listOf types.str;
-        default = [];
-        description = "Additional `Wants=` dependencies for the Podman prune service.";
-      };
     };
   };
 
   config = mkIf cfg.enable (mkMerge [
     (mkIf cfg.docker.enable {
-      systemd.services.cache-prune-docker = mkService "docker" cfg.docker;
-      systemd.timers.cache-prune-docker = mkTimer cfg.docker;
+      virtualisation.docker.autoPrune = {
+        enable = true;
+        dates = cfg.docker.schedule;
+        randomizedDelaySec = cfg.docker.randomizedDelaySec;
+        persistent = cfg.docker.persistent;
+        flags = retentionFlags cfg.docker;
+      };
     })
     (mkIf cfg.podman.enable {
-      systemd.services.cache-prune-podman = mkService "podman" cfg.podman;
-      systemd.timers.cache-prune-podman = mkTimer cfg.podman;
+      virtualisation.podman.autoPrune = {
+        enable = true;
+        dates = cfg.podman.schedule;
+        flags = retentionFlags cfg.podman;
+      };
     })
   ]);
 }
