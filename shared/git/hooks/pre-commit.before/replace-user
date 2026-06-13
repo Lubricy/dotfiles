@@ -4,9 +4,33 @@ set -eo pipefail
 
 EXIT_CODE=0
 
+is_partially_staged() {
+  ! git diff --quiet -- "$1"
+}
+
+replace_home_path() {
+  local file=$1
+
+  [[ -z "${HOME:-}" ]] && return 0
+
+  # Perl is used in binary mode so CRLF/LF bytes are preserved exactly.
+  perl -0pi -e '
+    BEGIN {
+      binmode STDIN;
+      binmode STDOUT;
+      $home = $ENV{HOME};
+    }
+    s/\Q$home\E/~/g if length $home;
+  ' "$file"
+}
+
 git diff --staged --name-only --diff-filter=ACM | while read -r FILE; do
   # Skip if file doesn't exist (e.g., was deleted)
   [[ ! -e "$FILE" ]] && continue
+  if is_partially_staged "$FILE"; then
+    echo "Warning: '$FILE' has unstaged changes; skipping replace-user auto-fix to preserve partial commit." >&2
+    continue
+  fi
 
   if [[ -L "$FILE" ]]; then
     # It's a symlink — resolve to target
@@ -15,12 +39,12 @@ git diff --staged --name-only --diff-filter=ACM | while read -r FILE; do
     [[ ! -e "$TARGET" ]] && echo "Warning: symlink '$FILE' points to non-existent target '$TARGET'" >&2 && continue
 
     # Edit the target file
-    sed -i'' "s#$HOME#~#g" "$TARGET"
+    replace_home_path "$TARGET"
     # Add the target to git (not the symlink itself)
     git add "$TARGET"
   elif [[ -f "$FILE" ]]; then
     # Regular file — edit directly
-    sed -i'' "s#$HOME#~#g" "$FILE"
+    replace_home_path "$FILE"
     git add "$FILE"
   else
     # Skip directories, devices, etc.

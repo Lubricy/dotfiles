@@ -3,14 +3,23 @@ set -eo pipefail
 if command -v typos > /dev/null; then
   # Use array to properly handle filenames with spaces
   mapfile -t staged < <(git diff --cached --name-only --diff-filter=ACM)
+  writable=()
 
-  # Check if there are any staged files
-  if [ ${#staged[@]} -gt 0 ]; then
+  for file in "${staged[@]}"; do
+    if git diff --quiet -- "$file"; then
+      writable+=("$file")
+    else
+      echo "Warning: '$file' has unstaged changes; skipping typos auto-fix to preserve partial commit." >&2
+    fi
+  done
+
+  # Check if there are any fully staged files
+  if [ ${#writable[@]} -gt 0 ]; then
     # Pass array elements properly quoted to typos
-    typos --write-changes --force-exclude --config "$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")/typos.default.toml" "${staged[@]}"
+    typos --write-changes --force-exclude --config "$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")/typos.default.toml" "${writable[@]}"
 
     # Pass array elements properly quoted to git add
-    git add "${staged[@]}"
+    git add "${writable[@]}"
   fi
 else
     echo "warning: typos not installed."
