@@ -1,6 +1,7 @@
 {
   lib,
   config,
+  pkgs,
   ...
 }: {
   options.dot.features.localAI.enable = lib.mkEnableOption "Local AI";
@@ -12,7 +13,7 @@
         services.ollama.enable = true;
       }
       (lib.mkIf config.dot.features.nvidia.enable {
-        services.ollama.acceleration = "cuda";
+        services.ollama.package = pkgs.ollama-cuda;
       })
     ]);
 }

@@ -84,12 +84,15 @@ in {
           # spell checker
           typos
           # code formatter
-          nodePackages.prettier
+          prettier
         ];
         name = "dots";
         shellHook = ''
+          # HACK: trick shellHook to install locally
+          GIT_CONFIG=/dev/null 
+          export GIT_CONFIG=/dev/null
           ${self.checks.${system}.pre-commit-check.shellHook}
-          git config --local --unset-all core.hooksPath # HACK: prefer global hooksPath
+          unset GIT_CONFIG
         '';
       };
     }

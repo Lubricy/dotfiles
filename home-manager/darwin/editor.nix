@@ -12,7 +12,7 @@
   home.packages = with pkgs; [
     helm-ls
     nil
-    nodePackages.prettier
+    prettier
     yaml-language-server
   ];
 }

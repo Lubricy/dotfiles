@@ -27,5 +27,6 @@
         ];
       };
     };
+    profiles.headlessServer.enable = lib.mkEnableOption "Headless server profile";
   };
 }
