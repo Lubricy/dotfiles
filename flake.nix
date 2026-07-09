@@ -63,7 +63,9 @@
     };
     # doom-emacs is a configuration framework for GNU Emacs.
     doomemacs = {
-      url = "github:doomemacs/doomemacs";
+      type = "git";
+      url = "https://github.com/doomemacs/core";
+      submodules = true;
       flake = false;
     };
     # An IDE layer for Neovim with sane defaults.

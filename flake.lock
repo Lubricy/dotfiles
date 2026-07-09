@@ -3,17 +3,19 @@
     "doomemacs": {
       "flake": false,
       "locked": {
-        "lastModified": 1781538031,
-        "narHash": "sha256-ni3Xgi202AQZBAxGm4nkC/yGTp2lBvfGlcZ3lcJTWNo=",
-        "owner": "doomemacs",
-        "repo": "doomemacs",
-        "rev": "e3f0ec1e75ef7cb9597de4962be1c7a51a632027",
-        "type": "github"
+        "lastModified": 1783093997,
+        "narHash": "sha256-YC/3Q9kcbhbBgq74q6jHfuKZzIqF9h03xesn5DpRSUs=",
+        "ref": "refs/heads/master",
+        "rev": "8e4fbbae048a9abe897bf1878cbd32732a6d41d7",
+        "revCount": 21154,
+        "submodules": true,
+        "type": "git",
+        "url": "https://github.com/doomemacs/core"
       },
       "original": {
-        "owner": "doomemacs",
-        "repo": "doomemacs",
-        "type": "github"
+        "submodules": true,
+        "type": "git",
+        "url": "https://github.com/doomemacs/core"
       }
     },
     "dracula-sublime": {
