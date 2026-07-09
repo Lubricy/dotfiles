@@ -64,7 +64,7 @@
     # doom-emacs is a configuration framework for GNU Emacs.
     doomemacs = {
       type = "git";
-      url = "https://github.com/doomemacs/core";
+      url = "https://github.com/doomemacs/core.git";
       submodules = true;
       flake = false;
     };

@@ -10,12 +10,12 @@
         "revCount": 21154,
         "submodules": true,
         "type": "git",
-        "url": "https://github.com/doomemacs/core"
+        "url": "https://github.com/doomemacs/core.git"
       },
       "original": {
         "submodules": true,
         "type": "git",
-        "url": "https://github.com/doomemacs/core"
+        "url": "https://github.com/doomemacs/core.git"
       }
     },
     "dracula-sublime": {
