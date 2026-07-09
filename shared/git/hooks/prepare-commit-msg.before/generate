@@ -15,6 +15,7 @@ SHA1=$3
 
 PROG=${CHAT_COMPLETION_PROGRAM:-aichat}
 TEMPLATE=${CHAT_COMPLETION_TEMPLATE:-'-r commit_message'}
+MAX_LEN=${CHAT_MAX_LEN:-32768}
 
 # Check if oaichat script exists and is executable
 if ! command -v "$PROG" >/dev/null 2>&1; then
@@ -47,7 +48,7 @@ if [ -z "$DIFF" ]; then
     exit 0
 fi
 
-if [[ "${#DIFF}" -gt 32768 ]]; then
+if [[ "${#DIFF}" -gt "$MAX_LEN" ]]; then
   echo "warning: git diff is too long (${#DIFF}). commit message generation. " >&2
   exit 0
 fi
